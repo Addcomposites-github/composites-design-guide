@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# The offline CATIA mirror (too large and potentially copyright-sensitive for GitHub)
+catia_composites_offline/
+
+# Legacy scripts (kept locally, not needed in the public repo)
+mirror_site.py
+clean_pages.py
+build_index.py
+content_index.json
+mirror_log.txt
+10Nau_Dassault.pdf
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Local Claude settings
+.claude/
+HANDOFF_BRIEF.md
