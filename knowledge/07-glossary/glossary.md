@@ -138,6 +138,62 @@ Plain-English definitions of terms used throughout this knowledge base. Terms ar
 
 **Potted insert** — a threaded insert bonded into a sandwich panel using structural adhesive to carry concentrated fastener loads.
 
+## Composites CAD and Workflow Terms
+
+**Rosette** — a coordinate system (axis definition) that specifies what 0°, +45°, 90° mean on a composite surface. Types: Cartesian (for flat/gently curved panels), cylindrical (for barrels and ducts). See [Zone and Group Management](../05-catia-workflows/zone-and-group-management.md).
+
+**ITP (Imposed Thickness Point)** — a manually specified thickness at a vertex where multiple transition zones meet and the thickness is otherwise ambiguous. See [Zone and Group Management](../05-catia-workflows/zone-and-group-management.md).
+
+**ITP Height** — an ITP that accepts a decimal height value (not limited to exact ply multiples). Used in multi-material laminates.
+
+**ETBS (Edges To Be Staggered)** — the common edges between adjacent zones where ply drops occur. Identified during ply creation from zones and used as input for limit contour generation. See [Ply Drop-offs](../02-design-rules/ply-drop-offs.md).
+
+**Transition zone** — the geometric region between two zones of different thickness where ply drop-offs create a taper (ramp). See [Zone Design](../02-design-rules/zone-design.md).
+
+**Connection generator** — a validation tool that computes tangency connections between zones and transition zones, checking geometric consistency before ply creation.
+
+**Zones bridge** — the geometric validation of zone-to-zone connectivity, checking for gaps, overlaps, and disconnected edges.
+
+**Virtual stacking** — a spreadsheet-like interface for managing ply-by-ply laminate definitions across grid cells or zones. See [Stacking and Sequences](../05-catia-workflows/stacking-and-sequences.md).
+
+**Stacking area** — an independent stacking region within a model, used when different sections of a part have fundamentally different laminate architectures.
+
+**Grid-based design** — a parametric ply layout approach using a grid of cells, each with its own laminate definition. Alternative to zone-based design for complex panels. See [Grid-Based Design](../05-catia-workflows/grid-based-design.md).
+
+**NCF (Non-Crimp Fabric)** — a textile reinforcement where straight fibre layers are stitched together without interlacing, providing near-UD mechanical properties with faster layup. See [Non-Crimp Fabrics](../02-design-rules/non-crimp-fabrics.md).
+
+**Locking angle** — the maximum shear angle a woven or stitched fabric can sustain before wrinkling. Typically 25–45° depending on weave style.
+
+**Material excess** — extra material beyond the engineering boundary (EEOP) added for manufacturing tolerance, trimming, and edge bleed. See [Material Excess and Boundaries](../02-design-rules/material-excess-and-boundaries.md).
+
+**EOP (Edge Of Part)** — the outer boundary of the plies as defined in the structural design.
+
+**EEOP (Engineering Edge Of Part)** — the engineering boundary with tolerances applied. Accounts for ply placement accuracy.
+
+**MEOP (Manufacturing Edge Of Part)** — the outermost boundary, including material excess for handling, trimming, and bag sealing.
+
+## Composites Manufacturing and Production Terms
+
+**Skin swap / Skin swapping** — reversing the draping direction in a manufacturing model when the layup tool surface differs from the engineering reference surface. See [Manufacturing Preparation](../05-catia-workflows/manufacturing-preparation.md).
+
+**Stack-up file** — a text-based export of the laminate stacking order, used as a bridge between CAD, FEA, and manufacturing systems. See [Data Export and Interoperability](../05-catia-workflows/data-export-and-interoperability.md).
+
+**Ply exploder** — a visualisation tool that separates plies in the thickness direction for inspection, revealing each ply's contour individually.
+
+**Fibre deviation angle (delta angle)** — the difference between the intended fibre direction (from the rosette) and the actual fibre direction after draping. See [Flat Pattern and Flattening](../05-catia-workflows/flat-pattern-and-flattening.md).
+
+**Chimney effect** — a through-thickness weakness caused by ply terminations stacking up at the same location. Avoided by stagger origin points. See [Manufacturing Preparation](../05-catia-workflows/manufacturing-preparation.md).
+
+**Core insert** — a solid element (honeycomb, foam, or potting compound) placed within the laminate stack for local stiffening.
+
+**Stagger origin point** — a reference point from which stagger offsets are measured, ensuring ply terminations are distributed rather than aligned.
+
+**Draping direction** — the direction in which material is applied to the mould. Defines which side of the reference surface receives material.
+
+**Dart** — a deliberate cut in a ply to relieve excess material on doubly curved surfaces. See [Dart Design](../02-design-rules/dart-design.md).
+
+**CAI (Compression After Impact)** — the compressive strength of a laminate after sustaining a specified impact energy. The key metric for damage-tolerant design. See [Damage Tolerance and Repair](../04-structural-analysis/damage-tolerance-and-repair.md).
+
 ## Abbreviations
 
 | Abbreviation | Full term |
@@ -160,6 +216,19 @@ Plain-English definitions of terms used throughout this knowledge base. Terms ar
 | LPF | Last Ply Failure |
 | UD | Unidirectional |
 | Vf | Fibre Volume Fraction |
+| NCF | Non-Crimp Fabric |
+| EOP | Edge Of Part |
+| EEOP | Engineering Edge Of Part |
+| MEOP | Manufacturing Edge Of Part |
+| ITP | Imposed Thickness Point |
+| ETBS | Edges To Be Staggered |
+| CAI | Compression After Impact |
+| CTP | Constant Thickness Point |
+| GVS | Generative View Styles |
+| MES | Manufacturing Execution System |
+| PLM | Product Lifecycle Management |
+| DXF | Drawing Exchange Format |
+| IGES | Initial Graphics Exchange Specification |
 
 ## Key Takeaways
 

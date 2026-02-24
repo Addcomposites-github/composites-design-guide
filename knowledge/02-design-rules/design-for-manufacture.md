@@ -149,6 +149,31 @@ For a 2-metre-wide panel using 300 mm prepreg tape, you need at least 7 courses 
 | Large doubly curved parts with UD tape | Wrinkles, darts required, slower layup |
 | Asymmetric laminates | Warping, need compensating tooling |
 
+## Mirror and Symmetric Part Strategy
+
+Many composite structures are symmetric about a plane — left and right wing skins, paired fuselage panels, mirror-image fairings. Rather than designing both independently, design one and mirror it.
+
+**When to use mirroring:**
+- The part geometry is symmetric about a plane (left/right, upper/lower)
+- The laminate design is intended to be identical on both sides
+- Shared tooling reduces manufacturing cost
+
+**Associative vs non-associative mirror:**
+- **Associative** — changes to the master part automatically propagate to the mirror. Preferred for production designs where the master evolves.
+- **Non-associative** — a one-time copy. The mirror part is independent after creation. Use for parts that will diverge after the initial design.
+
+**What gets mirrored correctly:**
+- Ply contours and stacking order
+- Fibre directions (+45° becomes -45° in the mirror — this is structurally correct)
+- Reference surfaces and rosettes (axis systems are reflected)
+
+**Manufacturing benefits:**
+- Shared tooling (same tool, flipped) or mirrored tool halves the tooling cost
+- Halved programming effort for AFP/ATL
+- Consistent quality between left and right parts
+
+**Verify after mirroring:** The mirrored stacking must still satisfy all design rules (symmetry, balance, 10%). A balanced laminate [+45/-45/0/90]s remains balanced after mirroring, but an unbalanced one will have its imbalance reversed.
+
 ## Key Takeaways
 
 - Design for manufacture from the start — a laminate that cannot be built well is a bad laminate

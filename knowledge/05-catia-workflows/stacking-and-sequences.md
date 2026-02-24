@@ -57,6 +57,24 @@ For large laminates (60+ plies across multiple zones), managing the stacking man
 
 **Merging sequences/plies:** Combine sequences that should be manufactured together, or merge plies that have been split unnecessarily.
 
+### Detailed Row Operations
+
+The virtual stacking supports comprehensive row manipulation:
+
+| Operation | What It Does |
+|-----------|-------------|
+| **Insert blank** | Add a new empty ply at any position |
+| **Duplicate** | Copy an existing row with all its cell assignments |
+| **Copy / Cut / Paste** | Standard clipboard operations for rapid reorganisation |
+| **Move** | Drag a row to a new position in the stack |
+| **Swap** | Exchange two rows' positions in one step |
+| **Edit properties** | Change material, direction, or zone assignment for one or multiple rows simultaneously |
+| **Delete** | Remove a row from the stacking |
+
+**Sequence-level operations:** Insert blank sequences, merge sequences that should be manufactured together, or split a sequence into two. Sources and recipients track where plies came from and where they go during reorganisation.
+
+**Display modes:** The virtual stacking can show 3D information overlaid on the model, entity-level detail (ply, sequence, or stacking area), and import/export capability for external spreadsheet editing.
+
 ### Cell Orientation Valuating
 
 Each cell in the virtual stacking can display its fibre orientation. A visual colour code shows the direction at a glance:
@@ -80,6 +98,18 @@ Composites CAD tools can automatically check the stacking against design rules:
 - **Outer ply orientation** — are the outermost plies at the preferred angle (typically ±45°)?
 
 These automated checks save hours compared to manual verification and catch errors that are easy to miss in a 60-ply laminate.
+
+### What Gets Checked in Detail
+
+| Rule | What the Check Verifies |
+|------|------------------------|
+| **Symmetry** | For each zone/cell, is the top half of the stack a mirror of the bottom half? |
+| **Balance** | Does every +θ ply have a corresponding -θ ply at the same zone/cell? |
+| **10% minimum** | Is each of 0°, +45°, -45°, 90° at least 10% of the total plies? |
+| **Consecutive limit** | Are there more than N plies (typically 3–4) of the same angle in sequence? |
+| **Outer ply** | Are the outermost plies at ±45° for damage tolerance? |
+
+Violations are highlighted in the virtual stacking table with colour coding, allowing rapid identification. The check can run on the complete stacking or on a selection of zones/cells.
 
 ## Stack-up Files
 

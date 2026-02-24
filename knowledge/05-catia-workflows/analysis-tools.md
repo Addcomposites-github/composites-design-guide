@@ -98,6 +98,38 @@ Beyond the producibility analysis done during flattening (fibre deviation, shear
 
 This is the tool that determines whether a ply can be manufactured as designed, or whether the design needs darts, material changes, or geometry modifications.
 
+## Interpreting Producibility Results
+
+Producibility analysis produces colour-mapped results that require interpretation:
+
+**Colour map meaning:**
+- **Green** — fibre deviation within acceptable limits; ply can be manufactured as designed
+- **Yellow** — deviation at the warn threshold; review whether structural impact is acceptable
+- **Red** — deviation exceeds the limit; the ply cannot be manufactured as designed without defects
+
+**Remediation strategies when red zones appear:**
+1. **Add darts** — relief cuts at the point of maximum distortion allow the ply to conform (see [Dart Design](../02-design-rules/dart-design.md))
+2. **Change material form** — switch from UD tape to woven fabric (higher shear tolerance) or NCF
+3. **Reorient the fibre direction** — rotate the ply angle to align fibres with the curvature rather than across it
+4. **Modify the geometry** — add fillets, reduce curvature transitions, or increase radii at the problem area
+5. **Use multiple smaller plies** — replace one large ply with several smaller plies that individually conform better
+
+**Acceptance criteria vary by application:**
+- Aerospace primary structure: strict limits (typically <5° deviation for UD)
+- Aerospace secondary structure: moderate limits (up to 10° acceptable)
+- Automotive / industrial: more permissive (up to 15° may be acceptable depending on loading)
+
+## Producibility Inspection — Detailed
+
+The producibility inspection tool runs the analysis across the entire part or selected ply groups and exports structured results:
+- **On the complete stacking** — inspects every ply, producing a comprehensive report
+- **On a selection of groups** — inspects only the chosen plies groups
+- **Inspection points** — specific surface locations where deviation values are recorded numerically
+- **Export** — results can be saved to a file for external review or archival
+- **NCF-specific inspection** — accounts for the constrained draping behaviour of non-crimp fabrics
+
+The inspection report includes per-ply deviation maps, maximum deviation values, and locations of violations — essential for sign-off before manufacturing release.
+
 ## Zones Bridge Analysis
 
 After creating zones and transition zones, a **zones bridge analysis** checks the geometric connections between zones:

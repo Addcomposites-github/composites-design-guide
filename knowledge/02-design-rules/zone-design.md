@@ -140,6 +140,32 @@ Zones must be physically producible:
 - Is the zone large enough to be practical? Very small zones (less than 50 × 50 mm) are difficult to lay up accurately.
 - Will the transition ramps interfere with adjacent features (fasteners, access panels, lightning strike protection)?
 
+## Rosette Systems and Fibre Direction
+
+The **rosette** is the coordinate system that defines what 0°, 45°, 90° mean on the part surface. Choosing the wrong rosette type leads to fibres being oriented differently than intended — a silent, costly error.
+
+**Cartesian rosette:** Suitable for flat panels and gently curved surfaces. The X, Y, Z axes are fixed in space. Fibre directions are projected onto the surface from this fixed frame. Works well when the surface normal does not change much.
+
+**Cylindrical rosette:** Suitable for parts with high curvature — fuselage barrels, ducts, cylindrical tanks. Requires selecting a **neutral fibre** (the axis of the cylindrical shape). Fibre directions wrap around the cylinder naturally, maintaining consistent angles along the circumference.
+
+| Geometry | Rosette Type | Why |
+|----------|-------------|-----|
+| Flat panel | Cartesian | Simple, no curvature distortion |
+| Gently curved skin | Cartesian | Distortion is small and acceptable |
+| Cylinder / barrel | Cylindrical | Maintains consistent angles around circumference |
+| Cone / tapered duct | Cylindrical | Neutral fibre follows the cone axis |
+| Doubly curved (saddle/dome) | Case by case | May need multiple rosettes or geodesic draping |
+
+## Advanced Zone Operations
+
+**Refining transition zones:** A transition zone's taper geometry can be refined by increasing the refinement number or selecting intermediate curves, producing smoother ramps.
+
+**Zone bridge analysis:** Validates that all zone-to-zone connections are geometrically consistent — checking for gaps, overlaps, and disconnected edges. Connection types are colour-coded (red for structural zone edges, green for transition-to-top zone, magenta for transition-to-underlying zone, light blue for dual-transition edges).
+
+**Iso-thickness areas:** Regions of constant manufactured thickness extracted after plies are created — may differ from zone definitions due to staggering.
+
+**Junction lines and angle cuts:** Junction lines define ramp edges for tooling design. Angle cuts create clean terminations at zone boundaries and panel edges.
+
 ## Common Zone Design Mistakes
 
 | Mistake | Consequence | Fix |

@@ -120,6 +120,18 @@ Properties are modest — stiffness and strength fall below E-glass in most case
 
 Natural fibre composites are common in the European automotive industry for interior door panels and trim pieces, where low weight and sustainability credentials matter more than ultimate strength.
 
+## Fibre Forms: UD, Woven, and Non-Crimp Fabrics
+
+Fibres are supplied in different physical forms that affect draping, layup speed, and mechanical properties:
+
+**Unidirectional (UD) tape:** All fibres run in one direction. Provides the highest mechanical properties in that direction. Available as prepreg tape for hand layup or AFP, or as dry tape for infusion. Limited draping on doubly curved surfaces.
+
+**Woven fabric:** Fibres interlaced in two directions (typically 0° and 90°). Good draping, easier to handle, but the interlacing (crimp) reduces stiffness by 10–15% compared to equivalent UD. Common weave styles: plain, twill (2×2), satin (5-harness, 8-harness).
+
+**Non-crimp fabric (NCF):** Multiple layers of straight fibres stitched together without interlacing. Combines the handling advantages of fabric with mechanical properties closer to UD. See [Non-Crimp Fabrics](../02-design-rules/non-crimp-fabrics.md) for detailed design guidance.
+
+**Fibre sizing:** All commercial fibres receive a surface treatment (sizing) during production that promotes bonding with the resin matrix. The sizing must be compatible with your chosen resin — epoxy-sized fibres may not bond well with polyester resin and vice versa. Check material datasheets for compatibility.
+
 ## Fibre Comparison Table
 
 The table below gives typical values for dry fibres. Actual laminate properties depend on fibre volume fraction, resin type, and layup — use [AddStack](https://addstack.addcomposites.com) to calculate laminate-level properties for your specific design.

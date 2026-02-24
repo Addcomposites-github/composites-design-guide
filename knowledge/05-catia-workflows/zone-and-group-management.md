@@ -55,13 +55,46 @@ The transition zone's contour must lie within the underlying zone. The taper geo
 
 ## Connection Generation
 
-Once zones and transition zones are defined, a **connection generator** computes the tangency connections between them. This determines:
+Once zones and transition zones are defined, a **connection generator** computes the tangency connections between them. This step is critical — it validates the zone layout before plies are created.
 
-- How zone edges meet (structural zone edges)
-- Where thickness interpolation points (constant thickness points) fall
-- How transition zone edges connect to the zones above and below
+The connection generator computes:
+- **Structural zone edges** — how zone boundaries meet
+- **Structural zone thickness points (CTPs)** — constant thickness points at zone vertices
+- **Transition zone edges** — how transition zones connect to their adjacent zones
+- **Transition zone thickness points** — thickness at transition zone vertices
 
-Connection generation validates that the zone layout is geometrically consistent before plies are created. If connections cannot be resolved (e.g., gaps between zones, overlapping contours), the tool flags the errors.
+### Connection Types and Colour Coding
+
+Connections are colour-coded for quick visual diagnosis:
+
+| Colour | Connection Type |
+|--------|----------------|
+| **Red** | Between structural (connex) zones |
+| **Green** | Between transition zone and its top zone |
+| **Magenta** | Between transition zone and its underlying zone |
+| **Light blue** | Edge connected to two transition zones |
+| **Yellow** | Free edge of a structural zone |
+| **Dark blue** | Free edge of a transition zone |
+
+If free edges appear where they should not, it indicates gaps in the zone layout that must be fixed before proceeding.
+
+### Fixing Connection Errors
+
+Common issues flagged by the connection generator:
+- **Gaps between zones** — zone contours do not meet. Fix by adjusting contour curves or increasing the extrapolation distance.
+- **Overlapping zones** — two zone contours cover the same area. Fix by trimming contours.
+- **Missing thickness points** — the thickness at a vertex is ambiguous. Fix by adding an ITP.
+- **Inconsistent transitions** — a transition zone extends beyond its underlying zone. Fix by adjusting the transition contour.
+
+## Drop-Off Creation from Zones
+
+After the zone model is validated, **drop-offs** can be created to complete or refine the solid. A drop-off is defined by:
+- A **drop-off curve** — the top edge of the ramp (must be parallel to the reference surface)
+- A **slope** (angle or ratio, e.g., 1:20) and a **height**, or a **bottom curve** directly
+- **Direction** — which side of the curve the ramp slopes toward
+- **Limits** — start/end and left/right limits that control the ramp extent
+
+Drop-offs can also be created from a ply border when the top curve does not exist explicitly — the system computes the ramp from the ply boundary and an offset value.
 
 ## Imposed Thickness Points (ITPs)
 
@@ -69,9 +102,22 @@ At some locations — particularly where multiple transition zones meet at a sin
 
 Two variants:
 - **ITP** — specifies an integer number of plies at a point (the stack must be an exact multiple of ply thickness)
-- **ITP Height** — specifies a decimal height value at a point (supports non-integer thicknesses and multi-material scenarios)
+- **ITP Height** — specifies a decimal height value at a point (supports non-integer thicknesses and multi-material scenarios). This is necessary when the stack is not an exact multiple of ply thickness, or in multi-material laminates where different materials have different ply thicknesses.
 
-ITPs are placed at vertices where transition zones converge and the thickness would otherwise be ambiguous.
+### When ITPs Are Needed
+
+Three cases determine whether an ITP is required at a vertex:
+
+1. **Thickness defined by adjacent zones** — no ITP needed. The system calculates the thickness from the zone laminates on either side.
+2. **Thickness undefined, exact ply multiple** — an ITP with an integer value resolves the ambiguity.
+3. **Thickness undefined, not an exact ply multiple** — an ITP Height with a decimal value is required.
+
+**Practical scenarios:**
+- Multi-zone junctions where 3+ zones meet at a point
+- Local reinforcement areas where additional plies create non-standard thicknesses
+- Zero-thickness solid edges where a zone has an empty laminate (used for reinforcement area solid generation)
+
+ITPs are stored in the specification tree and update when the solid is regenerated.
 
 ## Creating Solids from Zones
 

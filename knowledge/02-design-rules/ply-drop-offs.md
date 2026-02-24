@@ -119,6 +119,35 @@ Not all plies are equal when it comes to dropping:
 
 5. **Do not drop plies at or very near a highly loaded feature** — keep drops away from bolt holes, cutouts, ply splices, and bond lines.
 
+## Limit Contours and Staggering Workflow
+
+In practice, staggering is implemented using **limit contours** — modified ply boundaries that offset the drop-off edge by a defined stagger step. The workflow:
+
+1. **Identify Edges To Be Staggered (ETBS):** When plies are created from zones, the common edges between adjacent zones are flagged as ETBS. These are the edges where ply drops naturally occur.
+
+2. **Define stagger parameters per ETBS:**
+   - **Stagger direction** — which way to offset (toward the thicker or thinner zone)
+   - **Stagger step** — the offset distance per ply (typically 4–8 mm)
+   - **Stagger value** — the total offset for each specific ply (step × position in the drop sequence)
+
+3. **Generate limit contours:** For each ply, a new boundary is created by offsetting the ETBS edge by the computed stagger value. This replaces the original coincident drop-off edge.
+
+4. **Verify:** After applying limit contours, check that the laminate at every cross-section still meets symmetry, balance, and 10% rules.
+
+**Staggering data files** can be generated during ply creation — a text file containing the ETBS list, stagger values, and directions for each ply. This file can be edited externally and re-imported to adjust the stagger pattern.
+
+## Local Drop-Offs and Ramp Supports
+
+Not all drop-offs come from zone transitions. **Local drop-offs** are created for small reinforcement patches or isolated thickness changes:
+
+- Defined by a drop-off curve (the ramp edge), a reference surface, and a slope angle or a bottom curve
+- The slope can be specified as an angle or a ratio (e.g., 1:20)
+- Drop-off direction and limits control the extent and width of the ramp
+
+**Ramp supports** define the detailed geometry of the taper surface at each drop-off. Editing ramp supports lets you adjust the taper profile after the initial creation — useful when the automatic ramp geometry does not produce a smooth result.
+
+**No-drop-off areas** can be designated where ply terminations are prohibited — similar to no-splice zones, these protect critical regions from the stress concentrations associated with ply drops.
+
 ## Common Mistakes
 
 | Mistake | Consequence | Fix |

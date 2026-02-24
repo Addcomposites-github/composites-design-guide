@@ -152,6 +152,29 @@ Automated processes create splices at every course (strip) boundary. Key conside
 - **Stagger is built into the programme:** Splice locations shift from ply to ply by a defined offset.
 - **Tow drops and adds:** When courses start or stop mid-ply to follow a contoured boundary, each start/stop is effectively a splice. These are called tow drops (at the end) and tow adds (at the beginning).
 
+## 3D Multi-Splice on Curved Surfaces
+
+When a ply covers a large curved surface that exceeds the material roll width, a single straight splice line is not sufficient. A **3D multi-splice** divides the ply into multiple overlapping sections (cut-pieces) that follow the surface curvature.
+
+Key parameters:
+- **Overlap value** — how much adjacent cut-pieces overlap (typically 10–25 mm, same as flat overlap splices)
+- **Stagger direction** — the direction along which splice lines are offset between plies
+- **Stagger value** — the offset distance between splice lines in adjacent plies
+
+On cylindrical surfaces (fuselage barrels, ducts), the multi-splice typically runs along the axis of the cylinder, with overlap along the circumference. On compound-curved surfaces, splice lines follow geodesic paths to minimise fibre distortion at the overlap.
+
+**Roll width constraint:** If the flattened ply exceeds the material roll width, the number of splices is: `ceil(flat pattern width / roll width) - 1`. Verify this during the flat pattern check, not after manufacturing.
+
+## Butt Splice Zones and No-Splice Zones
+
+In zone-based design, entire regions can be designated as splice or no-splice zones:
+
+**Butt splice zones** define areas where ply sections meet with a controlled gap. Parameters include the gap size (1–3 mm typical) and a parallel gap surface that guides the gap geometry on curved parts.
+
+**No-splice zones** define areas where splices are strictly prohibited — typically near bolt holes, high-stress regions, structural joints, or areas with tight inspection requirements. When generating splices automatically, the tool routes splice lines around no-splice zones.
+
+These zone designations apply to all plies within the designated region, ensuring consistent splice management across the laminate.
+
 ## Bonded Structural Joints (Component-Level)
 
 Beyond ply-level splices, composite structures often need joints between separate components — skin-to-spar, skin-to-stiffener, or panel-to-panel. These are distinct from ply splices but share the same principles:

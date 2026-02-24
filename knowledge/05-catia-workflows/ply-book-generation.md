@@ -72,6 +72,16 @@ Boundary relationships:
 - Tooling grip areas
 - Dimensional tolerance on the final trimmed edge
 
+## Drawing Production with Generative View Styles
+
+Ply books can be produced as formal engineering drawings using **Generative View Styles (GVS)** — customisable templates that control how composites-specific views are rendered:
+
+- **GVS customisation** — define drawing templates for composites that include ply outlines, fibre direction arrows, material labels, and stacking tables
+- **One sheet per ply vs one sheet per sequence** — choose the detail level appropriate for your manufacturing process
+- **Naming conventions** — configure how plies, sequences, and ply books are named (sequential numbers, material-based prefixes, zone-based identifiers)
+
+Drawings can be generated in CATDrawing format for integration with company documentation systems. The GVS can be modified and reapplied to regenerate drawings when the design changes.
+
 ## Manufacturing Document Creation
 
 Beyond the ply book itself, a **manufacturing document** is a separate part file that contains all the manufacturing-specific information:

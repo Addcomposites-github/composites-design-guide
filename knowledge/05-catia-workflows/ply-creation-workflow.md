@@ -70,6 +70,44 @@ See [Splices and Joints](../02-design-rules/splices-and-joints.md) for the desig
 
 A **dart** is a relief cut in a ply that allows it to conform to a doubly-curved surface without wrinkling. Darts are created by cutting the ply along a line or curve, allowing the two halves to overlap or gap slightly. Dart creation tools let you define the cut geometry and manage the resulting ply sections.
 
+## Plies from Slicing (Alternative Approach)
+
+An alternative to zone-based ply creation is **slicing** — generating plies by slicing a 3D solid model into layers. This is useful when:
+- Reverse-engineering a part from a solid CAD model or CT scan
+- Working with imported FEA solid models that already have thickness information
+- The geometry is too complex for straightforward zone decomposition
+
+Slicing parameters:
+- **Input zones group** — the solid to slice
+- **Slicing method** — constant thickness (uniform slices) or variable (following a thickness law)
+- **Slicing thickness** — the nominal ply thickness for each slice
+- **Curve degree** — controls the smoothness of the sliced contours
+- **Geometrical level** — which surface of the solid each slice corresponds to
+
+The sliced output creates a new plies group with plies whose contours follow the intersection of the slicing planes with the solid geometry.
+
+## Manual Ply Creation — Full Workflow
+
+Manual ply creation is used for plies that do not fit the zone-based or slicing approaches:
+- Local reinforcement patches
+- Repair plies in service
+- Inserts and doublers
+- Plies that span multiple zones groups with custom contours
+
+Each manually created ply requires: a **surface** to conform to, a **contour** (one or more closed curves), a **material**, a **direction** (fibre angle), and a **rosette** reference. The ply is inserted into the stacking tree under the selected sequence or plies group.
+
+## Ply Merging, Relimiting, and Re-routing
+
+After initial ply creation, several modification operations refine the laminate:
+
+**Merging plies:** When two adjacent plies of the same material, direction, and position in the stack can be combined into one, merging simplifies the model. Merging stackings combines two separate stacking trees into one — useful when independent designs must be unified.
+
+**Relimiting plies:** After geometry changes (zone contour edits, surface modifications), ply contours may no longer match the updated geometry. Relimiting re-computes the ply contour to conform to the current geometry.
+
+**Re-routing ply contours:** Changes the path of a ply boundary — specifying a new route between a start vertex and end vertex. Options include routing to the other side of a feature or matching the shape of similar plies. This is used when a ply must deviate from its auto-generated contour to accommodate manufacturing constraints or avoid interference.
+
+**Removing ply shells:** After modifications, redundant ply shell geometry can be cleaned up to keep the model lean.
+
 ## Checking Contours
 
 After modifying ply contours, a contour check verifies that:

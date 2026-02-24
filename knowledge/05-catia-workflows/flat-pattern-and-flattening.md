@@ -76,6 +76,40 @@ The flat pattern workflow involves bidirectional transfers:
 
 **2D to 3D:** The reverse operation. If the flat pattern is modified in 2D (e.g., a manufacturing engineer adjusts a dart location), the change can be transferred back to the 3D model.
 
+## Producibility Analysis — Full Parameters
+
+The producibility analysis offers several modes and parameters for detailed draping simulation:
+
+**Analysis modes:**
+- **Deformation mode** — measures the angle between the two vectors of the fibre mesh (how the mesh distorts). Best for woven fabrics where warp-weft shear is the primary concern.
+- **Deviation mode** — measures the angle between the transferred theoretical rosette and the actual fibre direction. Best for UD materials where fibre angle accuracy matters most.
+
+**Warn and limit angles:**
+- **Warn angle** — the deviation threshold that produces a warning (yellow). Typical: 5–10°.
+- **Limit angle** — the deviation threshold that flags a violation (red). Typical: 12–20° for UD, 25–40° for woven (based on the fabric's locking angle).
+
+**Fibre families:** Analysis can be run separately for warp (0° direction) or weft (90° direction) fibre families, showing where each family is under tension, compression, or shear independently.
+
+**Seed point options:**
+- **Point indication** — specify exact coordinates for the draping start point
+- **Point selection** — select a point on the surface interactively
+
+**Propagation types:**
+- **Minimum distortion** — optimises the draping to minimise total fibre deviation across the ply
+- **Keep** — maintains the theoretical fibre direction as closely as possible (may increase local distortion)
+- **Symmetric** — enforces symmetric fibre behaviour about a reference line
+
+**Scope:** Run on the full stacking, a single plies group, or individual plies. With or without thickness update (accounting for thickness changes from draping).
+
+## Unfolding Entities
+
+Beyond ply flattening, a general **unfolding** capability handles non-composites geometry — unfolding a surface (e.g., a sheet metal bracket, a caul plate) from its 3D form to a flat 2D shape. This is used for:
+- Creating flat patterns for caul plates and pressure pads
+- Unfolding tool surfaces for tool fabrication
+- Transferring non-ply geometry (markings, inspection points) between 3D and 2D
+
+**Unfold assembly:** When flattening plies with multiple location points, each region of the ply can be flattened independently and then assembled into a single flat pattern.
+
 ## Optimising the Flattening
 
 Several parameters control flattening quality:
