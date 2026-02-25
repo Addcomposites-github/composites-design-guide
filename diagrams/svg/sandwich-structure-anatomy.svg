@@ -1,0 +1,110 @@
+<!-- Original diagram by AddComposites, CC BY 4.0, composites-design-guide -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 380" font-family="system-ui, -apple-system, sans-serif">
+  <!-- Title -->
+  <text x="325" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">Sandwich Structure Anatomy</text>
+  <text x="325" y="48" text-anchor="middle" font-size="12" fill="#64748b">High stiffness-to-weight ratio through separated face sheets</text>
+
+  <!-- Top face sheet -->
+  <rect x="80" y="80" width="400" height="30" fill="#dbeafe" stroke="#2563eb" stroke-width="2" rx="3"/>
+  <text x="280" y="100" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">Top Face Sheet</text>
+
+  <!-- Adhesive layer (top) -->
+  <rect x="80" y="110" width="400" height="8" fill="#fbbf24" stroke="#d97706" stroke-width="1" rx="1"/>
+
+  <!-- Core -->
+  <rect x="80" y="118" width="400" height="100" fill="#fef3c7" stroke="#d97706" stroke-width="2" rx="3"/>
+  <!-- Honeycomb pattern in core -->
+  <g stroke="#d97706" stroke-width="0.8" fill="none" opacity="0.4">
+    <path d="M100,135 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M128,135 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M156,135 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M184,135 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M212,135 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M240,135 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M268,135 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M296,135 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M324,135 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M352,135 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M380,135 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M408,135 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M114,155 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M142,155 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M170,155 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M198,155 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M226,155 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M254,155 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M282,155 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M310,155 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M338,155 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M366,155 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M394,155 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M100,175 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M128,175 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M156,175 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M184,175 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M212,175 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M240,175 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M268,175 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M296,175 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M324,175 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M352,175 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M380,175 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M408,175 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M114,195 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M142,195 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M170,195 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M198,195 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M226,195 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M254,195 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M282,195 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M310,195 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M338,195 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M366,195 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+    <path d="M394,195 l8,-10 h12 l8,10 l-8,10 h-12 z"/>
+  </g>
+  <text x="280" y="172" text-anchor="middle" font-size="14" font-weight="600" fill="#92400e">Core</text>
+  <text x="280" y="188" text-anchor="middle" font-size="11" fill="#92400e">(Honeycomb, Foam, or Balsa)</text>
+
+  <!-- Adhesive layer (bottom) -->
+  <rect x="80" y="218" width="400" height="8" fill="#fbbf24" stroke="#d97706" stroke-width="1" rx="1"/>
+
+  <!-- Bottom face sheet -->
+  <rect x="80" y="226" width="400" height="30" fill="#dbeafe" stroke="#2563eb" stroke-width="2" rx="3"/>
+  <text x="280" y="246" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">Bottom Face Sheet</text>
+
+  <!-- Annotations -->
+  <!-- Total height dimension -->
+  <line x1="500" y1="80" x2="500" y2="256" stroke="#0f172a" stroke-width="1.5"/>
+  <polygon points="500,80 496,88 504,88" fill="#0f172a"/>
+  <polygon points="500,256 496,248 504,248" fill="#0f172a"/>
+  <text x="510" y="155" font-size="11" fill="#0f172a">Total</text>
+  <text x="510" y="168" font-size="11" fill="#0f172a">height</text>
+  <text x="510" y="181" font-size="11" fill="#0f172a">(h)</text>
+
+  <!-- Face sheet dimension -->
+  <line x1="540" y1="80" x2="540" y2="110" stroke="#2563eb" stroke-width="1"/>
+  <text x="550" y="99" font-size="10" fill="#2563eb">t_f</text>
+
+  <!-- Core dimension -->
+  <line x1="540" y1="118" x2="540" y2="218" stroke="#d97706" stroke-width="1"/>
+  <text x="550" y="172" font-size="10" fill="#d97706">t_c</text>
+
+  <!-- Labels with arrows -->
+  <line x1="500" y1="95" x2="485" y2="95" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="500" y1="168" x2="485" y2="168" stroke="#94a3b8" stroke-width="0.8"/>
+  <line x1="500" y1="241" x2="485" y2="241" stroke="#94a3b8" stroke-width="0.8"/>
+
+  <!-- Adhesive labels -->
+  <text x="505" y="118" font-size="9" fill="#d97706">Adhesive</text>
+  <text x="505" y="228" font-size="9" fill="#d97706">Adhesive</text>
+
+  <!-- Key properties box -->
+  <rect x="60" y="275" width="530" height="95" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <text x="80" y="296" font-size="13" font-weight="bold" fill="#1e293b">Key Properties</text>
+
+  <text x="80" y="316" font-size="11" fill="#475569">Face sheets: Carry bending loads (tension + compression). Carbon/glass fibre laminate, typically 0.5-3 mm.</text>
+  <text x="80" y="334" font-size="11" fill="#475569">Core: Carries shear loads, separates face sheets for high bending stiffness. Typically 5-50 mm.</text>
+  <text x="80" y="352" font-size="11" fill="#475569">Stiffness scales with h^3 — doubling core thickness increases bending stiffness ~8x with minimal weight gain.</text>
+  <text x="80" y="366" font-size="11" fill="#94a3b8">Check for: face wrinkling, core crush, dimpling, shear crimping, and local buckling at load introduction points.</text>
+</svg>

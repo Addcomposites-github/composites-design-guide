@@ -1,0 +1,1133 @@
+{
+  "name": "Manufacturing Process Selection",
+  "version": "1.0",
+  "description": "Step-by-step decision tree for selecting a composites manufacturing process based on part geometry, production volume, and quality requirements.",
+  "usage": "Start at the node named in 'start'. Present the question to the user, collect their answer, then follow 'next' to the next node. Repeat until you reach a node with type 'recommendation'.",
+  "start": "geometry_type",
+  "nodes": {
+    "geometry_type": {
+      "id": "geometry_type",
+      "question": "What is the overall part geometry?",
+      "type": "choice",
+      "context": "The shape of the part is the single biggest factor in narrowing down which manufacturing processes are feasible.",
+      "options": [
+        {
+          "value": "flat_panel",
+          "label": "Flat or gently curved panel (e.g., body panel, fairing, deck plate)",
+          "next": "flat_volume"
+        },
+        {
+          "value": "single_curve",
+          "label": "Single curvature (cylinder, cone, slight barrel shape)",
+          "next": "curve_axisymmetric"
+        },
+        {
+          "value": "double_curve",
+          "label": "Double curvature or complex 3D shape (e.g., aerodynamic shell, helmet, car bonnet)",
+          "next": "complex_size"
+        },
+        {
+          "value": "constant_cross_section",
+          "label": "Constant cross-section profile (beam, rod, channel, I-section)",
+          "next": "profile_length"
+        },
+        {
+          "value": "hollow_closed",
+          "label": "Hollow or closed section (tube, tank, pressure vessel, duct)",
+          "next": "hollow_type"
+        }
+      ]
+    },
+
+    "flat_volume": {
+      "id": "flat_volume",
+      "question": "How many parts per year do you expect to produce?",
+      "type": "choice",
+      "context": "Production volume determines whether the tooling and setup cost of automated or mould-based processes is justified.",
+      "options": [
+        {
+          "value": "prototype",
+          "label": "1-5 parts (prototype or one-off)",
+          "next": "flat_quality_low_vol"
+        },
+        {
+          "value": "low",
+          "label": "5-50 parts per year (low rate production)",
+          "next": "flat_quality_low_vol"
+        },
+        {
+          "value": "medium",
+          "label": "50-500 parts per year (medium rate production)",
+          "next": "flat_quality_med_vol"
+        },
+        {
+          "value": "high",
+          "label": "500+ parts per year (high rate production)",
+          "next": "flat_quality_high_vol"
+        }
+      ]
+    },
+
+    "flat_quality_low_vol": {
+      "id": "flat_quality_low_vol",
+      "question": "What quality class does the part require?",
+      "type": "choice",
+      "context": "Quality class determines fibre volume fraction, void content, and dimensional tolerance expectations.",
+      "options": [
+        {
+          "value": "hobby",
+          "label": "Non-structural or cosmetic (hobby, appearance parts, non-load-bearing covers)",
+          "next": "rec_wet_layup"
+        },
+        {
+          "value": "structural",
+          "label": "Structural but not aerospace-certified (automotive, marine, industrial, sporting goods)",
+          "next": "rec_vacuum_bag_or_infusion"
+        },
+        {
+          "value": "aerospace",
+          "label": "Aerospace or high-performance structural (flight hardware, racing, defence)",
+          "next": "rec_prepreg_hand_layup"
+        }
+      ]
+    },
+
+    "flat_quality_med_vol": {
+      "id": "flat_quality_med_vol",
+      "question": "What quality class does the part require?",
+      "type": "choice",
+      "context": "At medium volumes, closed-mould processes become cost-effective and deliver better repeatability than open-mould methods.",
+      "options": [
+        {
+          "value": "structural",
+          "label": "Structural but not aerospace-certified (automotive, marine, wind energy)",
+          "next": "rec_rtm_light"
+        },
+        {
+          "value": "aerospace",
+          "label": "Aerospace or high-performance structural",
+          "next": "rec_prepreg_autoclave"
+        }
+      ]
+    },
+
+    "flat_quality_high_vol": {
+      "id": "flat_quality_high_vol",
+      "question": "What quality class does the part require?",
+      "type": "choice",
+      "context": "At high volumes, matched-die moulding and automated processes dominate because their high tooling cost is spread across many parts.",
+      "options": [
+        {
+          "value": "non_structural",
+          "label": "Non-structural or semi-structural (cosmetic panels, interior trim)",
+          "next": "rec_compression_moulding"
+        },
+        {
+          "value": "structural",
+          "label": "Structural (automotive crash structures, load-bearing brackets)",
+          "next": "rec_hp_rtm"
+        },
+        {
+          "value": "aerospace",
+          "label": "Aerospace structural (fuselage panels, wing skins)",
+          "next": "rec_afp_flat"
+        }
+      ]
+    },
+
+    "curve_axisymmetric": {
+      "id": "curve_axisymmetric",
+      "question": "Is the part axisymmetric (a surface of revolution like a cylinder, cone, or dome)?",
+      "type": "choice",
+      "context": "Axisymmetric parts can be made by winding fibre around a rotating mandrel, which is fast, repeatable, and cost-effective.",
+      "options": [
+        {
+          "value": "yes",
+          "label": "Yes, the part is axisymmetric or close to it",
+          "next": "winding_volume"
+        },
+        {
+          "value": "no",
+          "label": "No, it has single curvature but is not axisymmetric (e.g., a curved panel or fairing)",
+          "next": "curved_panel_volume"
+        }
+      ]
+    },
+
+    "winding_volume": {
+      "id": "winding_volume",
+      "question": "What is the production volume?",
+      "type": "choice",
+      "context": "Filament winding is inherently fast even for low volumes; the question is whether to use wet winding or towpreg.",
+      "options": [
+        {
+          "value": "low",
+          "label": "1-100 parts per year",
+          "next": "rec_filament_winding_wet"
+        },
+        {
+          "value": "high",
+          "label": "100+ parts per year",
+          "next": "rec_filament_winding_towpreg"
+        }
+      ]
+    },
+
+    "curved_panel_volume": {
+      "id": "curved_panel_volume",
+      "question": "What is the production volume and quality class?",
+      "type": "choice",
+      "context": "Curved non-axisymmetric panels require a female or male mould. The choice between hand layup and automated placement depends on volume and quality needs.",
+      "options": [
+        {
+          "value": "low_general",
+          "label": "Low volume, general structural",
+          "next": "rec_vacuum_bag_or_infusion"
+        },
+        {
+          "value": "low_aerospace",
+          "label": "Low volume, aerospace quality",
+          "next": "rec_prepreg_hand_layup"
+        },
+        {
+          "value": "high_any",
+          "label": "Medium to high volume, any quality",
+          "next": "rec_afp_curved"
+        }
+      ]
+    },
+
+    "complex_size": {
+      "id": "complex_size",
+      "question": "What is the approximate part size (largest dimension)?",
+      "type": "choice",
+      "context": "Part size determines whether automated placement is practical and what kind of tooling is needed.",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small (under 500 mm) - e.g., bracket, fitting, small fairing",
+          "next": "complex_small_volume"
+        },
+        {
+          "value": "medium",
+          "label": "Medium (500 mm to 2 m) - e.g., car bonnet, drone fuselage, helmet",
+          "next": "complex_medium_volume"
+        },
+        {
+          "value": "large",
+          "label": "Large (over 2 m) - e.g., boat hull, wind turbine blade, aircraft panel",
+          "next": "complex_large_volume"
+        }
+      ]
+    },
+
+    "complex_small_volume": {
+      "id": "complex_small_volume",
+      "question": "What is the production volume?",
+      "type": "choice",
+      "context": "Small complex parts can often use RTM or compression moulding at higher volumes, or hand layup at low volumes.",
+      "options": [
+        {
+          "value": "prototype",
+          "label": "1-10 parts (prototype)",
+          "next": "rec_wet_layup_complex"
+        },
+        {
+          "value": "low",
+          "label": "10-100 parts per year",
+          "next": "rec_rtm_small"
+        },
+        {
+          "value": "high",
+          "label": "100+ parts per year",
+          "next": "rec_compression_moulding"
+        }
+      ]
+    },
+
+    "complex_medium_volume": {
+      "id": "complex_medium_volume",
+      "question": "What is the production volume?",
+      "type": "choice",
+      "context": "Medium-sized complex parts are the sweet spot for infusion and RTM processes.",
+      "options": [
+        {
+          "value": "low",
+          "label": "1-50 parts per year",
+          "next": "complex_medium_quality"
+        },
+        {
+          "value": "medium",
+          "label": "50-500 parts per year",
+          "next": "rec_rtm_light"
+        },
+        {
+          "value": "high",
+          "label": "500+ parts per year",
+          "next": "rec_hp_rtm"
+        }
+      ]
+    },
+
+    "complex_medium_quality": {
+      "id": "complex_medium_quality",
+      "question": "What quality class is needed?",
+      "type": "choice",
+      "options": [
+        {
+          "value": "general",
+          "label": "General structural (marine, automotive, industrial)",
+          "next": "rec_infusion_complex"
+        },
+        {
+          "value": "aerospace",
+          "label": "Aerospace or high-performance",
+          "next": "rec_prepreg_complex"
+        }
+      ]
+    },
+
+    "complex_large_volume": {
+      "id": "complex_large_volume",
+      "question": "What is the production volume?",
+      "type": "choice",
+      "context": "Large complex parts are expensive to tool. At low volumes, infusion dominates. At higher volumes, AFP becomes justified.",
+      "options": [
+        {
+          "value": "low",
+          "label": "1-20 parts per year (boat hulls, specialty structures)",
+          "next": "rec_infusion_large"
+        },
+        {
+          "value": "medium",
+          "label": "20-200 parts per year (wind turbine blades, bus panels)",
+          "next": "rec_infusion_large"
+        },
+        {
+          "value": "high",
+          "label": "200+ parts per year (aircraft structures, automotive body-in-white)",
+          "next": "rec_afp_large"
+        }
+      ]
+    },
+
+    "profile_length": {
+      "id": "profile_length",
+      "question": "What total length of profile do you need per year?",
+      "type": "choice",
+      "context": "Pultrusion is extremely cost-effective for constant cross-sections at high volumes, but requires expensive dies and long production runs to justify setup.",
+      "options": [
+        {
+          "value": "short",
+          "label": "Under 500 m total per year (short runs, custom profiles)",
+          "next": "profile_short_type"
+        },
+        {
+          "value": "long",
+          "label": "500 m or more total per year (commodity profiles, structural members)",
+          "next": "rec_pultrusion"
+        }
+      ]
+    },
+
+    "profile_short_type": {
+      "id": "profile_short_type",
+      "question": "Is the cross-section a tube or rod, or a more complex open section?",
+      "type": "choice",
+      "options": [
+        {
+          "value": "tube_rod",
+          "label": "Tube or rod (round, oval, square)",
+          "next": "rec_filament_winding_profile"
+        },
+        {
+          "value": "open_section",
+          "label": "Open section (I-beam, C-channel, angle, hat stiffener)",
+          "next": "rec_hand_layup_profile"
+        }
+      ]
+    },
+
+    "hollow_type": {
+      "id": "hollow_type",
+      "question": "What type of hollow structure is it?",
+      "type": "choice",
+      "context": "The function of the hollow part determines the internal pressure requirements and hence the manufacturing approach.",
+      "options": [
+        {
+          "value": "pressure_vessel",
+          "label": "Pressure vessel or tank (must hold internal pressure: CNG tank, oxygen bottle, hydraulic accumulator)",
+          "next": "pressure_vessel_liner"
+        },
+        {
+          "value": "structural_tube",
+          "label": "Structural tube (bicycle frame, roll cage, drone arm, truss member)",
+          "next": "structural_tube_volume"
+        },
+        {
+          "value": "duct_fairing",
+          "label": "Duct, nacelle, or enclosed fairing (air duct, engine cowl, radome)",
+          "next": "rec_infusion_complex"
+        }
+      ]
+    },
+
+    "pressure_vessel_liner": {
+      "id": "pressure_vessel_liner",
+      "question": "Will the vessel have a liner (Type III/IV) or be linerless (Type V)?",
+      "type": "choice",
+      "context": "Most composite pressure vessels use a polymer or metal liner as a mandrel and gas barrier. Linerless (Type V) vessels are an emerging technology.",
+      "options": [
+        {
+          "value": "metal_liner",
+          "label": "Metal liner (Type III) - aluminium or steel liner with composite overwrap",
+          "next": "rec_filament_winding_vessel"
+        },
+        {
+          "value": "polymer_liner",
+          "label": "Polymer liner (Type IV) - HDPE or nylon liner with full composite load-bearing",
+          "next": "rec_filament_winding_vessel"
+        },
+        {
+          "value": "linerless",
+          "label": "Linerless (Type V) - all-composite",
+          "next": "rec_filament_winding_vessel_advanced"
+        }
+      ]
+    },
+
+    "structural_tube_volume": {
+      "id": "structural_tube_volume",
+      "question": "What is the production volume?",
+      "type": "choice",
+      "options": [
+        {
+          "value": "one_off",
+          "label": "1-5 parts (one-off or prototype)",
+          "next": "rec_bladder_moulding"
+        },
+        {
+          "value": "low",
+          "label": "5-100 parts per year",
+          "next": "rec_bladder_moulding"
+        },
+        {
+          "value": "high",
+          "label": "100+ parts per year",
+          "next": "rec_filament_winding_tube"
+        }
+      ]
+    },
+
+    "rec_wet_layup": {
+      "id": "rec_wet_layup",
+      "type": "recommendation",
+      "recommended_process": "Wet Layup (Hand Laminating)",
+      "reasoning": "For non-structural flat or gently curved parts at low volumes, wet layup is the simplest and cheapest entry point. It requires minimal equipment: a mould, fibre reinforcement, liquid resin, brushes, and rollers. Fibre volume fractions are typically 30-40%, which is adequate for non-structural applications.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "30-40%",
+        "void_content": "3-8%",
+        "tooling_cost": "Very low (single-sided mould, often foam or MDF)",
+        "skill_level": "Beginner friendly"
+      },
+      "alternatives": [
+        {
+          "process": "Vacuum Bagging",
+          "when": "If you want better fibre volume (45-55%) and fewer voids with minimal extra cost, add a vacuum bag over the wet layup"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$50-$500",
+        "per_part_relative": "Lowest",
+        "capital_equipment": "Under $500"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/wet-layup.md",
+        "knowledge/03-manufacturing-processes/common-defects.md"
+      ]
+    },
+
+    "rec_wet_layup_complex": {
+      "id": "rec_wet_layup_complex",
+      "type": "recommendation",
+      "recommended_process": "Wet Layup with Vacuum Consolidation",
+      "reasoning": "For small complex prototype parts, wet layup with a vacuum bag is often the only practical approach. The complex geometry makes automation difficult to justify for 1-10 parts, and the small size keeps material waste manageable. Use peel ply and breather to improve surface finish.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "40-50%",
+        "void_content": "2-5%",
+        "tooling_cost": "Low to moderate (female mould needed for complex shapes)",
+        "skill_level": "Intermediate"
+      },
+      "alternatives": [
+        {
+          "process": "Resin Infusion (VARTM)",
+          "when": "If the geometry allows reliable flow paths and you need better, more repeatable quality"
+        },
+        {
+          "process": "3D Printed Tooling + Prepreg",
+          "when": "If you have access to a large-format 3D printer and an oven, printed moulds with prepreg can give better quality for prototypes"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$200-$2,000",
+        "per_part_relative": "Low",
+        "capital_equipment": "Under $2,000 (vacuum pump, consumables)"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/wet-layup.md",
+        "knowledge/03-manufacturing-processes/vacuum-bagging.md"
+      ]
+    },
+
+    "rec_vacuum_bag_or_infusion": {
+      "id": "rec_vacuum_bag_or_infusion",
+      "type": "recommendation",
+      "recommended_process": "Vacuum Bagging or Resin Infusion (VARTM)",
+      "reasoning": "For structural parts at low volumes, vacuum-assisted processes give a good balance of quality and cost. Vacuum bagging over a wet layup is simpler; resin infusion (VARTM) gives higher and more consistent fibre volume fractions. Choose infusion for parts larger than about 1 m or where consistency matters. Choose vacuum bagging for smaller parts or where infusion flow paths would be hard to control.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "50-60% (infusion), 45-55% (vacuum bag)",
+        "void_content": "1-3% (infusion), 2-5% (vacuum bag)",
+        "tooling_cost": "Moderate (single-sided mould with good surface finish)",
+        "skill_level": "Intermediate"
+      },
+      "alternatives": [
+        {
+          "process": "Prepreg with Oven Cure",
+          "when": "If you need higher performance (Vf > 55%) and can justify the material cost and freezer storage"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$500-$5,000",
+        "per_part_relative": "Low to moderate",
+        "capital_equipment": "$2,000-$10,000 (vacuum pump, catch pot, consumables, optional oven)"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/vacuum-bagging.md",
+        "knowledge/03-manufacturing-processes/resin-infusion-vartm.md"
+      ]
+    },
+
+    "rec_prepreg_hand_layup": {
+      "id": "rec_prepreg_hand_layup",
+      "type": "recommendation",
+      "recommended_process": "Prepreg Hand Layup with Autoclave or Oven Cure",
+      "reasoning": "For aerospace-quality flat or curved panels at low volumes, prepreg hand layup is the industry standard. Pre-impregnated fibre gives precise resin content, high fibre volume fractions, and low void content. Autoclave curing (at 3-7 bar pressure) gives the best results; oven-only curing with vacuum bag is acceptable for many applications if the prepreg is formulated for out-of-autoclave (OOA) processing.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "55-65%",
+        "void_content": "Under 1% (autoclave), 1-2% (OOA oven)",
+        "tooling_cost": "Moderate to high (must withstand autoclave temperature and pressure)",
+        "skill_level": "Advanced"
+      },
+      "alternatives": [
+        {
+          "process": "Automated Fibre Placement (AFP)",
+          "when": "If you can justify the capital cost, AFP removes the manual layup bottleneck and improves repeatability"
+        },
+        {
+          "process": "Resin Infusion with Aerospace-Grade Resin",
+          "when": "If you want to avoid prepreg storage and autoclave costs; some aerospace-grade infusion resins (e.g., RTM6) can meet void requirements"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$5,000-$50,000",
+        "per_part_relative": "Moderate to high",
+        "capital_equipment": "$50,000-$500,000 (autoclave, freezer, clean room)"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/prepreg-and-autoclave.md",
+        "knowledge/02-design-rules/stacking-sequences.md"
+      ]
+    },
+
+    "rec_prepreg_autoclave": {
+      "id": "rec_prepreg_autoclave",
+      "type": "recommendation",
+      "recommended_process": "Prepreg Layup with Autoclave Cure",
+      "reasoning": "At medium volumes with aerospace quality requirements, prepreg autoclave is still the benchmark. The consistent resin content and autoclave consolidation pressure produce laminates with Vf above 60% and void content well below 1%. For medium volumes, consider investing in laser-projection ply placement systems to speed up manual layup.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "58-65%",
+        "void_content": "Under 1%",
+        "tooling_cost": "High (Invar or steel tooling for dimensional stability)",
+        "skill_level": "Advanced"
+      },
+      "alternatives": [
+        {
+          "process": "AFP with Autoclave",
+          "when": "Volume exceeds about 200 parts/year and part size justifies the AFP cell investment"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$20,000-$200,000",
+        "per_part_relative": "High",
+        "capital_equipment": "$200,000-$2,000,000"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/prepreg-and-autoclave.md"
+      ]
+    },
+
+    "rec_rtm_light": {
+      "id": "rec_rtm_light",
+      "type": "recommendation",
+      "recommended_process": "RTM Light (Light Resin Transfer Moulding)",
+      "reasoning": "RTM Light uses a rigid lower mould and a semi-flexible upper mould with vacuum assistance to inject resin through a dry fibre preform. It gives good surface finish on both sides, repeatable fibre volume fractions, and moderate cycle times (30-90 minutes). Excellent for medium-volume structural parts in automotive, marine, and wind energy.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "50-58%",
+        "void_content": "1-3%",
+        "tooling_cost": "Moderate (two-sided tooling, lighter than matched metal RTM)",
+        "skill_level": "Intermediate to advanced"
+      },
+      "alternatives": [
+        {
+          "process": "Standard RTM (matched metal dies)",
+          "when": "If you need tighter tolerances and higher volumes"
+        },
+        {
+          "process": "Resin Infusion",
+          "when": "If two-sided tooling cost is too high and you can accept one rough surface"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$5,000-$30,000",
+        "per_part_relative": "Moderate",
+        "capital_equipment": "$10,000-$50,000 (injection equipment, clamping frame)"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/resin-infusion-vartm.md"
+      ]
+    },
+
+    "rec_rtm_small": {
+      "id": "rec_rtm_small",
+      "type": "recommendation",
+      "recommended_process": "Closed-Mould RTM",
+      "reasoning": "For small complex parts at 10-100 per year, closed-mould RTM offers excellent dimensional control, good surface finish on all sides, and repeatable quality. The small part size keeps tooling costs manageable. Use preformed dry-fibre preforms for consistency.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "50-60%",
+        "void_content": "1-2%",
+        "tooling_cost": "Moderate (small matched moulds, can be machined aluminium)",
+        "skill_level": "Advanced"
+      },
+      "alternatives": [
+        {
+          "process": "Compression Moulding (SMC/BMC)",
+          "when": "If the part can accept chopped-fibre reinforcement and you need faster cycles"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$3,000-$20,000",
+        "per_part_relative": "Moderate",
+        "capital_equipment": "$15,000-$50,000"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/resin-infusion-vartm.md"
+      ]
+    },
+
+    "rec_hp_rtm": {
+      "id": "rec_hp_rtm",
+      "type": "recommendation",
+      "recommended_process": "High-Pressure RTM (HP-RTM)",
+      "reasoning": "HP-RTM is the go-to process for high-volume structural composite parts, especially in automotive. It uses matched steel moulds, high injection pressures (30-150 bar), and fast-curing resins to achieve cycle times of 2-5 minutes. This enables automotive-scale production rates while maintaining structural-grade quality.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "50-58%",
+        "void_content": "Under 2%",
+        "tooling_cost": "Very high (precision steel moulds, hydraulic press)",
+        "skill_level": "Specialist production engineering"
+      },
+      "alternatives": [
+        {
+          "process": "Compression Moulding with Prepreg Blanks",
+          "when": "If the geometry is suitable for draping a flat prepreg blank into a press"
+        },
+        {
+          "process": "Wet Compression Moulding",
+          "when": "Emerging alternative with lower injection equipment cost"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$100,000-$1,000,000",
+        "per_part_relative": "Low (at high volume)",
+        "capital_equipment": "$500,000-$5,000,000 (press, injection unit, preform handling)"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/resin-infusion-vartm.md",
+        "knowledge/02-design-rules/design-for-manufacture.md"
+      ]
+    },
+
+    "rec_compression_moulding": {
+      "id": "rec_compression_moulding",
+      "type": "recommendation",
+      "recommended_process": "Compression Moulding (SMC or Prepreg Compression)",
+      "reasoning": "Compression moulding is ideal for high-volume parts that do not require continuous-fibre reinforcement throughout. Sheet Moulding Compound (SMC) uses chopped fibres in a resin paste, pressed in heated matched-metal dies. Cycle times of 1-3 minutes are achievable. For better mechanical performance, prepreg compression moulding uses continuous-fibre blanks draped and pressed.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "20-35% (SMC), 50-60% (prepreg compression)",
+        "void_content": "Under 2%",
+        "tooling_cost": "High (heated steel matched dies)",
+        "skill_level": "Production engineering"
+      },
+      "alternatives": [
+        {
+          "process": "Injection Moulding with Short Fibre Compounds",
+          "when": "If the part is small and non-structural, thermoplastic injection moulding with short glass or carbon fibre is even faster"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$50,000-$500,000",
+        "per_part_relative": "Very low (at volume)",
+        "capital_equipment": "$200,000-$2,000,000 (hydraulic press, material handling)"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/common-defects.md",
+        "knowledge/02-design-rules/design-for-manufacture.md"
+      ]
+    },
+
+    "rec_afp_flat": {
+      "id": "rec_afp_flat",
+      "type": "recommendation",
+      "recommended_process": "Automated Fibre Placement (AFP)",
+      "reasoning": "For high-volume aerospace-grade flat or gently curved panels, AFP is the most efficient process. It lays prepreg tows at rates of 10-50 kg/hour with high precision, minimal material waste, and excellent repeatability. AFP can place fibres in any orientation, handle ply drop-offs automatically, and produce near-net-shape laminates that require minimal trimming.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "57-63%",
+        "void_content": "Under 1% (with autoclave), 1-2% (in-situ consolidation)",
+        "tooling_cost": "Very high (precision mandrels or moulds)",
+        "skill_level": "Specialist (programming and operation)"
+      },
+      "alternatives": [
+        {
+          "process": "Automated Tape Laying (ATL)",
+          "when": "If the surface is flat or near-flat and width > 150 mm tows, ATL may be faster than AFP"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$50,000-$500,000",
+        "per_part_relative": "Moderate (high deposition rate reduces labour)",
+        "capital_equipment": "$1,000,000-$10,000,000 (AFP cell, robot, laser/IR heater)"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/afp-atl.md",
+        "knowledge/02-design-rules/stacking-sequences.md"
+      ]
+    },
+
+    "rec_afp_curved": {
+      "id": "rec_afp_curved",
+      "type": "recommendation",
+      "recommended_process": "Automated Fibre Placement (AFP) on Curved Tooling",
+      "reasoning": "AFP excels on single-curvature surfaces because the tow steering requirements are minimal. The process handles curvature by adjusting individual tow tension and feed rate. For medium to high volumes, the automation eliminates the variability of hand layup and reduces recurring cost despite the high capital investment.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "57-63%",
+        "void_content": "Under 1.5%",
+        "tooling_cost": "High (curved mandrel, typically Invar or composite tooling)",
+        "skill_level": "Specialist"
+      },
+      "alternatives": [
+        {
+          "process": "Filament Winding",
+          "when": "If the curvature is convex and axisymmetric, filament winding is simpler and cheaper"
+        },
+        {
+          "process": "Prepreg Hand Layup",
+          "when": "If volume is under 50 parts/year and the investment in AFP cannot be justified"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$50,000-$300,000",
+        "per_part_relative": "Moderate",
+        "capital_equipment": "$1,000,000-$10,000,000"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/afp-atl.md"
+      ]
+    },
+
+    "rec_afp_large": {
+      "id": "rec_afp_large",
+      "type": "recommendation",
+      "recommended_process": "Automated Fibre Placement (AFP) for Large Structures",
+      "reasoning": "Large complex structures at high volumes are the core application of AFP. Aircraft fuselage sections, wing skins, and large automotive structures all benefit from AFP's combination of high deposition rates, precise fibre placement, and minimal material waste. In-situ consolidation with thermoplastic tapes is an emerging option that can eliminate the autoclave step entirely.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "57-65%",
+        "void_content": "Under 1% (autoclave), 1-2% (in-situ)",
+        "tooling_cost": "Very high",
+        "skill_level": "Specialist production engineering"
+      },
+      "alternatives": [
+        {
+          "process": "Resin Infusion (for lower volumes)",
+          "when": "If volume is under 100/year and the AFP investment is not justified"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$200,000-$2,000,000",
+        "per_part_relative": "Moderate to high (offset by deposition speed)",
+        "capital_equipment": "$2,000,000-$15,000,000"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/afp-atl.md",
+        "knowledge/02-design-rules/design-for-manufacture.md"
+      ]
+    },
+
+    "rec_infusion_complex": {
+      "id": "rec_infusion_complex",
+      "type": "recommendation",
+      "recommended_process": "Resin Infusion (VARTM)",
+      "reasoning": "Resin infusion is ideal for medium-complexity parts where you need good structural performance without the cost of prepreg and autoclave. Dry reinforcement is placed in a single-sided mould, sealed with a vacuum bag, and resin is drawn through the fibres by vacuum. It works well for complex geometries including ducts, fairings, and enclosed shapes when used with split moulds.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "50-60%",
+        "void_content": "1-3%",
+        "tooling_cost": "Moderate (single-sided mould with good surface)",
+        "skill_level": "Intermediate to advanced"
+      },
+      "alternatives": [
+        {
+          "process": "RTM Light",
+          "when": "If you need a good finish on both sides and can afford two-sided tooling"
+        },
+        {
+          "process": "Prepreg Layup",
+          "when": "If you need void content under 1% and higher fibre volume fractions"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$2,000-$20,000",
+        "per_part_relative": "Low to moderate",
+        "capital_equipment": "$3,000-$15,000"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/resin-infusion-vartm.md",
+        "knowledge/03-manufacturing-processes/common-defects.md"
+      ]
+    },
+
+    "rec_prepreg_complex": {
+      "id": "rec_prepreg_complex",
+      "type": "recommendation",
+      "recommended_process": "Prepreg Hand Layup with Autoclave Cure",
+      "reasoning": "For low-volume aerospace-quality complex parts, prepreg hand layup remains the standard. Skilled laminators can drape prepreg plies over complex contours, using cuts and darts where needed. The autoclave consolidation pressure ensures low void content even in tight radii and complex features. This is how most aerospace parts with complex geometry are still made.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "55-65%",
+        "void_content": "Under 1%",
+        "tooling_cost": "High (must withstand autoclave conditions)",
+        "skill_level": "Advanced (skilled laminators required)"
+      },
+      "alternatives": [
+        {
+          "process": "AFP",
+          "when": "If the geometry permits robotic access and volume justifies the capital"
+        },
+        {
+          "process": "Out-of-Autoclave Prepreg",
+          "when": "If you want to avoid autoclave cost and can accept slightly higher void content (1-2%)"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$10,000-$100,000",
+        "per_part_relative": "High (material + labour intensive)",
+        "capital_equipment": "$100,000-$1,000,000"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/prepreg-and-autoclave.md",
+        "knowledge/02-design-rules/design-for-manufacture.md"
+      ]
+    },
+
+    "rec_infusion_large": {
+      "id": "rec_infusion_large",
+      "type": "recommendation",
+      "recommended_process": "Resin Infusion (VARTM) for Large Structures",
+      "reasoning": "For large complex parts at low to medium volumes, resin infusion is often the only practical process. Autoclaves large enough for boat hulls or wind turbine blades would be prohibitively expensive. Infusion handles large areas well because the vacuum-driven resin flow can cover several metres when flow media and feed/vent line placement are designed correctly.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "50-58%",
+        "void_content": "1-3%",
+        "tooling_cost": "Moderate to high (large single-sided mould)",
+        "skill_level": "Advanced (flow simulation and process design critical at large scale)"
+      },
+      "alternatives": [
+        {
+          "process": "Prepreg with Large Oven (Out-of-Autoclave)",
+          "when": "If void content requirements are strict and you can build/source a large oven"
+        },
+        {
+          "process": "AFP",
+          "when": "At volumes above 100-200/year for large structures"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$20,000-$200,000",
+        "per_part_relative": "Moderate",
+        "capital_equipment": "$5,000-$30,000 (scaled-up infusion setup)"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/resin-infusion-vartm.md",
+        "knowledge/03-manufacturing-processes/common-defects.md"
+      ]
+    },
+
+    "rec_filament_winding_wet": {
+      "id": "rec_filament_winding_wet",
+      "type": "recommendation",
+      "recommended_process": "Wet Filament Winding",
+      "reasoning": "Wet filament winding is highly efficient for axisymmetric parts. Continuous fibre is pulled through a resin bath and wound onto a rotating mandrel under controlled tension. It gives excellent fibre alignment, high fibre volume fractions, and is inherently suited to automated production even at low volumes because the process is CNC-controlled.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "55-65%",
+        "void_content": "2-4%",
+        "tooling_cost": "Low to moderate (mandrel, often reusable or extractable)",
+        "skill_level": "Intermediate (CNC programming + winding setup)"
+      },
+      "alternatives": [
+        {
+          "process": "Hand Layup on Mandrel",
+          "when": "If you have only 1-2 parts and no access to a winding machine"
+        },
+        {
+          "process": "AFP on Mandrel",
+          "when": "If you need more complex fibre paths than winding can achieve (e.g., 0-degree axial plies on a cylinder)"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$1,000-$10,000 (mandrel)",
+        "per_part_relative": "Low to moderate",
+        "capital_equipment": "$20,000-$200,000 (winding machine)"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/afp-atl.md"
+      ]
+    },
+
+    "rec_filament_winding_towpreg": {
+      "id": "rec_filament_winding_towpreg",
+      "type": "recommendation",
+      "recommended_process": "Towpreg Filament Winding",
+      "reasoning": "At higher volumes, using pre-impregnated tow (towpreg) instead of wet winding eliminates the resin bath, reduces mess, and gives more consistent resin content. Towpreg winding is cleaner, faster to set up, and produces more repeatable parts. The trade-off is higher material cost compared to dry fibre and liquid resin.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "58-65%",
+        "void_content": "1-3%",
+        "tooling_cost": "Low to moderate (mandrel)",
+        "skill_level": "Intermediate"
+      },
+      "alternatives": [
+        {
+          "process": "Wet Filament Winding",
+          "when": "If material cost is the primary driver and you can tolerate more process variability"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$1,000-$10,000 (mandrel)",
+        "per_part_relative": "Moderate (towpreg material is more expensive than wet winding)",
+        "capital_equipment": "$30,000-$300,000"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/afp-atl.md"
+      ]
+    },
+
+    "rec_filament_winding_vessel": {
+      "id": "rec_filament_winding_vessel",
+      "type": "recommendation",
+      "recommended_process": "Filament Winding for Pressure Vessels",
+      "reasoning": "Filament winding is the dominant process for composite pressure vessels (Types III and IV). The liner serves as both the mandrel and the gas barrier. Fibre is wound in helical and hoop patterns optimised for the pressure loading. Netting analysis gives the optimal winding angles (typically 54.7 degrees for cylindrical sections under biaxial loading). The process is well-understood, widely used for CNG, hydrogen, and oxygen storage.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "58-65%",
+        "void_content": "1-3%",
+        "tooling_cost": "Low (the liner IS the mandrel)",
+        "skill_level": "Advanced (winding pattern design is critical for burst performance)"
+      },
+      "alternatives": [
+        {
+          "process": "AFP for Pressure Vessels",
+          "when": "For non-axisymmetric or very large vessels where winding angle limitations are a problem"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$500-$5,000 (winding fixtures, the liner is consumed)",
+        "per_part_relative": "Moderate (dominated by carbon fibre cost for high-pressure vessels)",
+        "capital_equipment": "$50,000-$500,000"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/afp-atl.md",
+        "knowledge/04-structural-analysis/sizing-a-panel.md"
+      ]
+    },
+
+    "rec_filament_winding_vessel_advanced": {
+      "id": "rec_filament_winding_vessel_advanced",
+      "type": "recommendation",
+      "recommended_process": "Advanced Filament Winding for Linerless (Type V) Vessels",
+      "reasoning": "Type V (linerless) composite pressure vessels eliminate the liner entirely, saving weight and avoiding liner-related failure modes. However, the composite must serve as both the structural shell and the gas barrier. This requires specialized matrix systems, very low void content, and careful process control. This is an emerging technology; consult specialists.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "60-66%",
+        "void_content": "Must be under 1% (gas permeation through voids)",
+        "tooling_cost": "High (sacrificial or extractable mandrel required)",
+        "skill_level": "Expert (emerging technology, limited production experience)"
+      },
+      "alternatives": [
+        {
+          "process": "Type IV (polymer liner) Filament Winding",
+          "when": "If the weight saving of going linerless does not justify the risk and development cost"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$5,000-$50,000 (sacrificial mandrel adds cost)",
+        "per_part_relative": "High (development stage)",
+        "capital_equipment": "$100,000-$1,000,000"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/afp-atl.md"
+      ]
+    },
+
+    "rec_filament_winding_tube": {
+      "id": "rec_filament_winding_tube",
+      "type": "recommendation",
+      "recommended_process": "Filament Winding for Structural Tubes",
+      "reasoning": "At higher volumes (100+ per year), filament winding is the most cost-effective way to make composite tubes. The mandrel is reusable (typically polished steel or aluminium with a taper or split for extraction), and the process is fast (a 1 m tube can be wound in minutes). Winding angles can be varied to optimise for bending, torsion, or axial loading.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "55-65%",
+        "void_content": "2-4%",
+        "tooling_cost": "Low (reusable mandrel)",
+        "skill_level": "Intermediate"
+      },
+      "alternatives": [
+        {
+          "process": "Roll Wrapping",
+          "when": "For thin-wall tubes (like fishing rods or golf shafts) where winding is too slow"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$500-$5,000 (reusable mandrel)",
+        "per_part_relative": "Low",
+        "capital_equipment": "$20,000-$200,000"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/afp-atl.md"
+      ]
+    },
+
+    "rec_filament_winding_profile": {
+      "id": "rec_filament_winding_profile",
+      "type": "recommendation",
+      "recommended_process": "Filament Winding or Mandrel Wrapping",
+      "reasoning": "For tube and rod profiles at short-run volumes, filament winding or mandrel wrapping (using prepreg) is practical. Winding gives helical reinforcement (good for torsion), while wrapping with prepreg allows 0-degree plies for axial stiffness. The mandrel is typically a polished steel bar with release agent.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "55-65%",
+        "void_content": "2-4% (winding), 1-2% (prepreg wrapping + oven cure)",
+        "tooling_cost": "Low",
+        "skill_level": "Intermediate"
+      },
+      "alternatives": [
+        {
+          "process": "Pultrusion",
+          "when": "If annual volumes grow above 500 m and the cross-section can be standardised"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$500-$3,000",
+        "per_part_relative": "Moderate",
+        "capital_equipment": "$10,000-$100,000"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/afp-atl.md"
+      ]
+    },
+
+    "rec_hand_layup_profile": {
+      "id": "rec_hand_layup_profile",
+      "type": "recommendation",
+      "recommended_process": "Hand Layup on Shaped Mandrel or in Female Mould",
+      "reasoning": "Open-section profiles (C-channels, angles, hat stiffeners, I-beams) cannot easily be wound and are too short-run for pultrusion. Hand layup of prepreg or dry fabric into a female mould (or over a male mandrel) is the standard approach. For hat stiffeners and closed sections, an inflatable bladder or foam mandrel provides internal pressure during cure.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "50-60% (with vacuum or autoclave)",
+        "void_content": "1-3%",
+        "tooling_cost": "Moderate (shaped mould or mandrel for each profile)",
+        "skill_level": "Intermediate to advanced"
+      },
+      "alternatives": [
+        {
+          "process": "Braiding + RTM",
+          "when": "If the profile has a closed section and you want automated fibre placement with resin injection"
+        },
+        {
+          "process": "Hot Drape Forming",
+          "when": "If you have flat prepreg laminates that can be formed into the profile shape while hot"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$1,000-$15,000",
+        "per_part_relative": "Moderate to high (labour intensive)",
+        "capital_equipment": "$5,000-$100,000"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/prepreg-and-autoclave.md",
+        "knowledge/02-design-rules/design-for-manufacture.md"
+      ]
+    },
+
+    "rec_pultrusion": {
+      "id": "rec_pultrusion",
+      "type": "recommendation",
+      "recommended_process": "Pultrusion",
+      "reasoning": "Pultrusion is the most cost-effective process for constant cross-section composite profiles produced in long runs. Continuous fibres and fabrics are pulled through a heated die that shapes and cures the resin in a single continuous operation. Line speeds of 0.5-3 m/minute are typical. The process is ideal for structural beams, window frames, gratings, rebar, and cable trays.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "50-70% (very high Vf achievable with unidirectional fibres)",
+        "void_content": "Under 2%",
+        "tooling_cost": "High (precision heated steel die, pulling mechanism)",
+        "skill_level": "Specialist (die design and process tuning critical)"
+      },
+      "alternatives": [
+        {
+          "process": "Pull-winding (Pultrusion + Winding)",
+          "when": "If you need off-axis reinforcement (e.g., +/-45 degree layers for torsion resistance) in addition to axial fibres"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$20,000-$100,000 (die set)",
+        "per_part_relative": "Very low (at volume, per metre)",
+        "capital_equipment": "$100,000-$500,000 (pultrusion line)"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/afp-atl.md",
+        "knowledge/01-fundamentals/fibre-types.md"
+      ]
+    },
+
+    "rec_bladder_moulding": {
+      "id": "rec_bladder_moulding",
+      "type": "recommendation",
+      "recommended_process": "Bladder Moulding (Internal Pressure Moulding)",
+      "reasoning": "Bladder moulding is the standard process for structural composite tubes at low to medium volumes. Prepreg plies are laid up around an inflatable silicone or nylon bladder, placed inside a clamshell mould, and cured under internal bladder pressure (3-7 bar) in an oven. This gives good consolidation, smooth internal surfaces, and precise external geometry. It is how most bicycle frames, tennis rackets, and drone arms are made.",
+      "key_parameters": {
+        "typical_fibre_volume_fraction": "55-65%",
+        "void_content": "1-3%",
+        "tooling_cost": "Moderate (two-piece clamshell mould + reusable bladders)",
+        "skill_level": "Intermediate to advanced"
+      },
+      "alternatives": [
+        {
+          "process": "Filament Winding",
+          "when": "If the tube is axisymmetric and volumes are higher"
+        },
+        {
+          "process": "Mandrel Wrapping",
+          "when": "For simple straight tubes where internal pressure is not needed"
+        },
+        {
+          "process": "Foam Core Wrapping",
+          "when": "If the tube needs a structural core (e.g., sandwich construction for stiffness)"
+        }
+      ],
+      "cost_indication": {
+        "tooling": "$2,000-$20,000 (clamshell mould)",
+        "per_part_relative": "Moderate",
+        "capital_equipment": "$5,000-$50,000 (oven, pressure source, bladders)"
+      },
+      "relevant_knowledge_pages": [
+        "knowledge/03-manufacturing-processes/prepreg-and-autoclave.md",
+        "knowledge/03-manufacturing-processes/vacuum-bagging.md"
+      ]
+    }
+  }
+}

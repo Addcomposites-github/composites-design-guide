@@ -84,6 +84,34 @@ Wet layup is the starting point. Each upgrade improves part quality:
 - **Switch to resin infusion** → dry fabric laid up first, resin pulled through under vacuum. Even higher fibre volume (50–60%). See [Resin Infusion / VARTM](resin-infusion-vartm.md).
 - **Switch to prepreg** → resin pre-impregnated into the fibre. Best properties but needs freezer storage and autoclave or oven cure. See [Prepreg and Autoclave](prepreg-and-autoclave.md).
 
+## When to Choose Wet Layup
+
+```mermaid
+graph TD
+    A[Need a composite part?] --> B{How many parts?}
+    B -->|1–20 parts| C{Structural or cosmetic?}
+    B -->|20–500 parts| D[Consider vacuum bagging or infusion]
+    B -->|500+ parts| E[Consider RTM, prepreg, or AFP]
+    C -->|Cosmetic / non-critical| F{Budget?}
+    C -->|Structural / load-bearing| G[Upgrade to vacuum bagging minimum]
+    F -->|Minimal < $200 setup| H[✅ WET LAYUP]
+    F -->|Moderate| I[Vacuum bagging for better quality]
+    H --> J[Add vacuum bagging as first upgrade]
+```
+
+**Choose wet layup when:**
+- You are making 1–20 parts and structural performance is not critical
+- You are learning composites for the first time
+- Budget is minimal (< $200 total setup cost)
+- The part is cosmetic, non-structural, or a prototype
+- You are doing a repair on an existing composite structure
+
+**Do NOT choose wet layup when:**
+- The part is load-bearing and safety-critical
+- You need fibre volume fraction above 50%
+- Void content below 3% is required
+- You need repeatable, consistent properties across many parts
+
 ## Key Takeaways
 
 - Wet layup is the simplest composite manufacturing method — brush or roll liquid resin into dry fabric on a mould

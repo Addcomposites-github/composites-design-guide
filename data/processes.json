@@ -1,0 +1,741 @@
+{
+  "meta": {
+    "description": "Composites manufacturing process capability matrix for AI-assisted process selection",
+    "version": "1.0.0",
+    "last_updated": "2026-02",
+    "units": {
+      "pressure": "MPa",
+      "temperature": "Celsius",
+      "cost": "USD",
+      "length": "mm",
+      "area": "m2",
+      "mass_rate": "kg/hr"
+    },
+    "notes": "Values are representative industry ranges. Actual results depend on specific materials, tooling, operator skill, and environmental conditions. Always verify against material supplier datasheets and process specifications."
+  },
+  "processes": [
+    {
+      "id": "wet-layup",
+      "name": "Wet Layup / Hand Layup",
+      "difficulty": "beginner",
+      "description": "Dry fabric + liquid resin applied by hand with brush/roller onto an open mould. The simplest and most accessible composites manufacturing method.",
+      "capabilities": {
+        "fibre_volume_fraction": { "min": 0.30, "typical": 0.40, "max": 0.50 },
+        "void_content_pct": { "min": 2.0, "typical": 5.0, "max": 10.0 },
+        "dimensional_tolerance_mm": { "typical": 1.5, "best": 0.5 },
+        "max_part_size_m2": null,
+        "min_thickness_mm": 0.5,
+        "surface_quality": "moderate",
+        "surface_quality_notes": "One good surface (mould side); bag/free side is rough and resin-rich"
+      },
+      "suitable_materials": {
+        "fibre_forms": ["woven", "chopped-strand-mat", "ncf", "unidirectional"],
+        "resin_families": ["epoxy", "polyester", "vinyl-ester"],
+        "not_suitable": ["prepreg", "thermoplastic"]
+      },
+      "cost": {
+        "capital_equipment_usd": { "low": 500, "high": 5000 },
+        "tooling_per_part_usd": { "simple": 200, "moderate": 2000, "complex": 10000 },
+        "labour_hours_per_kg": { "low": 2, "typical": 4, "high": 8 },
+        "material_waste_pct": { "typical": 10, "max": 20 }
+      },
+      "production": {
+        "suitable_volume": { "min": 1, "sweet_spot_max": 50 },
+        "cycle_time_description": "Hours to days depending on resin system and part size. Room-temperature epoxy cures in 12-24 hours; post-cure adds several hours at 60-80C.",
+        "automation_level": "manual"
+      },
+      "part_geometry": {
+        "open_shapes": true,
+        "closed_shapes": false,
+        "flat_panels": true,
+        "single_curvature": true,
+        "double_curvature": true,
+        "axisymmetric": false,
+        "constant_cross_section": false
+      },
+      "quality_class": ["hobby", "industrial"],
+      "advantages": [
+        "Lowest equipment cost of any composites process",
+        "No special tooling or facility required",
+        "Very flexible geometry — almost any open shape",
+        "Easy to learn — ideal starting point for beginners",
+        "Wide range of compatible fibre and resin types",
+        "Ideal for prototypes and one-off parts"
+      ],
+      "limitations": [
+        "Low fibre volume fraction (35-50%)",
+        "Inconsistent quality — highly operator-dependent",
+        "High void content compared to other processes",
+        "20-40% lower mechanical properties than autoclave prepreg with same materials",
+        "Difficult to control thickness precisely",
+        "Styrene emissions with polyester/vinyl-ester resins"
+      ],
+      "typical_applications": [
+        "Car body kits and cosmetic fairings",
+        "Surfboards and small boat repairs",
+        "Maker projects and student competitions",
+        "Prototypes and proof-of-concept parts",
+        "Non-structural or lightly loaded parts"
+      ],
+      "knowledge_base_page": "knowledge/03-manufacturing-processes/wet-layup.md"
+    },
+    {
+      "id": "vacuum-bagging",
+      "name": "Vacuum Bagging",
+      "difficulty": "beginner",
+      "description": "Wet layup or dry fabric sealed under a flexible bag with vacuum applied to compact the laminate, remove trapped air, and squeeze out excess resin. Applies approximately 1 atm (0.1 MPa) of uniform pressure.",
+      "capabilities": {
+        "fibre_volume_fraction": { "min": 0.45, "typical": 0.52, "max": 0.58 },
+        "void_content_pct": { "min": 0.5, "typical": 2.0, "max": 4.0 },
+        "dimensional_tolerance_mm": { "typical": 0.8, "best": 0.3 },
+        "max_part_size_m2": null,
+        "min_thickness_mm": 0.3,
+        "surface_quality": "good",
+        "surface_quality_notes": "Mould side is excellent; bag side is smooth but shows breather texture"
+      },
+      "suitable_materials": {
+        "fibre_forms": ["woven", "ncf", "unidirectional", "prepreg"],
+        "resin_families": ["epoxy", "polyester", "vinyl-ester"],
+        "not_suitable": ["thermoplastic"]
+      },
+      "cost": {
+        "capital_equipment_usd": { "low": 1000, "high": 15000 },
+        "tooling_per_part_usd": { "simple": 300, "moderate": 3000, "complex": 15000 },
+        "labour_hours_per_kg": { "low": 3, "typical": 5, "high": 10 },
+        "material_waste_pct": { "typical": 12, "max": 25 },
+        "consumables_note": "Peel ply, release film, bleeder, breather, bag film, sealant tape are single-use per cure cycle"
+      },
+      "production": {
+        "suitable_volume": { "min": 1, "sweet_spot_max": 200 },
+        "cycle_time_description": "Similar to wet layup cure time plus 30-60 min for bag setup. Vacuum held throughout cure.",
+        "automation_level": "manual"
+      },
+      "part_geometry": {
+        "open_shapes": true,
+        "closed_shapes": false,
+        "flat_panels": true,
+        "single_curvature": true,
+        "double_curvature": true,
+        "axisymmetric": false,
+        "constant_cross_section": false
+      },
+      "quality_class": ["hobby", "industrial", "aerospace-secondary"],
+      "advantages": [
+        "Significant quality improvement over wet layup at low additional cost",
+        "Higher fibre volume fraction (50-55%) through compaction",
+        "Lower void content — atmospheric pressure drives out trapped air",
+        "More consistent laminate thickness",
+        "Compatible with oven post-cure for better mechanical properties",
+        "Same flexible geometry capability as wet layup"
+      ],
+      "limitations": [
+        "Higher consumables cost per cycle (bag, breather, bleeder are single-use)",
+        "Requires leak-free bag seal — corners and fittings are common failure points",
+        "Longer setup time than open-mould wet layup",
+        "Limited to ~0.1 MPa compaction pressure",
+        "Operator skill required for consistent bagging"
+      ],
+      "typical_applications": [
+        "Student Formula and competition vehicles",
+        "Small marine structures and boat repairs",
+        "Small aircraft secondary structures",
+        "Drone airframes and UAV structures",
+        "Sporting goods — bicycle frames, skis, kayak paddles",
+        "Composite repairs in the field"
+      ],
+      "knowledge_base_page": "knowledge/03-manufacturing-processes/vacuum-bagging.md"
+    },
+    {
+      "id": "resin-infusion-vartm",
+      "name": "Resin Infusion / VARTM",
+      "difficulty": "intermediate",
+      "description": "Dry fabric stacked on mould, sealed under vacuum bag, then liquid resin is pulled through the stack by vacuum. Achieves near-prepreg quality at near-wet-layup material cost.",
+      "capabilities": {
+        "fibre_volume_fraction": { "min": 0.48, "typical": 0.55, "max": 0.62 },
+        "void_content_pct": { "min": 0.5, "typical": 1.5, "max": 3.0 },
+        "dimensional_tolerance_mm": { "typical": 0.5, "best": 0.2 },
+        "max_part_size_m2": 200,
+        "min_thickness_mm": 0.5,
+        "surface_quality": "good",
+        "surface_quality_notes": "Mould side excellent; bag side is resin-rich but smoother than wet layup",
+        "max_practical_thickness_mm": 25
+      },
+      "suitable_materials": {
+        "fibre_forms": ["woven", "ncf", "unidirectional"],
+        "resin_families": ["epoxy", "polyester", "vinyl-ester"],
+        "resin_requirements": "Low viscosity (<300-500 mPa.s), adequate pot life for part size, low exotherm",
+        "not_suitable": ["prepreg", "chopped-strand-mat", "thermoplastic"]
+      },
+      "cost": {
+        "capital_equipment_usd": { "low": 3000, "high": 50000 },
+        "tooling_per_part_usd": { "simple": 500, "moderate": 5000, "complex": 30000 },
+        "labour_hours_per_kg": { "low": 1.5, "typical": 3, "high": 6 },
+        "material_waste_pct": { "typical": 8, "max": 15 },
+        "consumables_note": "Flow media, spiral tubing, bag film, sealant tape, catch pot — single-use per infusion"
+      },
+      "production": {
+        "suitable_volume": { "min": 5, "sweet_spot_max": 500 },
+        "cycle_time_description": "Dry layup: 1-4 hours depending on size. Infusion: 30 min to 3 hours. Cure: 6-24 hours room temp, or 2-4 hours oven.",
+        "automation_level": "semi-automated"
+      },
+      "part_geometry": {
+        "open_shapes": true,
+        "closed_shapes": false,
+        "flat_panels": true,
+        "single_curvature": true,
+        "double_curvature": true,
+        "axisymmetric": false,
+        "constant_cross_section": false
+      },
+      "quality_class": ["industrial", "marine", "wind-energy", "automotive"],
+      "advantages": [
+        "High fibre volume fraction (50-60%) at low material cost",
+        "Dry layup is faster and cleaner than wet layup",
+        "Excellent for very large parts — boat hulls, wind turbine blades",
+        "Visible flow front allows real-time monitoring",
+        "Low VOC emissions — closed system keeps resin contained",
+        "Good repeatability with established inlet/outlet strategy"
+      ],
+      "limitations": [
+        "Requires low-viscosity infusion-grade resin",
+        "Race-tracking and dry spots are common failure modes if inlet/outlet placement is wrong",
+        "Not ideal for very thick laminates (>20-25 mm) — resin may gel before full wet-out",
+        "Setup overhead makes it inefficient for very small parts",
+        "One-shot process — if infusion fails, the part is scrap",
+        "Flow simulation recommended for complex parts"
+      ],
+      "typical_applications": [
+        "Boat hulls and marine structures",
+        "Wind turbine blades (spar caps, skins)",
+        "Bus and rail body panels",
+        "Large automotive panels and truck fairings",
+        "Bridge decks and civil infrastructure",
+        "Large aerospace fairings and cowlings"
+      ],
+      "knowledge_base_page": "knowledge/03-manufacturing-processes/resin-infusion-vartm.md"
+    },
+    {
+      "id": "rtm",
+      "name": "RTM (Resin Transfer Moulding)",
+      "difficulty": "intermediate",
+      "description": "Dry fibre preform placed in a rigid closed mould (matched tooling). Resin injected under positive pressure (1-10 bar). Both surfaces are mould-quality. Higher cost tooling but excellent repeatability and surface finish.",
+      "capabilities": {
+        "fibre_volume_fraction": { "min": 0.45, "typical": 0.55, "max": 0.62 },
+        "void_content_pct": { "min": 0.3, "typical": 1.0, "max": 2.5 },
+        "dimensional_tolerance_mm": { "typical": 0.3, "best": 0.1 },
+        "max_part_size_m2": 5,
+        "min_thickness_mm": 1.0,
+        "surface_quality": "excellent",
+        "surface_quality_notes": "Both surfaces are mould-quality (class A possible). Excellent for visible/cosmetic parts."
+      },
+      "suitable_materials": {
+        "fibre_forms": ["woven", "ncf", "braided-preform", "3d-woven", "chopped-fibre-preform"],
+        "resin_families": ["epoxy", "polyester", "vinyl-ester", "polyurethane"],
+        "resin_requirements": "Low to medium viscosity, fast gel times preferred for production rate",
+        "not_suitable": ["prepreg", "thermoplastic-in-standard-rtm"]
+      },
+      "cost": {
+        "capital_equipment_usd": { "low": 50000, "high": 500000 },
+        "tooling_per_part_usd": { "simple": 10000, "moderate": 50000, "complex": 200000 },
+        "labour_hours_per_kg": { "low": 0.5, "typical": 1.5, "high": 3.0 },
+        "material_waste_pct": { "typical": 5, "max": 10 }
+      },
+      "production": {
+        "suitable_volume": { "min": 100, "sweet_spot_max": 10000 },
+        "cycle_time_description": "10-60 minutes per part for injection and cure (fast-cure resins). Preform preparation adds time but can be done offline.",
+        "automation_level": "semi-automated"
+      },
+      "part_geometry": {
+        "open_shapes": true,
+        "closed_shapes": true,
+        "flat_panels": true,
+        "single_curvature": true,
+        "double_curvature": true,
+        "axisymmetric": false,
+        "constant_cross_section": false,
+        "notes": "Can produce ribs, bosses, and integral stiffeners within the mould"
+      },
+      "quality_class": ["industrial", "automotive", "aerospace-secondary"],
+      "advantages": [
+        "Excellent dimensional accuracy — both surfaces are mould-defined",
+        "Class A surface finish possible on both sides",
+        "High repeatability — low part-to-part variation",
+        "Low void content with proper process control",
+        "Short cycle times possible with fast-cure resins (HP-RTM: 2-5 min)",
+        "Net-shape or near-net-shape parts reduce post-processing"
+      ],
+      "limitations": [
+        "High tooling cost — matched metal moulds are expensive",
+        "Part size limited by mould and press capacity (typically <5 m2)",
+        "Tooling lead time is long (weeks to months)",
+        "Mould clamping force required — need a press or robust clamping system",
+        "Not economical for low volumes (<100 parts) due to tooling amortisation",
+        "Limited thickness variation within a single part"
+      ],
+      "typical_applications": [
+        "Automotive body panels and structural parts (BMW i3, Lamborghini)",
+        "Aerospace brackets, clips, and fittings",
+        "Bicycle components (cranks, stems)",
+        "Sporting goods (helmet shells, ski bindings)",
+        "Small-to-medium structural components with cosmetic requirements"
+      ],
+      "knowledge_base_page": "knowledge/03-manufacturing-processes/rtm.md"
+    },
+    {
+      "id": "prepreg-hand-layup-oven",
+      "name": "Prepreg Hand Layup + Oven Cure",
+      "difficulty": "intermediate",
+      "description": "Pre-impregnated fibre (prepreg) laid up by hand and cured in an oven under vacuum-only pressure (~0.1 MPa). Uses out-of-autoclave (OOA) prepreg systems designed to consolidate without autoclave pressure.",
+      "capabilities": {
+        "fibre_volume_fraction": { "min": 0.50, "typical": 0.55, "max": 0.60 },
+        "void_content_pct": { "min": 0.5, "typical": 1.5, "max": 3.0 },
+        "dimensional_tolerance_mm": { "typical": 0.4, "best": 0.15 },
+        "max_part_size_m2": null,
+        "min_thickness_mm": 0.2,
+        "surface_quality": "good-to-excellent",
+        "surface_quality_notes": "Mould side is excellent; bag side is very good. Slightly lower quality than autoclave due to lower compaction pressure."
+      },
+      "suitable_materials": {
+        "fibre_forms": ["unidirectional-prepreg", "woven-prepreg", "ncf-prepreg"],
+        "resin_families": ["epoxy", "bismaleimide", "cyanate-ester"],
+        "resin_requirements": "Out-of-autoclave (OOA) prepreg formulations designed for vacuum-only cure",
+        "not_suitable": ["dry-fabric", "thermoplastic-prepreg"]
+      },
+      "cost": {
+        "capital_equipment_usd": { "low": 10000, "high": 100000 },
+        "tooling_per_part_usd": { "simple": 1000, "moderate": 10000, "complex": 50000 },
+        "labour_hours_per_kg": { "low": 3, "typical": 6, "high": 12 },
+        "material_waste_pct": { "typical": 15, "max": 30 },
+        "notes": "Prepreg material cost is 2-5x higher than dry fabric + resin. Freezer storage required (-18C)."
+      },
+      "production": {
+        "suitable_volume": { "min": 1, "sweet_spot_max": 200 },
+        "cycle_time_description": "Layup: 2-8 hours depending on part complexity. Debulk every 3-5 plies (15 min each). Oven cure: 2-6 hours at 80-180C depending on resin system.",
+        "automation_level": "manual"
+      },
+      "part_geometry": {
+        "open_shapes": true,
+        "closed_shapes": false,
+        "flat_panels": true,
+        "single_curvature": true,
+        "double_curvature": true,
+        "axisymmetric": false,
+        "constant_cross_section": false
+      },
+      "quality_class": ["industrial", "aerospace-secondary", "motorsport"],
+      "advantages": [
+        "Near-autoclave quality without autoclave capital cost",
+        "Precise, factory-controlled resin content — low part-to-part variation",
+        "Clean layup process — no liquid resin mixing on the shop floor",
+        "Better mechanical properties than wet layup or infusion",
+        "Accessible to smaller companies without autoclave infrastructure",
+        "Can process very large parts that would not fit in an autoclave"
+      ],
+      "limitations": [
+        "Prepreg material is 2-5x more expensive than dry fabric + resin",
+        "Requires freezer storage (-18C) — limited shelf life and out-time",
+        "Slightly lower compaction than autoclave — marginally higher void content",
+        "OOA-specific prepreg systems required (not all prepregs work vacuum-only)",
+        "Manual layup is slow for large or complex parts",
+        "Debulking between ply groups adds cycle time"
+      ],
+      "typical_applications": [
+        "Motorsport structures (F1, WEC — bodywork, aero packages)",
+        "Small aircraft primary and secondary structures",
+        "High-performance sporting goods (tennis rackets, golf shafts, bicycle frames)",
+        "Tooling and moulds for composite production",
+        "Large structures that exceed autoclave capacity (wind turbine spars, large fairings)"
+      ],
+      "knowledge_base_page": "knowledge/03-manufacturing-processes/prepreg-and-autoclave.md"
+    },
+    {
+      "id": "prepreg-autoclave",
+      "name": "Prepreg + Autoclave",
+      "difficulty": "advanced",
+      "description": "Pre-impregnated fibre laid up (by hand or automation), vacuum-bagged, then cured in an autoclave under combined heat (120-180C) and pressure (0.3-0.7 MPa). The gold standard for composite quality — delivers the highest fibre volume fraction, lowest void content, and best repeatability.",
+      "capabilities": {
+        "fibre_volume_fraction": { "min": 0.55, "typical": 0.60, "max": 0.65 },
+        "void_content_pct": { "min": 0.1, "typical": 0.5, "max": 1.0 },
+        "dimensional_tolerance_mm": { "typical": 0.2, "best": 0.05 },
+        "max_part_size_m2": 50,
+        "min_thickness_mm": 0.13,
+        "surface_quality": "excellent",
+        "surface_quality_notes": "Both surfaces excellent. Mould side is class A. Bag side is very smooth under autoclave pressure.",
+        "max_practical_thickness_mm": 50
+      },
+      "suitable_materials": {
+        "fibre_forms": ["unidirectional-prepreg", "woven-prepreg", "ncf-prepreg"],
+        "resin_families": ["epoxy", "bismaleimide", "cyanate-ester", "benzoxazine"],
+        "not_suitable": ["dry-fabric", "thermoplastic-prepreg-standard"]
+      },
+      "cost": {
+        "capital_equipment_usd": { "low": 500000, "high": 10000000 },
+        "tooling_per_part_usd": { "simple": 5000, "moderate": 50000, "complex": 500000 },
+        "labour_hours_per_kg": { "low": 4, "typical": 8, "high": 15 },
+        "material_waste_pct": { "typical": 20, "max": 35 },
+        "notes": "Autoclave purchase price dominates capital cost. Energy cost per cure cycle is significant. Tooling must withstand autoclave pressure and temperature."
+      },
+      "production": {
+        "suitable_volume": { "min": 10, "sweet_spot_max": 5000 },
+        "cycle_time_description": "Layup: 4-40 hours for complex parts. Debulk every 3-5 plies. Autoclave cycle: 4-12 hours including heat-up, dwell, and cool-down.",
+        "automation_level": "manual-or-automated",
+        "automation_notes": "AFP/ATL often used for layup; cure is always autoclave"
+      },
+      "part_geometry": {
+        "open_shapes": true,
+        "closed_shapes": true,
+        "flat_panels": true,
+        "single_curvature": true,
+        "double_curvature": true,
+        "axisymmetric": true,
+        "constant_cross_section": false
+      },
+      "quality_class": ["aerospace-primary", "aerospace-secondary", "motorsport", "defence"],
+      "advantages": [
+        "Highest achievable composite quality — <1% void content",
+        "Highest fibre volume fraction (55-65%) of any layup process",
+        "Most repeatable mechanical properties — essential for certification",
+        "Proven for primary aerospace structures (wings, fuselage, empennage)",
+        "Factory-controlled resin content eliminates mixing variability",
+        "Extensive material qualification database (allowables)"
+      ],
+      "limitations": [
+        "Extremely high capital cost — autoclave alone costs $500k-$10M+",
+        "High energy consumption per cure cycle",
+        "Part size limited by autoclave chamber dimensions",
+        "Prepreg requires freezer storage and has limited out-time",
+        "Long cure cycles — 4-12 hours per load",
+        "Tooling must withstand autoclave pressure and temperature (expensive materials)",
+        "Highest overall cost per kilogram of finished composite"
+      ],
+      "typical_applications": [
+        "Commercial aircraft primary structure (wing skins, fuselage barrels, spars)",
+        "Military aircraft structural components",
+        "Helicopter rotor blades",
+        "Spacecraft structures and fairings",
+        "Formula 1 monocoques and crash structures",
+        "High-performance satellite components"
+      ],
+      "knowledge_base_page": "knowledge/03-manufacturing-processes/prepreg-and-autoclave.md"
+    },
+    {
+      "id": "afp",
+      "name": "AFP (Automated Fibre Placement)",
+      "difficulty": "advanced",
+      "description": "Robotic head places multiple narrow prepreg tows (3.175-12.7 mm each) simultaneously onto a tool surface. Each tow can be independently started, stopped, and cut. Capable of following complex curved surfaces with high precision.",
+      "capabilities": {
+        "fibre_volume_fraction": { "min": 0.55, "typical": 0.60, "max": 0.65 },
+        "void_content_pct": { "min": 0.1, "typical": 0.5, "max": 1.5 },
+        "dimensional_tolerance_mm": { "typical": 0.15, "best": 0.05 },
+        "fibre_angle_accuracy_deg": 1.0,
+        "positional_accuracy_mm": 1.0,
+        "max_part_size_m2": null,
+        "min_thickness_mm": 0.13,
+        "surface_quality": "excellent",
+        "surface_quality_notes": "Depends on cure method. Autoclave-cured AFP parts have excellent surface quality.",
+        "gap_overlap_tolerance_mm": { "typical": 1.0, "max": 2.0 },
+        "min_steering_radius_mm": { "typical": 1000, "min": 500 }
+      },
+      "suitable_materials": {
+        "fibre_forms": ["slit-tape-prepreg", "tow-prepreg", "dry-fibre-tow"],
+        "resin_families": ["epoxy", "bismaleimide", "thermoplastic"],
+        "not_suitable": ["woven-fabric", "ncf-broadgoods", "chopped-fibre"]
+      },
+      "cost": {
+        "capital_equipment_usd": { "low": 2000000, "high": 10000000 },
+        "tooling_per_part_usd": { "simple": 20000, "moderate": 100000, "complex": 500000 },
+        "labour_hours_per_kg": { "low": 0.3, "typical": 0.8, "high": 2.0 },
+        "material_waste_pct": { "typical": 5, "max": 12 },
+        "deposition_rate_kg_per_hr": { "low": 5, "typical": 15, "high": 30 },
+        "notes": "Capital cost dominates. Programming and path planning add significant non-recurring engineering cost."
+      },
+      "production": {
+        "suitable_volume": { "min": 50, "sweet_spot_max": 10000 },
+        "cycle_time_description": "Layup rate: 5-30 kg/hr depending on part geometry and machine. Complex parts with many tow drops/adds are slower. Cure time depends on method (autoclave or OOA).",
+        "automation_level": "fully-automated"
+      },
+      "part_geometry": {
+        "open_shapes": true,
+        "closed_shapes": true,
+        "flat_panels": true,
+        "single_curvature": true,
+        "double_curvature": true,
+        "axisymmetric": true,
+        "constant_cross_section": false,
+        "notes": "Excels on complex contoured surfaces. Tow steering allows geodesic and non-geodesic fibre paths. Limited by minimum steering radius."
+      },
+      "quality_class": ["aerospace-primary", "aerospace-secondary", "defence", "space"],
+      "advantages": [
+        "Handles complex 3D contoured surfaces with high precision",
+        "Individual tow control allows complex ply boundaries and tailored layups",
+        "Excellent repeatability — machine accuracy ±1 mm position, ±1 deg angle",
+        "Lower material waste than hand layup (tows placed precisely where needed)",
+        "Full traceability — machine records every tow position",
+        "Scalable — can lay up very large structures (fuselage barrels, wing skins)"
+      ],
+      "limitations": [
+        "Very high capital cost ($2-10M per machine)",
+        "Significant programming and path planning effort for each new part",
+        "Lower deposition rate on complex geometry than ATL on flat parts",
+        "Minimum steering radius limits fibre path options",
+        "Tow gaps and overlaps at course boundaries affect structural properties",
+        "Requires skilled technicians for machine operation and maintenance"
+      ],
+      "typical_applications": [
+        "Aircraft fuselage barrels and skins",
+        "Wing skins with ply drop-offs",
+        "Engine nacelles and inlet ducts",
+        "Rocket motor cases and payload fairings",
+        "Helicopter cowlings and fuselage panels",
+        "Large wind turbine spar caps"
+      ],
+      "knowledge_base_page": "knowledge/03-manufacturing-processes/afp-atl.md"
+    },
+    {
+      "id": "atl",
+      "name": "ATL (Automated Tape Laying)",
+      "difficulty": "advanced",
+      "description": "Robotic gantry or CNC machine lays wide prepreg tape (75-300 mm) onto flat or gently curved tool surfaces. Highest deposition rate of any automated layup process for suitable geometries.",
+      "capabilities": {
+        "fibre_volume_fraction": { "min": 0.55, "typical": 0.60, "max": 0.65 },
+        "void_content_pct": { "min": 0.1, "typical": 0.5, "max": 1.0 },
+        "dimensional_tolerance_mm": { "typical": 0.15, "best": 0.05 },
+        "fibre_angle_accuracy_deg": 0.5,
+        "positional_accuracy_mm": 0.5,
+        "max_part_size_m2": null,
+        "min_thickness_mm": 0.13,
+        "surface_quality": "excellent",
+        "surface_quality_notes": "Uniform tape laydown gives very consistent surface. Final quality depends on cure method.",
+        "tape_widths_mm": [75, 150, 300]
+      },
+      "suitable_materials": {
+        "fibre_forms": ["wide-prepreg-tape"],
+        "resin_families": ["epoxy", "bismaleimide"],
+        "not_suitable": ["woven-fabric", "ncf", "dry-fibre", "narrow-tow"]
+      },
+      "cost": {
+        "capital_equipment_usd": { "low": 2000000, "high": 8000000 },
+        "tooling_per_part_usd": { "simple": 20000, "moderate": 80000, "complex": 400000 },
+        "labour_hours_per_kg": { "low": 0.2, "typical": 0.5, "high": 1.5 },
+        "material_waste_pct": { "typical": 8, "max": 18 },
+        "deposition_rate_kg_per_hr": { "low": 15, "typical": 35, "high": 60 },
+        "notes": "Highest deposition rate of any composites layup process on flat/gently curved surfaces."
+      },
+      "production": {
+        "suitable_volume": { "min": 50, "sweet_spot_max": 10000 },
+        "cycle_time_description": "Layup rate: 15-60 kg/hr on flat geometry. Very fast for large flat panels. Cure time depends on autoclave or oven cycle.",
+        "automation_level": "fully-automated"
+      },
+      "part_geometry": {
+        "open_shapes": true,
+        "closed_shapes": false,
+        "flat_panels": true,
+        "single_curvature": true,
+        "double_curvature": false,
+        "axisymmetric": false,
+        "constant_cross_section": false,
+        "notes": "Best for large, flat or gently single-curved surfaces. Wide tape cannot conform to double curvature without wrinkling."
+      },
+      "quality_class": ["aerospace-primary", "aerospace-secondary", "defence"],
+      "advantages": [
+        "Highest deposition rate of any composites layup process (up to 60 kg/hr)",
+        "Excellent for large flat or gently curved panels",
+        "Very consistent ply thickness and fibre alignment",
+        "Low material waste on rectangular/regular geometries",
+        "Full machine traceability of every tape course",
+        "Lower programming complexity than AFP for suitable geometries"
+      ],
+      "limitations": [
+        "Cannot handle double curvature or complex contours — wide tape wrinkles",
+        "High capital cost ($2-8M)",
+        "Limited to wide prepreg tape as input material",
+        "Not suitable for small parts — machine footprint is very large",
+        "Complex ply boundaries require cutting and repositioning, reducing efficiency",
+        "Cannot steer tape — only straight or gently curved paths"
+      ],
+      "typical_applications": [
+        "Large flat wing skin panels",
+        "Horizontal and vertical stabiliser skins",
+        "Flat spar webs and caps",
+        "Large panel layups for subsequent forming (hot drape forming)",
+        "Composite floor panels and deck structures"
+      ],
+      "knowledge_base_page": "knowledge/03-manufacturing-processes/afp-atl.md"
+    },
+    {
+      "id": "filament-winding",
+      "name": "Filament Winding",
+      "difficulty": "intermediate",
+      "description": "Continuous fibre (wet with resin or as towpreg) wound under tension around a rotating mandrel in precise, programmable patterns. Dominant process for pressure vessels, pipes, and axisymmetric structures.",
+      "capabilities": {
+        "fibre_volume_fraction": { "min": 0.55, "typical": 0.63, "max": 0.70 },
+        "void_content_pct": { "min": 0.3, "typical": 1.0, "max": 2.5 },
+        "dimensional_tolerance_mm": { "typical": 0.3, "best": 0.1 },
+        "max_part_size_m2": null,
+        "min_thickness_mm": 0.3,
+        "surface_quality": "good",
+        "surface_quality_notes": "Outer surface shows fibre pattern (band marks). Inner surface defined by mandrel — can be very smooth.",
+        "winding_angle_range_deg": { "min": 5, "max": 90 },
+        "fibre_placement_accuracy_mm": { "typical": 1.5, "best": 0.5 }
+      },
+      "suitable_materials": {
+        "fibre_forms": ["continuous-roving", "tow", "towpreg", "tape"],
+        "resin_families": ["epoxy", "polyester", "vinyl-ester", "thermoplastic"],
+        "not_suitable": ["woven-fabric", "ncf-broadgoods", "chopped-fibre", "prepreg-broadgoods"]
+      },
+      "cost": {
+        "capital_equipment_usd": { "low": 100000, "high": 1000000 },
+        "tooling_per_part_usd": { "simple": 2000, "moderate": 20000, "complex": 100000 },
+        "labour_hours_per_kg": { "low": 0.3, "typical": 1.0, "high": 3.0 },
+        "material_waste_pct": { "typical": 3, "max": 8 },
+        "notes": "Mandrel cost varies enormously — reusable steel mandrels for pipes vs expendable/dissolvable mandrels for enclosed vessels."
+      },
+      "production": {
+        "suitable_volume": { "min": 10, "sweet_spot_max": 100000 },
+        "cycle_time_description": "Simple pipes: minutes. Pressure vessels: 1-8 hours. Cure: room temp to oven depending on resin system.",
+        "automation_level": "fully-automated"
+      },
+      "part_geometry": {
+        "open_shapes": false,
+        "closed_shapes": true,
+        "flat_panels": false,
+        "single_curvature": true,
+        "double_curvature": true,
+        "axisymmetric": true,
+        "constant_cross_section": true,
+        "notes": "Best for surfaces of revolution — cylinders, cones, spheres, domes. Non-axisymmetric shapes are possible but limited."
+      },
+      "quality_class": ["industrial", "aerospace", "defence", "energy", "automotive"],
+      "advantages": [
+        "Highest fibre volume fraction of any composites process (55-70%)",
+        "Very low material waste — continuous fibre, no cutting",
+        "Excellent repeatability — CNC-controlled winding patterns",
+        "High production rate for suitable geometries (pipes in minutes)",
+        "Lower capital cost than AFP/ATL ($100k-$1M vs $2-10M)",
+        "Wide range of fibre and resin compatibility",
+        "Well-established design methods (netting analysis, geodesic paths)"
+      ],
+      "limitations": [
+        "Limited to surfaces of revolution or near-axisymmetric shapes",
+        "Cannot place fibres in arbitrary directions — limited to continuous paths",
+        "Ply drop-offs and local reinforcements are very difficult",
+        "Outer surface shows winding pattern — not cosmetically smooth",
+        "Mandrel design and extraction can be complex for enclosed shapes",
+        "Concave surfaces cause fibre bridging"
+      ],
+      "typical_applications": [
+        "Hydrogen and CNG pressure vessels (Type III, IV, V)",
+        "Rocket motor cases and solid propellant casings",
+        "Industrial pipes and ducting (oil/gas, chemical, water)",
+        "Drive shafts and propeller shafts",
+        "Flywheels and energy storage rotors",
+        "Electric motor rotor retention sleeves",
+        "Composite utility poles and tubular structures"
+      ],
+      "knowledge_base_page": "knowledge/03-manufacturing-processes/filament-winding.md"
+    },
+    {
+      "id": "pultrusion",
+      "name": "Pultrusion",
+      "difficulty": "intermediate",
+      "description": "Continuous fibres pulled through a resin bath then through a heated steel die that shapes and cures the profile in one continuous operation. Produces constant cross-section profiles at high speed and low cost.",
+      "capabilities": {
+        "fibre_volume_fraction": { "min": 0.50, "typical": 0.60, "max": 0.70 },
+        "void_content_pct": { "min": 0.2, "typical": 0.8, "max": 2.0 },
+        "dimensional_tolerance_mm": { "typical": 0.2, "best": 0.05 },
+        "max_part_size_m2": null,
+        "min_thickness_mm": 1.0,
+        "surface_quality": "good-to-excellent",
+        "surface_quality_notes": "Die-defined surface is smooth and consistent. Can achieve Class A finish with polished dies.",
+        "max_cross_section_dimension_mm": 1500,
+        "min_wall_thickness_mm": 1.0,
+        "pull_speed_m_per_min": { "typical": 0.3, "fast": 3.0 }
+      },
+      "suitable_materials": {
+        "fibre_forms": ["continuous-roving", "continuous-mat", "woven-tape", "ncf-tape"],
+        "resin_families": ["polyester", "vinyl-ester", "epoxy", "polyurethane", "phenolic"],
+        "not_suitable": ["prepreg-broadgoods", "chopped-fibre-only"]
+      },
+      "cost": {
+        "capital_equipment_usd": { "low": 200000, "high": 2000000 },
+        "tooling_per_part_usd": { "simple": 10000, "moderate": 50000, "complex": 150000 },
+        "labour_hours_per_kg": { "low": 0.05, "typical": 0.2, "high": 0.5 },
+        "material_waste_pct": { "typical": 2, "max": 5 },
+        "notes": "Lowest cost per metre of any composites process for constant cross-section profiles. Die cost is the main tooling investment."
+      },
+      "production": {
+        "suitable_volume": { "min": 1000, "sweet_spot_max": 1000000 },
+        "cycle_time_description": "Continuous process — pull speed 0.3-3.0 m/min depending on cross-section and resin. Runs 24/7 in production.",
+        "automation_level": "fully-automated"
+      },
+      "part_geometry": {
+        "open_shapes": true,
+        "closed_shapes": true,
+        "flat_panels": false,
+        "single_curvature": false,
+        "double_curvature": false,
+        "axisymmetric": false,
+        "constant_cross_section": true,
+        "notes": "ONLY constant cross-section profiles (I-beams, angles, channels, tubes, rods, flat strips). Cannot produce varying geometry along the length."
+      },
+      "quality_class": ["industrial", "infrastructure", "energy"],
+      "advantages": [
+        "Lowest cost per unit length for constant cross-section composites",
+        "Very high fibre volume fraction (50-70%) due to die compaction",
+        "Continuous production — high throughput, 24/7 operation possible",
+        "Extremely low material waste (<5%)",
+        "Excellent dimensional consistency over long production runs",
+        "Low labour requirement — highly automated",
+        "Wide range of profile shapes (I, C, L, T, tube, rod, custom)"
+      ],
+      "limitations": [
+        "ONLY constant cross-section parts — no taper, no thickness change, no curvature",
+        "Limited to predominantly 0-degree fibres (along pull direction) — transverse properties are lower",
+        "Adding off-axis fibres (mat, woven, braided) reduces pull speed and increases cost",
+        "High die tooling cost — economical only at high volumes",
+        "Profile length limited only by handling and transport",
+        "Cannot integrate features like bosses, ribs, or inserts during process"
+      ],
+      "typical_applications": [
+        "Structural profiles for construction (I-beams, channels, angles)",
+        "Cable trays, gratings, and handrails (corrosion-resistant)",
+        "Window and door frames",
+        "Electrical insulator rods and cross-arms",
+        "Wind turbine spar caps (flat pultruded strips stacked)",
+        "Bridge deck components",
+        "Rebar and dowel bars for concrete reinforcement",
+        "Composite utility poles and light standards"
+      ],
+      "knowledge_base_page": "knowledge/03-manufacturing-processes/pultrusion.md"
+    }
+  ],
+  "comparison_notes": {
+    "quality_ranking": [
+      "prepreg-autoclave",
+      "afp",
+      "atl",
+      "prepreg-hand-layup-oven",
+      "filament-winding",
+      "rtm",
+      "resin-infusion-vartm",
+      "vacuum-bagging",
+      "pultrusion",
+      "wet-layup"
+    ],
+    "quality_ranking_note": "Ranked by typical void content and fibre volume fraction. Pultrusion ranks lower in this general list but achieves excellent properties in the fibre direction for its specific profile applications.",
+    "cost_ranking_low_to_high": [
+      "wet-layup",
+      "vacuum-bagging",
+      "resin-infusion-vartm",
+      "pultrusion",
+      "filament-winding",
+      "rtm",
+      "prepreg-hand-layup-oven",
+      "prepreg-autoclave",
+      "atl",
+      "afp"
+    ],
+    "cost_ranking_note": "Ranked by total cost per kg for low-to-medium volume production. At very high volumes, automated processes (pultrusion, filament winding, RTM) become the cheapest per-part options despite higher capital cost.",
+    "process_selection_guidance": "Process selection depends on: (1) part geometry — axisymmetric favours winding, constant cross-section favours pultrusion, complex surfaces favour AFP; (2) production volume — low volume favours manual processes, high volume favours automation; (3) performance requirements — aerospace primary structure needs autoclave prepreg, industrial parts can use infusion or RTM; (4) budget — both capital and per-part cost matter."
+  }
+}

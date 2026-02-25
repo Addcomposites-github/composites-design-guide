@@ -1,0 +1,972 @@
+{
+  "name": "Fibre Type Selection",
+  "version": "1.0",
+  "description": "Step-by-step decision tree for selecting the right reinforcement fibre based on performance requirements, application class, and constraints.",
+  "usage": "Start at the node named in 'start'. Present the question to the user, collect their answer, then follow 'next' to the next node. Repeat until you reach a node with type 'recommendation'.",
+  "start": "primary_requirement",
+  "nodes": {
+    "primary_requirement": {
+      "id": "primary_requirement",
+      "question": "What is the single most important requirement for this part?",
+      "type": "choice",
+      "context": "Different fibre types excel in different areas. Identifying the primary driver helps narrow the selection quickly. You can consider secondary requirements in the next steps.",
+      "options": [
+        {
+          "value": "lowest_cost",
+          "label": "Lowest material cost (the part must be affordable above all else)",
+          "next": "cost_performance_class"
+        },
+        {
+          "value": "highest_stiffness",
+          "label": "Highest stiffness (maximum rigidity per unit weight)",
+          "next": "stiffness_performance_class"
+        },
+        {
+          "value": "highest_strength",
+          "label": "Highest tensile strength",
+          "next": "strength_performance_class"
+        },
+        {
+          "value": "impact_resistance",
+          "label": "Impact resistance and damage tolerance (must survive drops, strikes, or ballistic events)",
+          "next": "impact_performance_class"
+        },
+        {
+          "value": "electrical_insulation",
+          "label": "Electrical insulation or RF transparency (must not conduct electricity or block radio signals)",
+          "next": "electrical_performance_class"
+        },
+        {
+          "value": "chemical_resistance",
+          "label": "Chemical or corrosion resistance (exposed to acids, alkalis, or seawater)",
+          "next": "chemical_environment"
+        },
+        {
+          "value": "temperature_resistance",
+          "label": "High temperature resistance (continuous use above 200 C)",
+          "next": "temperature_range"
+        },
+        {
+          "value": "vibration_damping",
+          "label": "Vibration damping (must absorb vibration energy)",
+          "next": "damping_performance_class"
+        }
+      ]
+    },
+
+    "cost_performance_class": {
+      "id": "cost_performance_class",
+      "question": "What performance class does the part fall into?",
+      "type": "choice",
+      "context": "Even within cost-driven selection, the structural demands determine which grade of glass fibre is appropriate.",
+      "options": [
+        {
+          "value": "hobby",
+          "label": "Hobby or non-structural (cosmetic parts, moulds, non-load-bearing covers)",
+          "next": "rec_e_glass_woven"
+        },
+        {
+          "value": "structural",
+          "label": "Structural (marine, automotive, wind energy, industrial equipment)",
+          "next": "rec_e_glass_structural"
+        },
+        {
+          "value": "high_performance",
+          "label": "High performance structural (but cost is still the top constraint)",
+          "next": "rec_s_glass_or_ht_carbon"
+        }
+      ]
+    },
+
+    "stiffness_performance_class": {
+      "id": "stiffness_performance_class",
+      "question": "What performance class does the part fall into?",
+      "type": "choice",
+      "context": "Carbon fibre dominates stiffness-driven applications. The question is which grade and modulus class.",
+      "options": [
+        {
+          "value": "hobby",
+          "label": "Hobby or sporting goods (bicycle, drone, RC aircraft, musical instrument)",
+          "next": "rec_standard_modulus_carbon"
+        },
+        {
+          "value": "structural",
+          "label": "Structural engineering (automotive, industrial machinery, robotics)",
+          "next": "rec_intermediate_modulus_carbon"
+        },
+        {
+          "value": "aerospace",
+          "label": "Aerospace or space (flight structures, satellite components, launch vehicles)",
+          "next": "stiffness_aerospace_detail"
+        }
+      ]
+    },
+
+    "stiffness_aerospace_detail": {
+      "id": "stiffness_aerospace_detail",
+      "question": "Is extreme stiffness critical (e.g., space telescope, antenna reflector), or is it a balance of stiffness and strength?",
+      "type": "choice",
+      "context": "Ultra-high modulus (UHM) carbon fibres achieve stiffness above 400 GPa but at the cost of lower strain-to-failure and higher price.",
+      "options": [
+        {
+          "value": "balanced",
+          "label": "Balanced stiffness and strength (most aerospace structures: wing skins, fuselage panels, control surfaces)",
+          "next": "rec_im_carbon_aerospace"
+        },
+        {
+          "value": "extreme_stiffness",
+          "label": "Extreme stiffness is the priority (dimensionally stable structures: space optics, antenna reflectors)",
+          "next": "rec_uhm_carbon"
+        }
+      ]
+    },
+
+    "strength_performance_class": {
+      "id": "strength_performance_class",
+      "question": "What performance class does the part fall into?",
+      "type": "choice",
+      "context": "For strength-driven applications, the fibre tensile strength and strain-to-failure are the key parameters.",
+      "options": [
+        {
+          "value": "hobby",
+          "label": "Hobby or general (sporting goods, DIY projects)",
+          "next": "rec_standard_modulus_carbon"
+        },
+        {
+          "value": "structural",
+          "label": "Structural (pressure vessels, flywheels, tension members)",
+          "next": "rec_ht_carbon_strength"
+        },
+        {
+          "value": "aerospace",
+          "label": "Aerospace (primary structure, fatigue-critical components)",
+          "next": "rec_im_carbon_strength"
+        }
+      ]
+    },
+
+    "impact_performance_class": {
+      "id": "impact_performance_class",
+      "question": "What type of impact resistance is needed?",
+      "type": "choice",
+      "context": "Impact resistance depends on fibre strain-to-failure and energy absorption. Aramid (Kevlar) and hybrid laminates are the go-to choices.",
+      "options": [
+        {
+          "value": "low_velocity",
+          "label": "Low-velocity impact survival (tool drops, hail, gravel, handling damage)",
+          "next": "impact_structural_class"
+        },
+        {
+          "value": "ballistic",
+          "label": "Ballistic or blast protection (body armour, vehicle protection, blast panels)",
+          "next": "rec_aramid_ballistic"
+        },
+        {
+          "value": "crash",
+          "label": "Crash energy absorption (automotive crash structures, safety barriers)",
+          "next": "rec_hybrid_crash"
+        }
+      ]
+    },
+
+    "impact_structural_class": {
+      "id": "impact_structural_class",
+      "question": "Does the part also need high stiffness, or is impact tolerance the main concern?",
+      "type": "choice",
+      "options": [
+        {
+          "value": "stiffness_too",
+          "label": "Needs both impact tolerance AND high stiffness (e.g., aircraft leading edge, helicopter blade)",
+          "next": "rec_hybrid_carbon_aramid"
+        },
+        {
+          "value": "impact_primary",
+          "label": "Impact tolerance is primary, stiffness is secondary (e.g., protective enclosure, guard, canoe)",
+          "next": "rec_aramid_structural"
+        }
+      ]
+    },
+
+    "electrical_performance_class": {
+      "id": "electrical_performance_class",
+      "question": "What performance class does the part fall into?",
+      "type": "choice",
+      "context": "Carbon fibre is electrically conductive and blocks radio waves. Glass and aramid fibres are insulators and RF-transparent. If electrical insulation or radar transparency is required, carbon is ruled out.",
+      "options": [
+        {
+          "value": "rf_transparent",
+          "label": "Must be RF-transparent (radome, antenna housing, radar fairing)",
+          "next": "rec_e_glass_rf"
+        },
+        {
+          "value": "electrical_insulator",
+          "label": "Must be an electrical insulator (high-voltage equipment, power line hardware, switchgear)",
+          "next": "rec_e_glass_electrical"
+        },
+        {
+          "value": "emi_shielding",
+          "label": "Actually needs EMI shielding (electronics enclosure that must BLOCK interference)",
+          "next": "rec_carbon_emi"
+        }
+      ]
+    },
+
+    "chemical_environment": {
+      "id": "chemical_environment",
+      "question": "What is the primary chemical exposure?",
+      "type": "choice",
+      "context": "The fibre itself is generally more resistant than the resin matrix, but some fibres degrade in specific environments. E-glass is attacked by acids; E-CR glass and basalt resist them.",
+      "options": [
+        {
+          "value": "mild",
+          "label": "Mild chemical exposure (seawater, mild detergents, fuel splash, UV outdoor)",
+          "next": "rec_e_glass_chemical"
+        },
+        {
+          "value": "acid",
+          "label": "Acid environment (chemical plant, battery enclosure, acid storage)",
+          "next": "rec_ecr_glass_or_basalt"
+        },
+        {
+          "value": "alkaline",
+          "label": "Alkaline environment (concrete reinforcement, water treatment, pulp and paper)",
+          "next": "rec_basalt_alkaline"
+        },
+        {
+          "value": "solvent",
+          "label": "Solvent exposure (fuel tank, chemical piping, paint booth)",
+          "next": "rec_e_glass_solvent"
+        }
+      ]
+    },
+
+    "temperature_range": {
+      "id": "temperature_range",
+      "question": "What is the continuous operating temperature?",
+      "type": "choice",
+      "context": "The temperature limit is almost always set by the resin matrix, not the fibre. But at extreme temperatures, fibre choice matters. Note: the resin system must also be selected for the temperature. Fibre degradation temperatures are much higher than typical resin limits.",
+      "options": [
+        {
+          "value": "200_to_300",
+          "label": "200-300 C continuous (jet engine nacelle, brake duct, exhaust components)",
+          "next": "rec_carbon_high_temp"
+        },
+        {
+          "value": "300_to_600",
+          "label": "300-600 C continuous (heat shields, furnace components, high-speed vehicle leading edges)",
+          "next": "rec_basalt_high_temp"
+        },
+        {
+          "value": "above_600",
+          "label": "Above 600 C (re-entry structures, rocket nozzles, extreme thermal protection)",
+          "next": "rec_carbon_extreme_temp"
+        }
+      ]
+    },
+
+    "damping_performance_class": {
+      "id": "damping_performance_class",
+      "question": "What performance class does the part fall into?",
+      "type": "choice",
+      "context": "Aramid fibres have inherently higher damping than carbon or glass due to their microstructure. Hybrid laminates can be tuned for damping.",
+      "options": [
+        {
+          "value": "sporting",
+          "label": "Sporting goods (tennis racket, ski, snowboard, paddle)",
+          "next": "rec_hybrid_damping_sport"
+        },
+        {
+          "value": "industrial",
+          "label": "Industrial (machine tool component, robotic arm, vibration-sensitive equipment)",
+          "next": "rec_hybrid_damping_industrial"
+        }
+      ]
+    },
+
+    "rec_e_glass_woven": {
+      "id": "rec_e_glass_woven",
+      "type": "recommendation",
+      "recommended_fibre": "E-Glass (woven fabric)",
+      "specific_grades": [
+        {
+          "name": "E-Glass plain weave, 200 g/m2",
+          "use_case": "Thin cosmetic layups, mould making"
+        },
+        {
+          "name": "E-Glass twill weave, 300-600 g/m2",
+          "use_case": "General purpose, good drape over curved surfaces"
+        }
+      ],
+      "typical_properties": {
+        "tensile_modulus_GPa": 72,
+        "tensile_strength_MPa": 2400,
+        "density_g_per_cm3": 2.54,
+        "strain_to_failure_percent": 3.4
+      },
+      "typical_cost_per_kg": "$2-$5",
+      "reasoning": "E-glass is the lowest-cost structural fibre. For non-structural or hobby applications, it provides adequate stiffness and strength at a fraction of the cost of carbon. Woven fabrics are easier to handle than unidirectional for beginners. E-glass is transparent to radio waves and electrically insulating.",
+      "limitations": "Stiffness is about 3.5 times lower than carbon. Parts will be heavier than carbon equivalents. Not suitable where weight is critical.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md"
+      ]
+    },
+
+    "rec_e_glass_structural": {
+      "id": "rec_e_glass_structural",
+      "type": "recommendation",
+      "recommended_fibre": "E-Glass (multi-axial or unidirectional)",
+      "specific_grades": [
+        {
+          "name": "E-Glass unidirectional, 300-1200 g/m2",
+          "use_case": "High structural performance in the fibre direction (spar caps, tension members)"
+        },
+        {
+          "name": "E-Glass biaxial (+/-45), 600-1200 g/m2",
+          "use_case": "Shear webs, torsion members, skin reinforcement"
+        },
+        {
+          "name": "E-Glass triaxial (0/+45/-45), 800-1500 g/m2",
+          "use_case": "Quasi-isotropic or multi-directional loading, boat hulls"
+        }
+      ],
+      "typical_properties": {
+        "tensile_modulus_GPa": 72,
+        "tensile_strength_MPa": 2400,
+        "density_g_per_cm3": 2.54,
+        "strain_to_failure_percent": 3.4
+      },
+      "typical_cost_per_kg": "$2-$5 (fabric), $1-$3 (roving)",
+      "reasoning": "For structural applications where cost is the primary driver and weight is a secondary concern, E-glass in multi-axial or unidirectional form gives excellent strength per dollar. Wind turbine blades, boats, tanks, and pipes are predominantly E-glass. Multi-axial non-crimp fabrics give better mechanical properties than woven fabrics because the fibres remain straight.",
+      "limitations": "Weight penalty compared to carbon. Fatigue performance is lower than carbon. If the design is stiffness-critical, glass parts will be thicker and heavier.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md",
+        "knowledge/01-fundamentals/laminate-theory.md"
+      ]
+    },
+
+    "rec_s_glass_or_ht_carbon": {
+      "id": "rec_s_glass_or_ht_carbon",
+      "type": "recommendation",
+      "recommended_fibre": "S-Glass or High-Tenacity (HT) Carbon",
+      "specific_grades": [
+        {
+          "name": "S-2 Glass (AGY)",
+          "use_case": "When you need 15-25% more strength than E-glass without going to carbon"
+        },
+        {
+          "name": "Toray T300 (3K or 6K carbon)",
+          "use_case": "Lowest-cost carbon fibre, widely available, well-characterized"
+        }
+      ],
+      "typical_properties": {
+        "s2_glass_tensile_modulus_GPa": 87,
+        "s2_glass_tensile_strength_MPa": 4890,
+        "t300_carbon_tensile_modulus_GPa": 230,
+        "t300_carbon_tensile_strength_MPa": 3530
+      },
+      "typical_cost_per_kg": "$8-$15 (S-2 Glass), $15-$30 (T300 carbon)",
+      "reasoning": "When E-glass is not strong enough but full aerospace-grade carbon is too expensive, S-glass or entry-level carbon (T300) fills the gap. S-2 glass is 25% stronger and 15% stiffer than E-glass. T300 carbon is the most affordable carbon fibre and is a reasonable choice when stiffness matters but aerospace qualification is not required.",
+      "limitations": "S-glass is still much less stiff than carbon. T300 carbon is lower performance than T700 or IM fibres. Neither is the best in any single metric; they are compromise choices.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md"
+      ]
+    },
+
+    "rec_standard_modulus_carbon": {
+      "id": "rec_standard_modulus_carbon",
+      "type": "recommendation",
+      "recommended_fibre": "Standard Modulus Carbon Fibre (T700 class)",
+      "specific_grades": [
+        {
+          "name": "Toray T700S (12K or 24K)",
+          "use_case": "The workhorse carbon fibre. Excellent strength, good stiffness, widely available."
+        },
+        {
+          "name": "SGL Sigrafil C T50 (50K tow)",
+          "use_case": "Lower cost per kg in large-tow format for non-aerospace applications"
+        },
+        {
+          "name": "Toray T700S (3K or 6K woven)",
+          "use_case": "Cosmetic twill or plain weave for visible carbon surfaces"
+        }
+      ],
+      "typical_properties": {
+        "tensile_modulus_GPa": 230,
+        "tensile_strength_MPa": 4900,
+        "density_g_per_cm3": 1.80,
+        "strain_to_failure_percent": 2.1
+      },
+      "typical_cost_per_kg": "$20-$40 (tow), $30-$80 (woven fabric)",
+      "reasoning": "T700-class standard modulus carbon is the best all-around carbon fibre for hobby and sporting goods applications. It offers 3x the stiffness of glass at 70% of the density, with excellent tensile strength. The 12K and 24K tow formats balance cost and handling. For visible carbon parts, 3K twill weave gives the iconic carbon look.",
+      "limitations": "Lower compression strength than intermediate modulus fibres. The 2.1% strain-to-failure is lower than glass, meaning carbon parts are more brittle. Impact damage can cause hidden delamination.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md",
+        "knowledge/01-fundamentals/failure-modes.md"
+      ]
+    },
+
+    "rec_intermediate_modulus_carbon": {
+      "id": "rec_intermediate_modulus_carbon",
+      "type": "recommendation",
+      "recommended_fibre": "Intermediate Modulus Carbon Fibre (T800 / IM7 class)",
+      "specific_grades": [
+        {
+          "name": "Toray T800S",
+          "use_case": "Higher strength and modulus than T700, used in industrial and some aerospace applications"
+        },
+        {
+          "name": "Hexcel IM7 (12K)",
+          "use_case": "Aerospace-grade intermediate modulus fibre, excellent compression and fatigue performance"
+        }
+      ],
+      "typical_properties": {
+        "tensile_modulus_GPa": "294 (T800S) / 276 (IM7)",
+        "tensile_strength_MPa": "5880 (T800S) / 5310 (IM7)",
+        "density_g_per_cm3": 1.80,
+        "strain_to_failure_percent": "2.0 (T800S) / 1.9 (IM7)"
+      },
+      "typical_cost_per_kg": "$50-$120",
+      "reasoning": "Intermediate modulus carbon gives a 15-25% improvement in both stiffness and strength over standard modulus, with better compression performance. This makes it worthwhile for structural parts where weight is important and the design is compression or buckling-critical (which covers most structural applications). T800S and IM7 are widely available and well-characterized.",
+      "limitations": "Significantly more expensive than T700 class. The improvement in properties may not justify the cost unless the design is weight-critical. Supply chain is smaller than for standard modulus fibres.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md",
+        "knowledge/04-structural-analysis/buckling-basics.md"
+      ]
+    },
+
+    "rec_im_carbon_aerospace": {
+      "id": "rec_im_carbon_aerospace",
+      "type": "recommendation",
+      "recommended_fibre": "Intermediate Modulus Carbon (IM7 / T800H / M55J class)",
+      "specific_grades": [
+        {
+          "name": "Hexcel IM7 (6K/12K)",
+          "use_case": "Primary aerospace structural fibre. Used in F-35, Boeing 787, Airbus A350."
+        },
+        {
+          "name": "Toray T800H (12K)",
+          "use_case": "Widely used in commercial aerospace primary structure."
+        },
+        {
+          "name": "Toray M55J (6K)",
+          "use_case": "High modulus (540 GPa) for stiffness-critical aerospace structures that also need reasonable strength."
+        }
+      ],
+      "typical_properties": {
+        "im7_tensile_modulus_GPa": 276,
+        "im7_tensile_strength_MPa": 5310,
+        "im7_density_g_per_cm3": 1.78,
+        "im7_strain_to_failure_percent": 1.9
+      },
+      "typical_cost_per_kg": "$80-$200",
+      "reasoning": "IM7 and T800H are the standard fibres for aerospace primary structure. They offer the best balance of stiffness, strength, compression performance, and fatigue life in the carbon fibre family. Extensive material databases exist (NCAMP, CMH-17) which simplifies certification. For stiffness-critical but not extreme applications, M55J offers high modulus (540 GPa) with better strain-to-failure than ultra-high modulus fibres.",
+      "limitations": "High cost. Long lead times for qualified prepreg formats. Compression-after-impact (CAI) performance must be tested for damage-tolerance-critical applications.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md",
+        "knowledge/04-structural-analysis/failure-criteria.md"
+      ]
+    },
+
+    "rec_uhm_carbon": {
+      "id": "rec_uhm_carbon",
+      "type": "recommendation",
+      "recommended_fibre": "Ultra-High Modulus (UHM) Carbon Fibre",
+      "specific_grades": [
+        {
+          "name": "Toray M60J",
+          "use_case": "Modulus 588 GPa. Space antenna reflectors, optical benches."
+        },
+        {
+          "name": "Nippon Graphite Fiber YS-95A (pitch-based)",
+          "use_case": "Modulus 920 GPa. Satellite structures where thermal stability is critical."
+        },
+        {
+          "name": "Mitsubishi DIALEAD K13D2U (pitch-based)",
+          "use_case": "Modulus 935 GPa. Ultra-high thermal conductivity (800 W/mK axial). Thermal management."
+        }
+      ],
+      "typical_properties": {
+        "m60j_tensile_modulus_GPa": 588,
+        "m60j_tensile_strength_MPa": 3820,
+        "pitch_cf_tensile_modulus_GPa": "900-935",
+        "pitch_cf_tensile_strength_MPa": "2600-3100",
+        "density_g_per_cm3": "1.93-2.17"
+      },
+      "typical_cost_per_kg": "$200-$2000+",
+      "reasoning": "When dimensional stability is paramount (thermal distortion in space, high-precision optics), UHM carbon is the only option. PAN-based UHM fibres (M60J) balance modulus and strength. Pitch-based UHM fibres achieve the highest modulus (>900 GPa) and have extremely high thermal conductivity along the fibre axis, making them also useful for thermal management applications.",
+      "limitations": "Very brittle (strain-to-failure 0.4-0.7%). Extremely expensive. Pitch-based fibres are fragile to handle. Design must account for the low transverse strength and CTE mismatch with the matrix. Not for impact-loaded structures.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md"
+      ]
+    },
+
+    "rec_ht_carbon_strength": {
+      "id": "rec_ht_carbon_strength",
+      "type": "recommendation",
+      "recommended_fibre": "High-Tenacity Carbon Fibre (T700S / T1000G class)",
+      "specific_grades": [
+        {
+          "name": "Toray T700S (12K/24K)",
+          "use_case": "Best strength-per-dollar carbon fibre. Dominant in pressure vessels and wind energy."
+        },
+        {
+          "name": "Toray T1000G (12K)",
+          "use_case": "Highest tensile strength PAN carbon fibre available (6370 MPa). For extreme tension-dominated applications."
+        },
+        {
+          "name": "Toray T1100G (12K)",
+          "use_case": "Best combination of strength (6600 MPa) and modulus (324 GPa) in a single fibre."
+        }
+      ],
+      "typical_properties": {
+        "t700s_tensile_strength_MPa": 4900,
+        "t1000g_tensile_strength_MPa": 6370,
+        "t1100g_tensile_strength_MPa": 6600,
+        "t1100g_tensile_modulus_GPa": 324
+      },
+      "typical_cost_per_kg": "$20-$40 (T700S), $100-$200 (T1000G), $150-$300 (T1100G)",
+      "reasoning": "For tension-dominated applications like pressure vessels and flywheels, the fibre tensile strength directly determines the burst pressure or stored energy. T700S offers the best value; T1000G and T1100G give 30-35% more strength for applications where every gram matters (hydrogen storage, space launch vehicles).",
+      "limitations": "Compression strength is not improved to the same degree. For compression-critical structures, intermediate modulus fibres (IM7) may be better despite lower tensile strength.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md",
+        "knowledge/04-structural-analysis/failure-criteria.md"
+      ]
+    },
+
+    "rec_im_carbon_strength": {
+      "id": "rec_im_carbon_strength",
+      "type": "recommendation",
+      "recommended_fibre": "Intermediate Modulus Carbon (IM7 / T800S) for Aerospace Strength Applications",
+      "specific_grades": [
+        {
+          "name": "Hexcel IM7",
+          "use_case": "Best all-around aerospace fibre. Excellent tension, compression, and fatigue."
+        },
+        {
+          "name": "Toray T800S",
+          "use_case": "Very high tensile strength (5880 MPa) with intermediate modulus. Good for fatigue-critical parts."
+        }
+      ],
+      "typical_properties": {
+        "im7_tensile_strength_MPa": 5310,
+        "im7_compression_strength_MPa": "~1700 (laminate level, depends on layup)",
+        "im7_tensile_modulus_GPa": 276
+      },
+      "typical_cost_per_kg": "$80-$200",
+      "reasoning": "For aerospace primary structure where both tension and compression strength matter, IM7 and T800S are preferred over standard modulus fibres because their higher modulus improves compression and buckling resistance. Aerospace structures are almost always compression-critical (because skin buckling drives design), so the higher modulus of IM fibres gives more benefit than the slightly higher tensile strength of HT fibres.",
+      "limitations": "High cost. Must be used with qualified prepreg resin systems. Certification requires extensive testing (NCAMP or equivalent).",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md",
+        "knowledge/04-structural-analysis/buckling-basics.md"
+      ]
+    },
+
+    "rec_aramid_ballistic": {
+      "id": "rec_aramid_ballistic",
+      "type": "recommendation",
+      "recommended_fibre": "Para-Aramid (Kevlar / Twaron) for Ballistic Protection",
+      "specific_grades": [
+        {
+          "name": "DuPont Kevlar 29",
+          "use_case": "Standard ballistic grade. Body armour, helmets, vehicle protection."
+        },
+        {
+          "name": "DuPont Kevlar KM2+",
+          "use_case": "Enhanced ballistic grade with improved energy absorption."
+        },
+        {
+          "name": "Teijin Twaron CT",
+          "use_case": "European equivalent to Kevlar for ballistic applications."
+        },
+        {
+          "name": "DSM Dyneema (UHMWPE)",
+          "use_case": "Not an aramid but an alternative: ultra-high molecular weight polyethylene offers even better ballistic performance per weight."
+        }
+      ],
+      "typical_properties": {
+        "kevlar29_tensile_modulus_GPa": 70,
+        "kevlar29_tensile_strength_MPa": 3600,
+        "kevlar29_density_g_per_cm3": 1.44,
+        "kevlar29_strain_to_failure_percent": 3.6
+      },
+      "typical_cost_per_kg": "$25-$50",
+      "reasoning": "Para-aramid fibres have the best energy absorption per unit weight of any fibre for ballistic applications. Their high strain-to-failure (3.6%) and high specific strength mean they absorb projectile energy over a large deformation before failure. Aramid does not shatter on impact like carbon or glass; it deforms and captures fragments. Kevlar 29 is the benchmark ballistic fibre.",
+      "limitations": "Poor compression strength (aramid fibres buckle at the micro level under compression). Susceptible to UV degradation. Difficult to cut and machine. Must be protected from moisture and sunlight in service.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md",
+        "knowledge/01-fundamentals/failure-modes.md"
+      ]
+    },
+
+    "rec_hybrid_crash": {
+      "id": "rec_hybrid_crash",
+      "type": "recommendation",
+      "recommended_fibre": "Hybrid Carbon/Aramid or Carbon/Glass for Crash Energy Absorption",
+      "specific_grades": [
+        {
+          "name": "Carbon/Kevlar hybrid fabric (e.g., Hexcel 282 or equivalent)",
+          "use_case": "Combines carbon stiffness with aramid toughness for progressive crushing."
+        },
+        {
+          "name": "Carbon UD spar caps with glass +/-45 skins",
+          "use_case": "Automotive crash box design: carbon provides stiffness, glass provides energy absorption."
+        }
+      ],
+      "typical_cost_per_kg": "$30-$80 (hybrid fabric)",
+      "reasoning": "Crash energy absorption requires progressive, controlled failure rather than catastrophic fracture. Pure carbon laminates tend to fail in a brittle, explosive manner. Adding aramid or glass layers increases the sustained crushing stress and prevents catastrophic fragmentation. Hybrid laminates can be designed to achieve specific energy absorption (SEA) values of 50-100 kJ/kg, which is competitive with aluminium crush structures at lower weight.",
+      "limitations": "Hybrid laminates are more complex to design and analyse. The interaction between different fibre types must be modelled carefully. Recycling of hybrid laminates is difficult.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md",
+        "knowledge/01-fundamentals/failure-modes.md"
+      ]
+    },
+
+    "rec_hybrid_carbon_aramid": {
+      "id": "rec_hybrid_carbon_aramid",
+      "type": "recommendation",
+      "recommended_fibre": "Hybrid Carbon/Aramid Laminate",
+      "specific_grades": [
+        {
+          "name": "Carbon outer plies (T700 or IM7) + Aramid inner plies (Kevlar 49)",
+          "use_case": "Carbon provides stiffness and strength; aramid provides damage containment."
+        },
+        {
+          "name": "Intraply hybrid fabric (carbon/aramid woven together)",
+          "use_case": "Combines both fibres in each ply for distributed toughening."
+        }
+      ],
+      "typical_cost_per_kg": "$40-$100",
+      "reasoning": "When a part must be stiff (needs carbon) but also survive impacts without catastrophic failure (needs aramid), a hybrid layup is the solution. Carbon outer plies carry the structural loads; aramid inner plies arrest crack growth and contain damage. This approach is used in helicopter blade skins, leading edges subject to bird strike, and high-end sporting goods.",
+      "limitations": "More complex and expensive than single-fibre laminates. Thermal stresses due to different CTE values of carbon and aramid. Machining and trimming is difficult due to aramid's toughness.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md",
+        "knowledge/02-design-rules/stacking-sequences.md"
+      ]
+    },
+
+    "rec_aramid_structural": {
+      "id": "rec_aramid_structural",
+      "type": "recommendation",
+      "recommended_fibre": "Para-Aramid (Kevlar 49 / Twaron HM)",
+      "specific_grades": [
+        {
+          "name": "DuPont Kevlar 49",
+          "use_case": "High-modulus aramid for structural applications needing damage tolerance."
+        },
+        {
+          "name": "Teijin Twaron HM",
+          "use_case": "European equivalent. Good stiffness for an aramid fibre."
+        }
+      ],
+      "typical_properties": {
+        "kevlar49_tensile_modulus_GPa": 112,
+        "kevlar49_tensile_strength_MPa": 3000,
+        "kevlar49_density_g_per_cm3": 1.44,
+        "kevlar49_strain_to_failure_percent": 2.4
+      },
+      "typical_cost_per_kg": "$25-$50",
+      "reasoning": "Kevlar 49 is the structural grade of aramid fibre. It has higher modulus than Kevlar 29 (ballistic grade) while retaining excellent damage tolerance. Used in canoes, kayaks, protective equipment, and structures that may experience frequent minor impacts. The low density (1.44 g/cm3 vs 1.80 for carbon) gives excellent specific strength.",
+      "limitations": "Compression strength is very low (aramid fibres micro-buckle under compression). Do not use for compression-loaded or buckling-critical structures. UV degradation: aramid must be painted or otherwise protected from sunlight.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md"
+      ]
+    },
+
+    "rec_e_glass_rf": {
+      "id": "rec_e_glass_rf",
+      "type": "recommendation",
+      "recommended_fibre": "E-Glass or D-Glass for RF-Transparent Structures",
+      "specific_grades": [
+        {
+          "name": "E-Glass (standard)",
+          "use_case": "Good RF transparency for most radome and antenna applications."
+        },
+        {
+          "name": "D-Glass (low dielectric constant)",
+          "use_case": "Superior RF performance for high-frequency or broadband applications."
+        },
+        {
+          "name": "Quartz fibre (SiO2)",
+          "use_case": "Best RF transparency at high frequencies (X-band and above). Used in military radomes."
+        }
+      ],
+      "typical_properties": {
+        "e_glass_dielectric_constant": 6.1,
+        "d_glass_dielectric_constant": 4.0,
+        "quartz_dielectric_constant": 3.8
+      },
+      "typical_cost_per_kg": "$2-$5 (E-glass), $10-$20 (D-glass), $100-$300 (quartz)",
+      "reasoning": "Carbon fibre is electrically conductive and opaque to radio waves, so it cannot be used for radomes or antenna housings. E-glass is the default choice for RF-transparent structures. For better RF performance (lower signal loss, broader bandwidth), D-glass or quartz fibre reduce the dielectric constant. Quartz is used in military and aerospace radomes where RF performance is critical.",
+      "limitations": "Glass and quartz fibres are heavier than carbon. Stiffness is much lower. For large radomes, a sandwich structure with honeycomb core may be needed to achieve adequate stiffness.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md"
+      ]
+    },
+
+    "rec_e_glass_electrical": {
+      "id": "rec_e_glass_electrical",
+      "type": "recommendation",
+      "recommended_fibre": "E-Glass (Electrical Grade)",
+      "specific_grades": [
+        {
+          "name": "E-Glass unidirectional rod (for power line hardware)",
+          "use_case": "Pultruded glass rods for composite insulators, cross-arms, and hot-line tools."
+        },
+        {
+          "name": "E-Glass woven fabric",
+          "use_case": "Switchgear enclosures, transformer components, cable trays."
+        }
+      ],
+      "typical_properties": {
+        "volume_resistivity_ohm_cm": ">1e14",
+        "dielectric_strength_kV_per_mm": "20-30"
+      },
+      "typical_cost_per_kg": "$2-$5",
+      "reasoning": "E-glass is one of the best electrical insulators available in a structural fibre form. It has been used in high-voltage electrical equipment for decades. The 'E' in E-glass originally stood for 'electrical'. Glass-reinforced composites are widely used for power line insulators, switchgear housings, and electrical equipment enclosures where the part must be both structural and insulating.",
+      "limitations": "Surface tracking can occur in contaminated or humid conditions. Surface coatings or hydrophobic treatments may be needed for outdoor high-voltage applications.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md"
+      ]
+    },
+
+    "rec_carbon_emi": {
+      "id": "rec_carbon_emi",
+      "type": "recommendation",
+      "recommended_fibre": "Carbon Fibre for EMI Shielding",
+      "specific_grades": [
+        {
+          "name": "Standard modulus carbon (T300 or T700S) in any format",
+          "use_case": "The carbon fibre itself provides conductivity. No special grade needed."
+        }
+      ],
+      "typical_properties": {
+        "electrical_resistivity_ohm_cm": "1.5e-3 (along fibre)",
+        "emi_shielding_effectiveness_dB": "40-80 (depending on layup thickness and fibre orientation)"
+      },
+      "typical_cost_per_kg": "$15-$40",
+      "reasoning": "Carbon fibre is electrically conductive, which makes it inherently effective as an EMI shield. A carbon composite enclosure can replace metal enclosures for electronics while providing structural function and weight savings. The shielding effectiveness depends on the number of plies, fibre orientations (cross-plied is better), and whether there are gaps or openings in the enclosure.",
+      "limitations": "Carbon fibre shielding is less effective than solid metal at low frequencies. Joints and seams must be conductively bonded for effective shielding. For very high shielding requirements, a metal mesh or conductive coating may still be needed.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md"
+      ]
+    },
+
+    "rec_e_glass_chemical": {
+      "id": "rec_e_glass_chemical",
+      "type": "recommendation",
+      "recommended_fibre": "E-Glass with Chemical-Resistant Resin",
+      "specific_grades": [
+        {
+          "name": "E-Glass with vinyl ester resin",
+          "use_case": "Marine, fuel-exposed, mild chemical environments."
+        },
+        {
+          "name": "E-Glass with isophthalic polyester resin",
+          "use_case": "Mild chemical and water exposure."
+        }
+      ],
+      "typical_cost_per_kg": "$2-$5 (fibre) + $5-$15/kg (vinyl ester resin)",
+      "reasoning": "For mild chemical environments (seawater, fuels, dilute chemicals, UV), the chemical resistance is primarily determined by the resin matrix, not the fibre. E-glass with vinyl ester resin is the standard solution for marine and mild chemical service. The resin barrier protects the glass from moisture and chemicals. A resin-rich surface layer (corrosion barrier) is standard practice.",
+      "limitations": "In strong acid environments (pH < 3), E-glass can be leached by acid wicking along the fibre-matrix interface. Use E-CR glass or basalt for acid service.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md",
+        "knowledge/01-fundamentals/resin-systems.md"
+      ]
+    },
+
+    "rec_ecr_glass_or_basalt": {
+      "id": "rec_ecr_glass_or_basalt",
+      "type": "recommendation",
+      "recommended_fibre": "E-CR Glass or Basalt Fibre for Acid Environments",
+      "specific_grades": [
+        {
+          "name": "Owens Corning Advantex (E-CR glass)",
+          "use_case": "Acid-resistant glass fibre. Chemical plant piping, tanks, scrubbers."
+        },
+        {
+          "name": "Basalt fibre (various manufacturers)",
+          "use_case": "Natural volcanic rock fibre with excellent acid resistance. Emerging alternative to E-CR glass."
+        }
+      ],
+      "typical_properties": {
+        "ecr_glass_tensile_modulus_GPa": 80,
+        "ecr_glass_tensile_strength_MPa": 3100,
+        "basalt_tensile_modulus_GPa": 89,
+        "basalt_tensile_strength_MPa": 2800
+      },
+      "typical_cost_per_kg": "$3-$8 (E-CR glass), $4-$10 (basalt)",
+      "reasoning": "E-CR (electrical/chemical resistant) glass eliminates the boron from E-glass composition, which dramatically improves acid resistance. Basalt fibre is made from volcanic rock and is inherently acid-resistant. Both are cost-effective alternatives for chemical plant equipment, acid storage tanks, and scrubber systems where standard E-glass would degrade.",
+      "limitations": "Neither has the stiffness of carbon. Basalt fibre supply chain is less mature than glass. Basalt has poor alkali resistance (unlike its excellent acid resistance).",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md"
+      ]
+    },
+
+    "rec_basalt_alkaline": {
+      "id": "rec_basalt_alkaline",
+      "type": "recommendation",
+      "recommended_fibre": "AR-Glass (Alkali-Resistant Glass) or E-CR Glass",
+      "specific_grades": [
+        {
+          "name": "AR-Glass (Nippon Electric Glass or CEM-FIL)",
+          "use_case": "Concrete reinforcement (rebar, mesh, GFRC). Specifically designed for alkaline environments."
+        },
+        {
+          "name": "E-CR Glass with vinyl ester resin",
+          "use_case": "Structural profiles for alkaline process equipment."
+        }
+      ],
+      "typical_properties": {
+        "ar_glass_tensile_modulus_GPa": 72,
+        "ar_glass_tensile_strength_MPa": 1700,
+        "ar_glass_zirconia_content_percent": "16-20"
+      },
+      "typical_cost_per_kg": "$3-$8 (AR-glass), $3-$8 (E-CR glass)",
+      "reasoning": "Standard E-glass and basalt fibre are attacked by alkaline environments (pH > 12), particularly the calcium hydroxide in concrete. AR-glass contains 16-20% zirconia (ZrO2) which makes it resistant to alkali attack. It is the standard fibre for glass fibre reinforced concrete (GFRC) and composite rebar for concrete structures. For structural profiles in alkaline process environments, E-CR glass with vinyl ester resin provides adequate resistance.",
+      "limitations": "AR-glass has lower tensile strength than E-glass. For composite rebar, long-term durability data should be checked against the specific concrete chemistry. Basalt is NOT recommended for alkaline environments despite its good acid resistance.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md"
+      ]
+    },
+
+    "rec_e_glass_solvent": {
+      "id": "rec_e_glass_solvent",
+      "type": "recommendation",
+      "recommended_fibre": "E-Glass with Solvent-Resistant Resin System",
+      "specific_grades": [
+        {
+          "name": "E-Glass with vinyl ester or novolac epoxy resin",
+          "use_case": "Fuel tanks, chemical piping, solvent storage."
+        }
+      ],
+      "typical_cost_per_kg": "$2-$5 (fibre) + $8-$20/kg (novolac epoxy resin)",
+      "reasoning": "For solvent exposure, the fibre type is less important than the resin system. E-glass provides adequate structural performance. The resin matrix must be selected for the specific solvent: vinyl ester for general hydrocarbon resistance, novolac epoxy for broad chemical resistance, and fluoropolymer-lined composites for the most aggressive solvents. A thick resin-rich corrosion barrier on the wetted surface is essential.",
+      "limitations": "No single resin system resists all solvents. Chemical compatibility must be verified for the specific solvent, concentration, and temperature. Permeation through the laminate may occur over time even if the composite does not visibly degrade.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md",
+        "knowledge/01-fundamentals/resin-systems.md"
+      ]
+    },
+
+    "rec_carbon_high_temp": {
+      "id": "rec_carbon_high_temp",
+      "type": "recommendation",
+      "recommended_fibre": "Carbon Fibre with High-Temperature Resin System",
+      "specific_grades": [
+        {
+          "name": "Standard carbon fibre (T700S or equivalent) with BMI resin",
+          "use_case": "Continuous service to 230-280 C. Jet engine nacelle components."
+        },
+        {
+          "name": "Standard carbon fibre with polyimide resin (PMR-15 or HFPE)",
+          "use_case": "Continuous service to 280-330 C. Engine environment structures."
+        }
+      ],
+      "typical_cost_per_kg": "$20-$40 (fibre) + high-temperature resin adds significant cost",
+      "reasoning": "Carbon fibre itself is stable to over 3000 C in inert atmospheres. In the 200-300 C range, the temperature limit is set entirely by the resin matrix, not the fibre. Standard epoxy resins fail above 180 C. BMI (bismaleimide) resins extend the range to 230-280 C. Polyimide resins push to 280-330 C. The fibre choice can be standard modulus carbon since the fibre properties are unaffected at these temperatures.",
+      "limitations": "High-temperature resins (BMI, polyimide) are expensive, difficult to process, and often brittle. Curing requires extended high-temperature post-cures (e.g., 24 hours at 300 C for polyimides). Tooling must withstand these temperatures.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md",
+        "knowledge/01-fundamentals/resin-systems.md"
+      ]
+    },
+
+    "rec_basalt_high_temp": {
+      "id": "rec_basalt_high_temp",
+      "type": "recommendation",
+      "recommended_fibre": "Basalt Fibre or Carbon Fibre with Ceramic Matrix",
+      "specific_grades": [
+        {
+          "name": "Basalt fibre with inorganic (geopolymer) matrix",
+          "use_case": "Fire barriers, high-temperature insulation, exhaust components to 600 C."
+        },
+        {
+          "name": "Carbon fibre with silicon carbide matrix (C/SiC CMC)",
+          "use_case": "Brake discs, turbine components, heat shields. Continuous service 400-600 C."
+        }
+      ],
+      "typical_properties": {
+        "basalt_max_service_temp_C": "600-700 (fibre softening above 700)",
+        "c_sic_max_service_temp_C": "1400 (limited by oxidation of carbon fibre)"
+      },
+      "typical_cost_per_kg": "$4-$10 (basalt), $500-$5000 (C/SiC CMC)",
+      "reasoning": "Above 300 C, polymer matrices are no longer viable and the choice shifts to ceramic or inorganic matrices. Basalt fibre with a geopolymer matrix is a cost-effective solution for fire barriers and moderate high-temperature applications up to 600 C. For higher temperatures or structural applications, ceramic matrix composites (CMCs) like C/SiC are used, but at dramatically higher cost.",
+      "limitations": "Basalt fibre softens above 700 C. Geopolymer matrices are brittle and low-strength. CMCs are extremely expensive and require specialized manufacturing (chemical vapour infiltration or melt infiltration). This is specialist territory.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md"
+      ]
+    },
+
+    "rec_carbon_extreme_temp": {
+      "id": "rec_carbon_extreme_temp",
+      "type": "recommendation",
+      "recommended_fibre": "Carbon/Carbon (C/C) Composite",
+      "specific_grades": [
+        {
+          "name": "Carbon fibre with carbon matrix (C/C)",
+          "use_case": "Rocket nozzles, re-entry heat shields, aircraft brake discs, furnace fixtures."
+        }
+      ],
+      "typical_properties": {
+        "max_service_temp_inert_C": 3000,
+        "max_service_temp_oxidising_C": "500-700 (without coating), 1600+ (with SiC oxidation protection coating)",
+        "density_g_per_cm3": "1.6-1.9"
+      },
+      "typical_cost_per_kg": "$500-$10,000+",
+      "reasoning": "Carbon/carbon composites are the ultimate high-temperature structural material. Carbon fibre in a carbon matrix retains strength to over 2000 C in inert or reducing atmospheres, and actually gets STRONGER with increasing temperature up to about 2200 C. Used for rocket nozzle throats, re-entry vehicle nose caps, and aircraft brake discs. The carbon matrix is created by repeated cycles of resin impregnation and pyrolysis, or by chemical vapour deposition (CVD).",
+      "limitations": "Oxidises rapidly above 500 C in air (the carbon literally burns away). Requires oxidation protection coatings (SiC, HfC) for use in oxidising environments. Extremely expensive and slow to manufacture (weeks to months of processing). Very small supplier base.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md"
+      ]
+    },
+
+    "rec_hybrid_damping_sport": {
+      "id": "rec_hybrid_damping_sport",
+      "type": "recommendation",
+      "recommended_fibre": "Hybrid Carbon/Aramid or Carbon/Flax for Vibration Damping in Sports Equipment",
+      "specific_grades": [
+        {
+          "name": "Carbon outer layers + Kevlar 49 inner layers",
+          "use_case": "Tennis rackets, paddles, ski poles. Carbon provides stiffness; aramid damps vibration."
+        },
+        {
+          "name": "Carbon + Flax fibre hybrid",
+          "use_case": "Skis, snowboards, bicycle handlebars. Flax has naturally high damping and provides a smooth ride feel."
+        },
+        {
+          "name": "Carbon with viscoelastic damping layers",
+          "use_case": "Custom vibration-damped layup using thin viscoelastic film between plies."
+        }
+      ],
+      "typical_cost_per_kg": "$30-$80 (hybrid fabric)",
+      "reasoning": "Carbon fibre composites have very low intrinsic damping, which can make sporting equipment feel harsh or buzzy. Adding aramid or natural fibre (flax, hemp) layers significantly increases the loss factor (damping ratio) without excessive weight or stiffness penalty. Flax/carbon hybrids are increasingly popular in sports equipment because flax has a loss factor 5-10 times higher than carbon.",
+      "limitations": "Adding damping layers reduces overall stiffness slightly. Flax fibres absorb moisture and must be well-encapsulated by resin. The optimal hybrid ratio depends on the specific application and must be tuned experimentally.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md"
+      ]
+    },
+
+    "rec_hybrid_damping_industrial": {
+      "id": "rec_hybrid_damping_industrial",
+      "type": "recommendation",
+      "recommended_fibre": "Carbon Fibre with Constrained-Layer Damping Treatment",
+      "specific_grades": [
+        {
+          "name": "Standard modulus carbon (T700S) with viscoelastic damping layers",
+          "use_case": "Machine tool spindles, robotic arms, precision equipment. Damping layers are co-cured between carbon plies."
+        },
+        {
+          "name": "Carbon/aramid hybrid layup",
+          "use_case": "Vibration-sensitive structures where the aramid layers provide distributed damping."
+        }
+      ],
+      "typical_cost_per_kg": "$30-$60 (carbon) + damping layer material",
+      "reasoning": "For industrial vibration-damped structures, the approach differs from sporting goods. The requirement is usually to achieve a specific modal damping ratio (e.g., 2-5% critical damping vs 0.1-0.5% for undamped carbon). Constrained-layer damping using a thin viscoelastic polymer film (e.g., 3M ISD110 or similar) sandwiched between stiff carbon face plies is the most effective approach. This converts bending vibration energy into heat through shear deformation of the viscoelastic layer.",
+      "limitations": "Constrained-layer damping is most effective in bending modes; less effective for in-plane vibration. The viscoelastic layer properties are temperature-dependent, so the damping varies with operating temperature. Adding damping layers increases laminate thickness and weight.",
+      "relevant_knowledge_pages": [
+        "knowledge/01-fundamentals/fibre-types.md",
+        "knowledge/01-fundamentals/laminate-theory.md"
+      ]
+    }
+  }
+}

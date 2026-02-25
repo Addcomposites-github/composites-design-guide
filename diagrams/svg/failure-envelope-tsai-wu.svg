@@ -1,0 +1,79 @@
+<!-- Original diagram by AddComposites, CC BY 4.0, composites-design-guide -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 500" font-family="system-ui, -apple-system, sans-serif">
+  <!-- Title -->
+  <text x="300" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">Tsai-Wu Failure Envelope</text>
+  <text x="300" y="46" text-anchor="middle" font-size="12" fill="#64748b">Stress space failure surface for a unidirectional ply (sigma_1 vs sigma_2)</text>
+
+  <!-- Axes -->
+  <!-- X-axis: sigma_1 -->
+  <line x1="50" y1="270" x2="550" y2="270" stroke="#1e293b" stroke-width="1.5"/>
+  <polygon points="550,270 540,265 540,275" fill="#1e293b"/>
+  <text x="555" y="275" font-size="12" fill="#1e293b">σ₁</text>
+  <text x="555" y="290" font-size="10" fill="#64748b">(MPa)</text>
+
+  <!-- Y-axis: sigma_2 -->
+  <line x1="220" y1="450" x2="220" y2="60" stroke="#1e293b" stroke-width="1.5"/>
+  <polygon points="220,60 215,70 225,70" fill="#1e293b"/>
+  <text x="210" y="55" font-size="12" fill="#1e293b">σ₂</text>
+  <text x="230" y="55" font-size="10" fill="#64748b">(MPa)</text>
+
+  <!-- Origin label -->
+  <text x="210" y="285" font-size="10" fill="#64748b">0</text>
+
+  <!-- Axis tick marks and labels -->
+  <!-- X-axis ticks -->
+  <line x1="100" y1="265" x2="100" y2="275" stroke="#1e293b" stroke-width="1"/>
+  <text x="100" y="290" text-anchor="middle" font-size="9" fill="#64748b">-Xc</text>
+  <line x1="450" y1="265" x2="450" y2="275" stroke="#1e293b" stroke-width="1"/>
+  <text x="450" y="290" text-anchor="middle" font-size="9" fill="#64748b">Xt</text>
+
+  <!-- Y-axis ticks -->
+  <line x1="215" y1="150" x2="225" y2="150" stroke="#1e293b" stroke-width="1"/>
+  <text x="208" y="154" text-anchor="end" font-size="9" fill="#64748b">Yt</text>
+  <line x1="215" y1="380" x2="225" y2="380" stroke="#1e293b" stroke-width="1"/>
+  <text x="208" y="384" text-anchor="end" font-size="9" fill="#64748b">-Yc</text>
+
+  <!-- Tsai-Wu failure envelope (ellipse-like curve) -->
+  <ellipse cx="280" cy="290" rx="250" ry="150" transform="rotate(-15, 280, 290)"
+    fill="none" stroke="#dc2626" stroke-width="3" opacity="0.9"/>
+
+  <!-- Safe region fill -->
+  <ellipse cx="280" cy="290" rx="248" ry="148" transform="rotate(-15, 280, 290)"
+    fill="#dcfce7" opacity="0.3"/>
+
+  <!-- Max Stress box (for comparison) -->
+  <rect x="100" y="150" width="350" height="230" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="8,4" opacity="0.6"/>
+
+  <!-- Labels for regions -->
+  <text x="300" y="230" text-anchor="middle" font-size="14" font-weight="bold" fill="#16a34a">SAFE</text>
+  <text x="300" y="248" text-anchor="middle" font-size="11" fill="#16a34a">FI &lt; 1.0</text>
+
+  <text x="500" y="180" text-anchor="middle" font-size="12" font-weight="bold" fill="#dc2626">FAILURE</text>
+  <text x="500" y="196" text-anchor="middle" font-size="10" fill="#dc2626">FI &gt; 1.0</text>
+
+  <!-- Stress points -->
+  <!-- Safe point -->
+  <circle cx="300" cy="260" r="5" fill="#16a34a" stroke="white" stroke-width="2"/>
+  <text x="315" y="255" font-size="10" fill="#16a34a">A: FI = 0.6</text>
+
+  <!-- Marginal point -->
+  <circle cx="380" cy="210" r="5" fill="#f59e0b" stroke="white" stroke-width="2"/>
+  <text x="395" y="205" font-size="10" fill="#d97706">B: FI = 0.95</text>
+
+  <!-- Failed point -->
+  <circle cx="480" cy="170" r="5" fill="#dc2626" stroke="white" stroke-width="2"/>
+  <text x="495" y="165" font-size="10" fill="#dc2626">C: FI = 1.3</text>
+
+  <!-- Legend -->
+  <rect x="60" y="415" width="480" height="80" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <line x1="80" y1="435" x2="110" y2="435" stroke="#dc2626" stroke-width="3"/>
+  <text x="118" y="439" font-size="11" fill="#475569">Tsai-Wu envelope (interactive failure — accounts for biaxial stress interaction)</text>
+
+  <line x1="80" y1="455" x2="110" y2="455" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="8,4"/>
+  <text x="118" y="459" font-size="11" fill="#475569">Max Stress criterion (independent — no interaction, rectangular boundary)</text>
+
+  <text x="80" y="480" font-size="11" fill="#94a3b8">Failure Index (FI) = 1.0 on the envelope surface. FI &lt; 1 = safe. FI &gt; 1 = predicted failure.</text>
+
+  <!-- Formula -->
+  <text x="300" y="310" text-anchor="middle" font-size="11" font-weight="600" fill="#475569">F₁σ₁ + F₂σ₂ + F₁₁σ₁² + F₂₂σ₂² + 2F₁₂σ₁σ₂ + F₆₆τ₁₂² = 1</text>
+</svg>

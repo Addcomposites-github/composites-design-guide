@@ -1,0 +1,90 @@
+<!-- Original diagram by AddComposites, CC BY 4.0, composites-design-guide -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 380" font-family="system-ui, -apple-system, sans-serif">
+  <!-- Title -->
+  <text x="350" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">Filament Winding Patterns</text>
+  <text x="350" y="46" text-anchor="middle" font-size="12" fill="#64748b">Three fundamental winding patterns on a cylindrical mandrel</text>
+
+  <!-- ===== HOOP WINDING ===== -->
+  <text x="120" y="80" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">Hoop Winding</text>
+  <text x="120" y="96" text-anchor="middle" font-size="11" fill="#64748b">α ≈ 90°</text>
+
+  <!-- Cylinder -->
+  <ellipse cx="120" cy="120" rx="60" ry="20" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+  <rect x="60" y="120" width="120" height="120" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+  <ellipse cx="120" cy="240" rx="60" ry="20" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+  <!-- Hide the rect top line behind the top ellipse -->
+  <ellipse cx="120" cy="120" rx="60" ry="20" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+
+  <!-- Hoop winding lines (horizontal rings) -->
+  <g stroke="#2563eb" stroke-width="2.5" fill="none" opacity="0.8">
+    <ellipse cx="120" cy="140" rx="60" ry="15"/>
+    <ellipse cx="120" cy="160" rx="60" ry="15"/>
+    <ellipse cx="120" cy="180" rx="60" ry="15"/>
+    <ellipse cx="120" cy="200" rx="60" ry="15"/>
+    <ellipse cx="120" cy="220" rx="60" ry="15"/>
+  </g>
+
+  <text x="120" y="280" text-anchor="middle" font-size="10" fill="#475569">Best for: hoop stress</text>
+  <text x="120" y="294" text-anchor="middle" font-size="10" fill="#475569">(pressure vessels)</text>
+
+  <!-- ===== HELICAL WINDING ===== -->
+  <text x="350" y="80" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">Helical Winding</text>
+  <text x="350" y="96" text-anchor="middle" font-size="11" fill="#64748b">α = 15°-75°</text>
+
+  <!-- Cylinder -->
+  <ellipse cx="350" cy="120" rx="60" ry="20" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+  <rect x="290" y="120" width="120" height="120" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+  <ellipse cx="350" cy="240" rx="60" ry="20" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+  <ellipse cx="350" cy="120" rx="60" ry="20" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+
+  <!-- Helical winding lines (diagonal helical paths) -->
+  <g stroke="#16a34a" stroke-width="2.5" fill="none" opacity="0.8">
+    <!-- Forward helix (+45°) -->
+    <path d="M 290,130 Q 320,145 350,155 Q 380,165 410,150"/>
+    <path d="M 290,160 Q 320,175 350,185 Q 380,195 410,180"/>
+    <path d="M 290,190 Q 320,205 350,215 Q 380,225 410,210"/>
+    <!-- Reverse helix (-45°) -->
+    <path d="M 410,130 Q 380,145 350,155 Q 320,165 290,150" stroke="#eab308"/>
+    <path d="M 410,160 Q 380,175 350,185 Q 320,195 290,180" stroke="#eab308"/>
+    <path d="M 410,190 Q 380,205 350,215 Q 320,225 290,210" stroke="#eab308"/>
+  </g>
+
+  <text x="350" y="280" text-anchor="middle" font-size="10" fill="#475569">Best for: combined axial</text>
+  <text x="350" y="294" text-anchor="middle" font-size="10" fill="#475569">+ hoop + torsion loads</text>
+
+  <!-- ===== POLAR WINDING ===== -->
+  <text x="580" y="80" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">Polar Winding</text>
+  <text x="580" y="96" text-anchor="middle" font-size="11" fill="#64748b">α = 5°-15°</text>
+
+  <!-- Cylinder with domes -->
+  <ellipse cx="580" cy="120" rx="60" ry="20" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+  <rect x="520" y="120" width="120" height="120" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+  <ellipse cx="580" cy="240" rx="60" ry="20" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+  <ellipse cx="580" cy="120" rx="60" ry="20" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+
+  <!-- Dome shapes at ends -->
+  <path d="M 520,120 Q 520,105 580,100 Q 640,105 640,120" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+  <path d="M 520,240 Q 520,255 580,260 Q 640,255 640,240" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+
+  <!-- Polar winding lines (nearly axial, passing over poles) -->
+  <g stroke="#dc2626" stroke-width="2" fill="none" opacity="0.8">
+    <path d="M 575,100 L 575,260"/>
+    <path d="M 585,100 L 585,260"/>
+    <path d="M 565,102 Q 560,180 570,260"/>
+    <path d="M 595,102 Q 600,180 590,260"/>
+    <path d="M 555,105 Q 545,180 560,258"/>
+    <path d="M 605,105 Q 615,180 600,258"/>
+    <path d="M 545,110 Q 530,180 550,255"/>
+    <path d="M 615,110 Q 630,180 610,255"/>
+  </g>
+
+  <text x="580" y="280" text-anchor="middle" font-size="10" fill="#475569">Best for: axial loads</text>
+  <text x="580" y="294" text-anchor="middle" font-size="10" fill="#475569">(geodesic dome paths)</text>
+
+  <!-- Angle reference -->
+  <rect x="50" y="320" width="600" height="50" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="80" y="340" font-size="11" font-weight="bold" fill="#1e293b">Winding Angle (α) vs Application:</text>
+  <text x="80" y="358" font-size="11" fill="#475569">Hoop (85-90°): max hoop strength | Helical (15-75°): balanced biaxial | Polar (5-15°): max axial strength</text>
+  <text x="560" y="340" font-size="10" fill="#94a3b8">Optimal angle for</text>
+  <text x="560" y="355" font-size="10" fill="#94a3b8">pressure vessel: ±54.7°</text>
+</svg>

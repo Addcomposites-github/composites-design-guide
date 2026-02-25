@@ -103,6 +103,34 @@ Vacuum bagging applies ~1 atm (0.1 MPa) of pressure. An autoclave adds 3–7 atm
 
 For most non-aerospace applications, vacuum-bag-only processing delivers excellent results.
 
+## When to Choose Vacuum Bagging
+
+```mermaid
+graph TD
+    A[Wet layup part needs better quality?] --> B{What improvement needed?}
+    B -->|Better surface finish both sides| C[Vacuum bagging ✅]
+    B -->|Higher fibre volume fraction| C
+    B -->|Fewer voids| C
+    B -->|All of the above| C
+    C --> D{Part size?}
+    D -->|Small to medium < 2m²| E[✅ VACUUM BAG — straightforward]
+    D -->|Large > 2m²| F{Can you maintain vacuum seal?}
+    F -->|Yes| G[✅ VACUUM BAG — use multiple ports]
+    F -->|Difficult| H[Consider resin infusion instead]
+```
+
+**Choose vacuum bagging when:**
+- You are already doing wet layup and want the single biggest quality improvement
+- Fibre volume fraction of 50–55% is sufficient
+- You need 1–3% void content (adequate for most structural applications)
+- Budget allows ~$300–$1,000 for a vacuum pump and consumables
+- Part is structural but not aerospace-certified
+
+**Move to infusion or prepreg when:**
+- You need fibre volume fraction above 55%
+- Parts are large (> 2 m²) and wet layup becomes impractical
+- You need < 1% void content (aerospace standard)
+
 ## Key Takeaways
 
 - Vacuum bagging applies ~1 atm of uniform pressure, improving compaction, void removal, and resin content

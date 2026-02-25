@@ -1,6 +1,6 @@
-# Composites Design Guide
+# OpenComposites
 
-**A free, open knowledge base for composites design — written for humans, structured for LLMs.**
+**A free, open knowledge base and design platform for composites engineering — written for humans, structured for LLMs.**
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
@@ -102,6 +102,45 @@ Point it at this repository URL or upload `index.json`. Then ask your composites
 
 ---
 
+## Web App & Engineering Tools
+
+OpenComposites includes a full web application with engineering analysis tools:
+
+- **Photo-to-Plan AI Analysis** — Describe a part, get a complete manufacturing plan (BYOK: bring your own Anthropic API key)
+- **Knowledge Base Search** — Search 56+ articles across 10 topic areas
+- **CLT Calculator** — ABD matrices, effective moduli, 4 failure criteria (Max Stress, Tsai-Wu, Tsai-Hill, Hashin)
+- **Sandwich Panel Analysis** — 6 failure modes, 7 core materials, optimization
+- **Bolted Joint Analysis** — Bearing, net-tension, shear-out, cleavage checks
+- **Stacking Rule Checker** — Symmetry, balance, 10% rule, consecutive ply limits
+- **Materials Browser** — Search 15+ composite material systems with full properties
+- **Cost Estimator** — Per-part cost breakdown by process
+
+### Running locally
+
+```bash
+# 1. Install dependencies
+bash scripts/build.sh
+
+# 2. Create your .env file
+cp web-app/backend/.env.example web-app/backend/.env
+# Edit .env and add your ANTHROPIC_API_KEY (optional, only for AI analysis)
+
+# 3. Start the server
+cd web-app/backend && python -m uvicorn app.main:app --port 8000
+
+# Open http://localhost:8000
+```
+
+### MCP Server
+
+Install the MCP server to use composites tools in Claude, ChatGPT, or any MCP-compatible AI assistant:
+
+```bash
+npx composites-mcp-server
+```
+
+---
+
 ## Contributing
 
 This knowledge base grows through community contribution. If you know something about composites that isn't here — a design rule, a manufacturing tip, a common mistake, a better diagram — please add it.
@@ -129,4 +168,4 @@ You are free to share and adapt this content for any purpose, including commerci
 
 ---
 
-*Built and maintained by [AddComposites](https://www.addcomposites.com) and the composites engineering community.*
+*Built and maintained by [Addcomposites](https://www.addcomposites.com) and the composites engineering community.*

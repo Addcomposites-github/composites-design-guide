@@ -1,0 +1,1369 @@
+{
+  "name": "Failure Criteria Selection",
+  "version": "1.0",
+  "description": "Step-by-step decision tree for selecting the appropriate composite failure criterion based on application type, loading conditions, and analysis requirements.",
+  "usage": "Start at the node named in 'start'. Present the question to the user, collect their answer, then follow 'next' to the next node. Repeat until you reach a node with type 'recommendation'.",
+  "start": "application_type",
+  "nodes": {
+    "application_type": {
+      "id": "application_type",
+      "question": "What is the application context for this failure analysis?",
+      "type": "choice",
+      "context": "The application context determines the level of conservatism, the regulatory requirements, and the sophistication of the failure criterion needed. A quick sizing check uses a different criterion than a certified aerospace structure.",
+      "options": [
+        {
+          "value": "quick_check",
+          "label": "Quick check or preliminary sizing (back-of-envelope, trade study, concept evaluation)",
+          "next": "quick_check_loading"
+        },
+        {
+          "value": "general_structural",
+          "label": "General structural design (automotive, marine, industrial, sporting goods - no aerospace certification)",
+          "next": "general_loading"
+        },
+        {
+          "value": "aerospace_certified",
+          "label": "Aerospace certified structure (must meet airworthiness regulations, damage tolerance required)",
+          "next": "aerospace_loading"
+        },
+        {
+          "value": "research",
+          "label": "Research or progressive damage analysis (need physically-based failure prediction, detailed failure sequence)",
+          "next": "research_loading"
+        },
+        {
+          "value": "fatigue",
+          "label": "Fatigue or cyclic loading (long-term durability under repeated loads)",
+          "next": "fatigue_type"
+        }
+      ]
+    },
+
+    "quick_check_loading": {
+      "id": "quick_check_loading",
+      "question": "What type of loading does the part experience?",
+      "type": "choice",
+      "context": "For preliminary sizing, the goal is a simple, conservative estimate. The criterion should be easy to apply and should not require extensive material data.",
+      "options": [
+        {
+          "value": "uniaxial",
+          "label": "Primarily uniaxial (tension or compression dominated, one clear load direction)",
+          "next": "rec_max_stress_simple"
+        },
+        {
+          "value": "biaxial",
+          "label": "Biaxial or multiaxial (combined in-plane loads, no clear dominant direction)",
+          "next": "rec_max_stress_biaxial"
+        },
+        {
+          "value": "with_shear",
+          "label": "Significant in-plane shear (torsion tubes, shear webs, +/-45 dominated layups)",
+          "next": "rec_tsai_wu_quick"
+        }
+      ]
+    },
+
+    "general_loading": {
+      "id": "general_loading",
+      "question": "What type of loading does the part experience?",
+      "type": "choice",
+      "context": "For general structural design, the criterion needs to be reliable enough for a production part but does not need to meet aerospace certification requirements. Tsai-Wu is the most widely used general-purpose criterion.",
+      "options": [
+        {
+          "value": "in_plane_only",
+          "label": "In-plane loads only (membrane tension, compression, shear - no significant through-thickness stresses)",
+          "next": "general_in_plane_detail"
+        },
+        {
+          "value": "with_interlaminar",
+          "label": "Significant interlaminar (through-thickness) stresses (near free edges, at ply drop-offs, at bonded joints, around holes)",
+          "next": "general_interlaminar"
+        },
+        {
+          "value": "impact_damage",
+          "label": "Impact or damage tolerance concerns (the part may have impact damage and must still carry loads)",
+          "next": "general_damage"
+        },
+        {
+          "value": "multiaxial_complex",
+          "label": "Complex multiaxial loading with stress concentrations (notches, cutouts, bolted joints)",
+          "next": "general_multiaxial_complex"
+        }
+      ]
+    },
+
+    "general_in_plane_detail": {
+      "id": "general_in_plane_detail",
+      "question": "Do you need to distinguish between fibre failure and matrix failure?",
+      "type": "choice",
+      "context": "Some criteria give a single failure index (pass/fail). Others separate fibre and matrix failure modes, which is useful for optimising the layup: if only the matrix fails, you might accept that in service; if fibre fails, the structure has lost its primary load path.",
+      "options": [
+        {
+          "value": "single_index",
+          "label": "No - a single pass/fail index is sufficient (simpler analysis, well-understood tool output)",
+          "next": "rec_tsai_wu"
+        },
+        {
+          "value": "separate_modes",
+          "label": "Yes - I need to know whether failure is fibre-dominated or matrix-dominated",
+          "next": "rec_hashin_general"
+        }
+      ]
+    },
+
+    "general_interlaminar": {
+      "id": "general_interlaminar",
+      "question": "What is the source of the interlaminar stresses?",
+      "type": "choice",
+      "context": "Interlaminar (through-thickness) stresses can cause delamination, which is one of the most common and dangerous failure modes in composites. Standard in-plane failure criteria (Tsai-Wu, Hashin) do not capture delamination.",
+      "options": [
+        {
+          "value": "free_edge",
+          "label": "Free edge effects (interlaminar stresses at ply boundaries near free edges, cutouts, or ply drops)",
+          "next": "rec_delamination_onset"
+        },
+        {
+          "value": "bonded_joint",
+          "label": "Bonded joint or co-cured interface (adhesive bond line under peel and shear)",
+          "next": "rec_cohesive_zone"
+        },
+        {
+          "value": "impact_induced",
+          "label": "Impact-induced delamination (low-velocity impact creating internal delaminations)",
+          "next": "rec_delamination_propagation"
+        },
+        {
+          "value": "curved_region",
+          "label": "Curved region (L-bracket, C-spar radius, joggle - through-thickness tension due to geometry)",
+          "next": "rec_interlaminar_curved"
+        }
+      ]
+    },
+
+    "general_damage": {
+      "id": "general_damage",
+      "question": "What level of damage tolerance analysis is needed?",
+      "type": "choice",
+      "options": [
+        {
+          "value": "simple_knockdown",
+          "label": "Simple knockdown approach (reduce allowables by a factor to account for possible damage)",
+          "next": "rec_knockdown_approach"
+        },
+        {
+          "value": "explicit_damage",
+          "label": "Explicit damage modelling (need to predict residual strength after a specific impact event)",
+          "next": "rec_progressive_damage_general"
+        }
+      ]
+    },
+
+    "general_multiaxial_complex": {
+      "id": "general_multiaxial_complex",
+      "question": "Is FEA (finite element analysis) being used?",
+      "type": "choice",
+      "context": "Complex stress states around notches and joints require either FEA with an appropriate failure criterion, or semi-empirical methods based on test data.",
+      "options": [
+        {
+          "value": "yes_fea",
+          "label": "Yes, FEA is being used (can evaluate failure at every element and ply)",
+          "next": "rec_hashin_fea"
+        },
+        {
+          "value": "no_fea",
+          "label": "No FEA - using hand calculations or simple tools",
+          "next": "rec_point_stress"
+        }
+      ]
+    },
+
+    "aerospace_loading": {
+      "id": "aerospace_loading",
+      "question": "What type of loading and analysis is required?",
+      "type": "choice",
+      "context": "Aerospace certification requires specific failure criteria that are accepted by the airworthiness authority (FAA, EASA). The criteria must be validated against test data. Damage tolerance is mandatory for primary structure.",
+      "options": [
+        {
+          "value": "in_plane_static",
+          "label": "In-plane static strength (skin panels, spar caps, ribs under ultimate loads)",
+          "next": "aerospace_in_plane_detail"
+        },
+        {
+          "value": "damage_tolerance",
+          "label": "Damage tolerance (residual strength after barely visible impact damage, BVID)",
+          "next": "rec_aerospace_damage_tolerance"
+        },
+        {
+          "value": "bolted_joints",
+          "label": "Bolted joint analysis (bolt bearing, net section, pull-through)",
+          "next": "rec_aerospace_bolted"
+        },
+        {
+          "value": "bonded_joints",
+          "label": "Bonded joint analysis (adhesive joint strength, peel and shear)",
+          "next": "rec_aerospace_bonded"
+        },
+        {
+          "value": "buckling",
+          "label": "Buckling and post-buckling (thin-skinned structures under compression or shear)",
+          "next": "rec_aerospace_buckling"
+        }
+      ]
+    },
+
+    "aerospace_in_plane_detail": {
+      "id": "aerospace_in_plane_detail",
+      "question": "What is the certification approach?",
+      "type": "choice",
+      "context": "Aerospace certification can use either point design allowables (tested for the specific layup and loading) or ply-level failure criteria validated against test data.",
+      "options": [
+        {
+          "value": "ply_level",
+          "label": "Ply-level failure criteria (predicting failure from ply-level stresses and unidirectional test data)",
+          "next": "rec_hashin_aerospace"
+        },
+        {
+          "value": "laminate_level",
+          "label": "Laminate-level allowables (using notched or unnotched laminate test data directly)",
+          "next": "rec_laminate_allowables"
+        }
+      ]
+    },
+
+    "research_loading": {
+      "id": "research_loading",
+      "question": "What is the primary analysis goal?",
+      "type": "choice",
+      "context": "Research-grade failure criteria aim for physical accuracy rather than simplicity. They separate failure modes based on the physical failure mechanisms and can predict the progressive sequence of failure events.",
+      "options": [
+        {
+          "value": "progressive_damage",
+          "label": "Progressive damage and final failure (predict first-ply failure through to ultimate failure of the laminate)",
+          "next": "research_progressive_detail"
+        },
+        {
+          "value": "matrix_cracking",
+          "label": "Matrix cracking onset and evolution (transverse cracking, matrix-dominated failure)",
+          "next": "rec_puck_matrix"
+        },
+        {
+          "value": "fibre_kinking",
+          "label": "Fibre kinking and compression failure (understanding compression failure mechanisms)",
+          "next": "rec_larc_compression"
+        },
+        {
+          "value": "delamination",
+          "label": "Delamination initiation and propagation (fracture mechanics approach)",
+          "next": "rec_vcct_or_czm"
+        },
+        {
+          "value": "impact_simulation",
+          "label": "Impact damage simulation (explicit dynamic FEA of impact events)",
+          "next": "rec_continuum_damage"
+        }
+      ]
+    },
+
+    "research_progressive_detail": {
+      "id": "research_progressive_detail",
+      "question": "Which level of fidelity is needed?",
+      "type": "choice",
+      "options": [
+        {
+          "value": "ply_discount",
+          "label": "Ply-discount progressive failure (simple: failed plies have reduced stiffness, redistribute loads)",
+          "next": "rec_hashin_progressive"
+        },
+        {
+          "value": "continuum_damage",
+          "label": "Continuum damage mechanics (CDM) (advanced: gradual stiffness degradation based on damage variables)",
+          "next": "rec_continuum_damage"
+        },
+        {
+          "value": "physically_based",
+          "label": "Physically-based with distinct failure mechanisms (most accurate: separate criteria for each physical failure mode)",
+          "next": "rec_puck_or_larc"
+        }
+      ]
+    },
+
+    "fatigue_type": {
+      "id": "fatigue_type",
+      "question": "What type of fatigue analysis is needed?",
+      "type": "choice",
+      "context": "Composite fatigue behaviour is fundamentally different from metals. There is no single fatigue limit and multiple damage mechanisms interact (matrix cracking, delamination, fibre breakage).",
+      "options": [
+        {
+          "value": "sn_curve",
+          "label": "S-N curve approach (characterise fatigue life from coupon tests, apply to design)",
+          "next": "rec_fatigue_sn"
+        },
+        {
+          "value": "residual_strength",
+          "label": "Residual strength degradation (track strength reduction over loading cycles)",
+          "next": "rec_fatigue_residual"
+        },
+        {
+          "value": "progressive_fatigue",
+          "label": "Progressive fatigue damage (simulate cycle-by-cycle damage accumulation)",
+          "next": "rec_fatigue_progressive"
+        }
+      ]
+    },
+
+    "rec_max_stress_simple": {
+      "id": "rec_max_stress_simple",
+      "type": "recommendation",
+      "recommended_criterion": "Maximum Stress Criterion",
+      "description": "Compare each stress component in each ply independently against the corresponding allowable. Failure occurs when any single stress component exceeds its allowable value.",
+      "formulation": "Failure when: sigma_1 >= X_T (tension) or |sigma_1| >= X_C (compression) or sigma_2 >= Y_T or |sigma_2| >= Y_C or |tau_12| >= S_12",
+      "required_material_data": [
+        "X_T: Longitudinal tensile strength",
+        "X_C: Longitudinal compressive strength",
+        "Y_T: Transverse tensile strength",
+        "Y_C: Transverse compressive strength",
+        "S_12: In-plane shear strength"
+      ],
+      "reasoning": "Maximum Stress is the simplest failure criterion. It requires only five strength values (the basic unidirectional strengths) and checks each stress component independently. It is conservative because it ignores beneficial stress interactions. Perfect for quick sizing, trade studies, and preliminary design where you want a fast, safe estimate.",
+      "advantages": [
+        "Simplest to apply - can be done by hand or in a spreadsheet",
+        "Identifies which stress component is critical",
+        "Conservative (safe for preliminary sizing)",
+        "Available in every analysis tool including free ones like AddStack"
+      ],
+      "limitations": [
+        "Does not account for stress interactions (biaxial strength can be higher or lower than predicted)",
+        "Non-conservative for certain biaxial stress states (combined transverse tension + shear)",
+        "Does not distinguish between fibre and matrix failure modes",
+        "Overly conservative for many real loading conditions"
+      ],
+      "when_not_to_use": "Do not rely on Max Stress for final design of structural parts under multiaxial loading. The lack of stress interaction means it can be non-conservative for combined transverse tension and shear, which is a common loading in +/-45 plies.",
+      "alternatives": [
+        {
+          "criterion": "Maximum Strain",
+          "when": "Essentially equivalent to Max Stress for linear elastic analysis. Some engineers prefer strain-based because strains are more directly measured."
+        },
+        {
+          "criterion": "Tsai-Wu",
+          "when": "When you need to account for stress interactions (more accurate for biaxial loading) while still keeping a single failure index."
+        }
+      ],
+      "tools": [
+        {
+          "name": "AddStack",
+          "url": "https://addstack.addcomposites.com",
+          "notes": "Implements Max Stress criterion with graphical output"
+        },
+        {
+          "name": "eLamX2",
+          "notes": "Open-source CLT tool that includes Max Stress"
+        }
+      ],
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/04-structural-analysis/sizing-a-panel.md"
+      ]
+    },
+
+    "rec_max_stress_biaxial": {
+      "id": "rec_max_stress_biaxial",
+      "type": "recommendation",
+      "recommended_criterion": "Maximum Stress (with caution) or Tsai-Wu for Quick Biaxial Check",
+      "description": "For biaxial loading in a quick check, Max Stress is still acceptable but be aware that it does not capture stress interactions. If the biaxial stress state is significant (e.g., pressure vessel, biaxially-loaded panel), step up to Tsai-Wu even for preliminary sizing.",
+      "reasoning": "Under biaxial loading, stress interactions can significantly affect the failure envelope. Transverse tension combined with shear is particularly dangerous and Max Stress can be non-conservative for this case. Tsai-Wu captures these interactions with a single additional parameter (the interaction coefficient F_12). For a quick check, using Tsai-Wu with F_12 = -0.5 (a common assumption when no biaxial test data is available) gives a reasonable estimate.",
+      "required_material_data": [
+        "Same five strengths as Max Stress, plus:",
+        "F_12 interaction coefficient (assume -0.5 if unknown)"
+      ],
+      "advantages": [
+        "Tsai-Wu accounts for stress interactions with minimal extra effort",
+        "Single failure index (FI) makes it easy to assess: FI < 1 means no failure"
+      ],
+      "limitations": [
+        "The interaction coefficient F_12 significantly affects predictions under biaxial loading but is difficult to measure experimentally",
+        "Tsai-Wu does not distinguish between fibre and matrix failure"
+      ],
+      "when_not_to_use": "If fibre vs matrix failure mode identification is important (e.g., for optimisation or progressive damage analysis), use Hashin instead.",
+      "alternatives": [
+        {
+          "criterion": "Tsai-Wu",
+          "when": "Always preferred over Max Stress for biaxial loading"
+        }
+      ],
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md"
+      ]
+    },
+
+    "rec_tsai_wu_quick": {
+      "id": "rec_tsai_wu_quick",
+      "type": "recommendation",
+      "recommended_criterion": "Tsai-Wu Failure Criterion",
+      "description": "A single-expression polynomial criterion that provides one failure index accounting for all in-plane stress components and their interactions.",
+      "formulation": "F1*sigma_1 + F2*sigma_2 + F11*sigma_1^2 + F22*sigma_2^2 + F66*tau_12^2 + 2*F12*sigma_1*sigma_2 >= 1 means failure",
+      "reasoning": "When significant shear is present (torsion, +/-45 plies), stress interactions are important. Tsai-Wu handles shear-dominated loading better than Max Stress because the polynomial formulation naturally captures the interaction between normal and shear stresses. For quick checks with shear, Tsai-Wu is the minimum recommended criterion.",
+      "required_material_data": [
+        "X_T, X_C, Y_T, Y_C, S_12 (same five strengths)",
+        "F_12 interaction coefficient (assume -0.5 if biaxial test data is unavailable)"
+      ],
+      "advantages": [
+        "Captures shear-normal stress interactions",
+        "Single failure index for easy comparison of designs",
+        "Well-implemented in most analysis tools"
+      ],
+      "limitations": [
+        "Does not identify failure mode (fibre vs matrix)",
+        "Sensitivity to F_12 value"
+      ],
+      "when_not_to_use": "Not suitable when you need to know whether failure is fibre- or matrix-dominated, or when through-thickness stresses are significant.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/04-structural-analysis/sizing-a-panel.md"
+      ]
+    },
+
+    "rec_tsai_wu": {
+      "id": "rec_tsai_wu",
+      "type": "recommendation",
+      "recommended_criterion": "Tsai-Wu Failure Criterion",
+      "description": "The most widely used general-purpose composite failure criterion. A quadratic polynomial in stress space that accounts for different strengths in tension and compression and includes stress interaction terms.",
+      "formulation": "F1*sigma_1 + F2*sigma_2 + F11*sigma_1^2 + F22*sigma_2^2 + F66*tau_12^2 + 2*F12*sigma_1*sigma_2 >= 1",
+      "required_material_data": [
+        "X_T: Longitudinal tensile strength",
+        "X_C: Longitudinal compressive strength",
+        "Y_T: Transverse tensile strength",
+        "Y_C: Transverse compressive strength",
+        "S_12: In-plane shear strength",
+        "F_12: Biaxial interaction coefficient (from biaxial test, or assume -0.5)"
+      ],
+      "reasoning": "Tsai-Wu is the workhorse failure criterion for general structural composites design. It gives a single failure index (FI) that accounts for all in-plane stress components and their interactions. An FI below 1 means the ply has not failed; the inverse of FI gives the reserve factor. It is well-understood, widely validated, and implemented in virtually every composites analysis tool. For non-aerospace structural design where a single pass/fail assessment is needed, Tsai-Wu is the default choice.",
+      "advantages": [
+        "Single failure index simplifies design assessment",
+        "Accounts for different tension/compression strengths",
+        "Captures stress interactions (important for biaxial loading)",
+        "Well-validated against test data for many material systems",
+        "Available in all composites analysis tools (AddStack, eLamX2, FEA codes)"
+      ],
+      "limitations": [
+        "Does not identify failure mode (fibre failure, matrix cracking, or delamination all give the same output)",
+        "The interaction coefficient F_12 is difficult to measure and significantly affects biaxial predictions",
+        "Can be non-conservative for certain matrix-dominated failure modes",
+        "Not suitable for progressive damage analysis (it predicts first failure, not the sequence)"
+      ],
+      "when_not_to_use": "Do not use Tsai-Wu when: (1) you need to distinguish fibre from matrix failure (use Hashin), (2) you need progressive damage analysis (use Puck or LaRC), (3) through-thickness stresses are significant (add a delamination criterion), (4) aerospace certification requires a specific criterion (check with your DER/CVE).",
+      "alternatives": [
+        {
+          "criterion": "Tsai-Hill",
+          "when": "Older variant without the linear terms. Less accurate than Tsai-Wu (does not distinguish tension/compression). Rarely preferred over Tsai-Wu today."
+        },
+        {
+          "criterion": "Hashin",
+          "when": "When you need separate fibre and matrix failure indices."
+        }
+      ],
+      "tools": [
+        {
+          "name": "AddStack",
+          "url": "https://addstack.addcomposites.com",
+          "notes": "Implements Tsai-Wu with failure envelope visualisation"
+        },
+        {
+          "name": "eLamX2",
+          "notes": "Open-source CLT with Tsai-Wu and Tsai-Hill"
+        }
+      ],
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/04-structural-analysis/sizing-a-panel.md"
+      ]
+    },
+
+    "rec_hashin_general": {
+      "id": "rec_hashin_general",
+      "type": "recommendation",
+      "recommended_criterion": "Hashin Failure Criteria (1980 formulation)",
+      "description": "A set of four separate failure criteria that distinguish between fibre tension, fibre compression, matrix tension, and matrix compression failure modes. Each mode has its own failure index.",
+      "failure_modes": [
+        {
+          "mode": "Fibre Tension",
+          "description": "Fibre breakage under longitudinal tension. Catastrophic failure of the ply.",
+          "key_parameter": "Longitudinal tensile strength X_T"
+        },
+        {
+          "mode": "Fibre Compression",
+          "description": "Fibre kinking or microbuckling under longitudinal compression.",
+          "key_parameter": "Longitudinal compressive strength X_C"
+        },
+        {
+          "mode": "Matrix Tension",
+          "description": "Matrix cracking under transverse tension and/or in-plane shear.",
+          "key_parameter": "Transverse tensile strength Y_T, shear strength S_12"
+        },
+        {
+          "mode": "Matrix Compression",
+          "description": "Matrix crushing under transverse compression, possibly with shear.",
+          "key_parameter": "Transverse compressive strength Y_C, shear strength S_12"
+        }
+      ],
+      "required_material_data": [
+        "X_T: Longitudinal tensile strength",
+        "X_C: Longitudinal compressive strength",
+        "Y_T: Transverse tensile strength",
+        "Y_C: Transverse compressive strength",
+        "S_12: In-plane shear strength",
+        "alpha: Shear contribution factor for fibre tension mode (often set to 1.0)"
+      ],
+      "reasoning": "Hashin criteria separate fibre and matrix failure modes, which is essential for understanding how a laminate fails and for optimising the layup. If Tsai-Wu says a ply fails at FI = 1.0, you do not know whether the fibre broke (catastrophic) or the matrix cracked (may be acceptable in service). Hashin tells you which mode is critical. This is valuable for design iteration: if only matrix modes fail, you might add +/-45 plies; if fibre modes fail, you need more 0-degree plies.",
+      "advantages": [
+        "Separates fibre and matrix failure modes (four separate indices)",
+        "Physically more meaningful than Tsai-Wu",
+        "Widely implemented in FEA codes (Abaqus, ANSYS, LS-DYNA all have built-in Hashin)",
+        "Can be used as the initiation criterion in progressive damage models"
+      ],
+      "limitations": [
+        "The fibre compression criterion (microbuckling/kinking) is simplified. Puck and LaRC do this better.",
+        "Does not capture delamination (need a separate criterion for that)",
+        "Matrix compression criterion does not predict the fracture plane angle (Puck does)",
+        "No single failure index - you need to check four indices per ply"
+      ],
+      "when_not_to_use": "Not sufficient when: (1) delamination is the expected failure mode (add Ye delamination or cohesive zone), (2) detailed compression failure prediction is needed (use LaRC), (3) you need to predict the matrix crack orientation (use Puck).",
+      "alternatives": [
+        {
+          "criterion": "Tsai-Wu",
+          "when": "When a single failure index is preferred and failure mode identification is not needed."
+        },
+        {
+          "criterion": "Puck",
+          "when": "When you need more physically accurate matrix failure prediction, including fracture plane angle."
+        }
+      ],
+      "tools": [
+        {
+          "name": "AddStack",
+          "url": "https://addstack.addcomposites.com",
+          "notes": "Implements Hashin with mode-separated output"
+        }
+      ],
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md"
+      ]
+    },
+
+    "rec_hashin_fea": {
+      "id": "rec_hashin_fea",
+      "type": "recommendation",
+      "recommended_criterion": "Hashin Criteria in FEA with Progressive Damage",
+      "description": "When using FEA for structures with stress concentrations (holes, notches, bolted joints), Hashin criteria should be combined with a progressive damage model. This allows failed elements to redistribute load rather than causing the entire model to fail at first-ply failure.",
+      "reasoning": "Stress concentrations around holes and notches cause local ply failures well before the structure reaches its ultimate load. If you only check first-ply failure, the predicted strength will be very conservative. Progressive damage modelling (using Hashin for initiation, then degrading the stiffness of failed plies) captures the load redistribution that occurs in real structures and gives much more realistic strength predictions.",
+      "implementation_notes": [
+        "Abaqus: Built-in Hashin damage initiation + energy-based damage evolution (VUMAT not needed for basic cases)",
+        "ANSYS: ACP module with Hashin or custom USERMAT",
+        "LS-DYNA: MAT054 (enhanced composite damage) or MAT261 (Puck-based)",
+        "Nastran: PCOMP with user-defined failure criteria or SOL400 progressive failure"
+      ],
+      "advantages": [
+        "Captures load redistribution around stress concentrations",
+        "More realistic strength predictions than first-ply failure",
+        "Mode separation helps understand the damage sequence"
+      ],
+      "limitations": [
+        "Mesh-dependent results (requires regularisation or characteristic element length)",
+        "Requires fracture energy data (G_Ic, G_IIc) for damage evolution laws",
+        "More computationally expensive than simple strength checks",
+        "Results must be validated against test data for the specific structural detail"
+      ],
+      "when_not_to_use": "Overkill for preliminary sizing or simple panels without stress concentrations. Use Tsai-Wu or basic Hashin for those cases.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/04-structural-analysis/sizing-a-panel.md"
+      ]
+    },
+
+    "rec_hashin_aerospace": {
+      "id": "rec_hashin_aerospace",
+      "type": "recommendation",
+      "recommended_criterion": "Hashin or Max Strain at Ply Level (with Building Block Validation)",
+      "description": "For aerospace certification using ply-level failure criteria, either Hashin or Max Strain is typically accepted. The criterion must be validated against test data at multiple scales (coupon, element, sub-component, full-scale) following the building block approach.",
+      "reasoning": "Aerospace certification requires that the failure criterion be validated against a pyramid of tests from coupons up to full-scale structure. The specific criterion matters less than the validation. Hashin is commonly used because the mode separation helps identify which failure modes are critical at each structural scale. Max Strain is also widely used in industry, particularly in legacy programs, because of its simplicity and because strain-based allowables are directly measured in tests.",
+      "certification_notes": [
+        "The criterion must be validated per the building block approach (CMH-17 Chapter 12)",
+        "Notched and unnotched allowables at the laminate level are typically used for final sizing, not ply-level criteria alone",
+        "Environmental knockdowns (hot/wet, cold/dry) must be applied to the allowables",
+        "The DER/CVE must approve the failure criteria approach in the certification plan"
+      ],
+      "advantages": [
+        "Hashin: mode separation identifies critical failure mechanisms at each design detail",
+        "Max Strain: simple, conservative, directly tied to measured test data",
+        "Both are well-accepted by certification authorities"
+      ],
+      "limitations": [
+        "Neither criterion alone is sufficient for certification - must be backed by test data",
+        "Environmental knockdowns can reduce allowables by 20-40%",
+        "Damage tolerance (BVID residual strength) is typically checked separately"
+      ],
+      "when_not_to_use": "When the certification basis requires a specific criterion (some programs mandate Max Strain). Always check with the DER/CVE.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/04-structural-analysis/buckling-basics.md"
+      ]
+    },
+
+    "rec_laminate_allowables": {
+      "id": "rec_laminate_allowables",
+      "type": "recommendation",
+      "recommended_criterion": "Laminate-Level Allowables (Notched and Unnotched)",
+      "description": "Instead of predicting failure from ply-level stresses, use tested laminate-level strength values (open-hole tension, open-hole compression, filled-hole tension, filled-hole compression, compression after impact) as design allowables.",
+      "reasoning": "The aerospace industry increasingly uses laminate-level allowables rather than ply-level failure criteria for final sizing. The rationale is that laminate-level tests directly capture the real failure mechanisms (notch sensitivity, hole size effects, delamination interactions) that ply-level criteria cannot. NCAMP and CMH-17 provide standardized laminate allowables for common material systems and layup families. The design strain (typically open-hole compression strain, which is the most critical for most structures) is compared directly against the allowable.",
+      "typical_design_values": {
+        "open_hole_compression_strain": "3500-5000 microstrain (depending on material, layup, environment)",
+        "compression_after_impact_strain": "3000-4500 microstrain (for BVID-damaged structure)",
+        "bearing_stress": "Material and fastener dependent"
+      },
+      "advantages": [
+        "Directly validated by test - no failure criterion approximation",
+        "Captures real structural effects (notch sensitivity, damage interaction)",
+        "NCAMP databases provide statistically-based allowables",
+        "Simplifies sizing: compare FEA strain against allowable strain"
+      ],
+      "limitations": [
+        "Only valid for the tested layup families, thicknesses, and environments",
+        "Does not give insight into failure mechanisms",
+        "Cannot be used for novel layups or loading conditions without additional testing",
+        "Requires a significant test programme (or use of existing NCAMP data)"
+      ],
+      "when_not_to_use": "Not useful for conceptual design, trade studies, or novel configurations where test data does not exist. Use ply-level criteria for those cases.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/04-structural-analysis/sizing-a-panel.md"
+      ]
+    },
+
+    "rec_aerospace_damage_tolerance": {
+      "id": "rec_aerospace_damage_tolerance",
+      "type": "recommendation",
+      "recommended_criterion": "Compression After Impact (CAI) Allowables + Delamination Growth Assessment",
+      "description": "For aerospace damage tolerance, the structure must demonstrate adequate residual strength after barely visible impact damage (BVID). The primary criterion is Compression After Impact (CAI) strain allowable. For delamination growth, a no-growth or slow-growth approach is used.",
+      "reasoning": "Composites are vulnerable to impact damage that may not be visible on the surface but creates internal delaminations that severely reduce compression strength. Airworthiness regulations require that the structure carry limit loads with BVID present. The CAI allowable (typically the lowest of all laminate allowables) usually drives the design of compression-loaded skins. Delamination growth under fatigue loading must also be assessed, typically using fracture mechanics (G_I, G_II, G_III).",
+      "key_concepts": [
+        "BVID: Barely Visible Impact Damage - the largest damage that might go undetected between inspections",
+        "CAI: Compression After Impact - residual compression strength of a BVID-damaged panel",
+        "No-growth: Demonstrate that delaminations do not grow under fatigue loading at limit load",
+        "Limit load: Maximum load expected in service (not factored)"
+      ],
+      "advantages": [
+        "Well-established regulatory framework (FAR 25.571, CS 25.571)",
+        "CAI testing is standardized (ASTM D7136/D7137)",
+        "Conservative approach that has proven safe in service"
+      ],
+      "limitations": [
+        "CAI allowables can be very conservative for structures that are primarily tension-loaded",
+        "Impact energy levels for BVID must be agreed with the certification authority",
+        "Delamination growth testing is expensive and time-consuming"
+      ],
+      "when_not_to_use": "This is mandatory for aerospace primary structure. It is not typically required for non-aerospace applications (but can be applied voluntarily for safety-critical parts).",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/01-fundamentals/failure-modes.md"
+      ]
+    },
+
+    "rec_aerospace_bolted": {
+      "id": "rec_aerospace_bolted",
+      "type": "recommendation",
+      "recommended_criterion": "Bearing/Bypass Interaction + Point Stress Criterion",
+      "description": "Bolted joint analysis in aerospace composites uses bearing/bypass interaction diagrams combined with point stress or average stress criteria for net section failure prediction. Bearing strength is obtained from test (ASTM D5961).",
+      "reasoning": "Bolted joints in composites are complex because the stress distribution around the hole is very different from metals. The laminate does not yield and redistribute load like metal. The analysis combines: (1) Bearing strength (from test, typically 50-70% of unidirectional compression strength), (2) Bypass strength (open-hole or filled-hole tension/compression), (3) Bearing-bypass interaction (linear or parabolic interaction curve). Point stress and average stress criteria (Whitney-Nuismer) are used to predict net section failure around the fastener hole.",
+      "key_parameters": [
+        "Bearing allowable (from ASTM D5961 test at appropriate temperature/moisture)",
+        "Bypass allowable (open-hole tension/compression)",
+        "Bearing-bypass interaction diagram (from analysis or test)",
+        "Point stress characteristic distance (d_0, typically 1-2 mm from hole edge)"
+      ],
+      "advantages": [
+        "Well-established methodology in aerospace industry",
+        "Bearing allowables are straightforward to test",
+        "Point stress approach accounts for laminate-specific notch sensitivity"
+      ],
+      "limitations": [
+        "Requires specific test data for each material/layup/fastener combination",
+        "Does not capture progressive bearing failure (requires detailed FEA for that)",
+        "Bolt load distribution in multi-bolt joints requires separate analysis"
+      ],
+      "when_not_to_use": "For simple joints in non-aerospace applications, use manufacturer's bearing allowables with appropriate safety factors instead of the full bearing-bypass interaction.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/02-design-rules/splices-and-joints.md"
+      ]
+    },
+
+    "rec_aerospace_bonded": {
+      "id": "rec_aerospace_bonded",
+      "type": "recommendation",
+      "recommended_criterion": "Adhesive Shear/Peel Stress Analysis + Cohesive Zone Modelling",
+      "description": "Bonded joint analysis uses closed-form solutions (Volkersen, Goland-Reissner, Hart-Smith) for preliminary sizing, and cohesive zone modelling (CZM) in FEA for detailed analysis.",
+      "reasoning": "Bonded joints in composites fail by either adhesive failure (within the adhesive layer), cohesive failure (at the adhesive-adherend interface), or adherend failure (interlaminar failure in the composite near the bond line). Classical closed-form solutions give the peak peel and shear stresses at the bond line ends. For detailed analysis, cohesive zone elements in FEA can predict both damage initiation and crack growth.",
+      "analysis_levels": [
+        {
+          "level": "Preliminary sizing",
+          "method": "Hart-Smith elastic-plastic adhesive model",
+          "notes": "Gives overlap length, maximum shear and peel stresses. Available as hand calculation or spreadsheet."
+        },
+        {
+          "level": "Detailed design",
+          "method": "FEA with cohesive zone elements",
+          "notes": "Models damage initiation and propagation. Requires traction-separation law parameters from DCB/ENF tests."
+        }
+      ],
+      "advantages": [
+        "Closed-form solutions enable rapid preliminary design",
+        "CZM in FEA captures progressive disbonding",
+        "Methodology is well-documented (CMH-17, ASTM standards)"
+      ],
+      "limitations": [
+        "Aerospace certification of bonded primary structure often requires redundant load paths (no primary bonded structure without fail-safe features)",
+        "Adhesive properties are highly sensitive to surface preparation, temperature, and moisture",
+        "CZM requires careful calibration against test data"
+      ],
+      "when_not_to_use": "For non-structural bonds, simple lap shear allowables from adhesive manufacturer data are sufficient.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/02-design-rules/splices-and-joints.md"
+      ]
+    },
+
+    "rec_aerospace_buckling": {
+      "id": "rec_aerospace_buckling",
+      "type": "recommendation",
+      "recommended_criterion": "Linear Buckling (Eigenvalue) + Post-Buckling Strength Check",
+      "description": "For thin composite skins under compression or shear, buckling is typically the first failure event. Linear buckling analysis gives the critical load. Post-buckling analysis (nonlinear FEA) determines whether the structure can carry loads beyond initial buckling.",
+      "reasoning": "Most aerospace composite panels are designed to buckle under limit load but carry ultimate load in a post-buckled state. The analysis approach is: (1) Linear buckling eigenvalue to find the critical load and mode shape, (2) Nonlinear post-buckling analysis to determine the load-shortening response, (3) Apply Hashin or Tsai-Wu at the ply level within the post-buckled FEA to check for material failure. The governing failure is typically compression-after-impact (CAI) in the post-buckled skin, or stiffener disbonding due to post-buckling-induced peel stresses.",
+      "analysis_sequence": [
+        "Step 1: Linear buckling eigenvalue analysis (SOL105 in Nastran, *BUCKLE in Abaqus)",
+        "Step 2: Nonlinear static or arc-length analysis with initial imperfection (scaled from buckling mode)",
+        "Step 3: Ply-level failure check at each load increment using Hashin or Max Strain",
+        "Step 4: Check stiffener-skin interface for delamination/disbond using interlaminar stresses or CZM"
+      ],
+      "advantages": [
+        "Linear buckling is fast and gives a good initial estimate",
+        "Post-buckling design reduces structural weight (skins can be thinner)",
+        "Well-established methodology in aerospace (used on A320, 787, A350)"
+      ],
+      "limitations": [
+        "Post-buckling analysis requires nonlinear FEA with geometric nonlinearity",
+        "Results are sensitive to initial geometric imperfections",
+        "Stiffener disbonding in post-buckling is difficult to predict accurately",
+        "Requires extensive testing to validate (stiffened panel tests are expensive)"
+      ],
+      "when_not_to_use": "For non-aerospace applications where post-buckling is not acceptable (the part must not visibly buckle), design to stay below the linear buckling load.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/buckling-basics.md",
+        "knowledge/04-structural-analysis/failure-criteria.md"
+      ]
+    },
+
+    "rec_delamination_onset": {
+      "id": "rec_delamination_onset",
+      "type": "recommendation",
+      "recommended_criterion": "Ye Delamination Criterion + Interlaminar Stress Check",
+      "description": "Check interlaminar stresses (sigma_33, tau_13, tau_23) against through-thickness strength values. The Ye delamination criterion combines these stresses into a single delamination failure index.",
+      "formulation": "Delamination Index = (sigma_33/Z_T)^2 + (tau_13/S_13)^2 + (tau_23/S_23)^2 >= 1 (for sigma_33 > 0, tension)",
+      "required_material_data": [
+        "Z_T: Through-thickness tensile strength (interlaminar tensile strength)",
+        "S_13: Interlaminar shear strength (1-3 plane)",
+        "S_23: Interlaminar shear strength (2-3 plane)",
+        "Note: Z_T is typically 30-60 MPa for a carbon/epoxy UD ply"
+      ],
+      "reasoning": "Standard in-plane failure criteria (Tsai-Wu, Hashin) do not check for delamination because they ignore through-thickness stresses. Near free edges, at ply drop-offs, and around cutouts, interlaminar stresses can be high enough to initiate delamination. A separate delamination onset check using interlaminar stresses from a 3D or layered-shell FEA is needed for these regions.",
+      "advantages": [
+        "Simple to apply as a post-processing check on FEA results",
+        "Identifies delamination-prone regions before manufacturing",
+        "Can be used to guide design changes (ply drop-off spacing, edge reinforcement)"
+      ],
+      "limitations": [
+        "Through-thickness properties are difficult to test and have high scatter",
+        "Only predicts onset, not growth (use fracture mechanics for growth)",
+        "Requires 3D solid elements or layered shells with through-thickness stress output",
+        "Free-edge stresses are singular (mesh-dependent) - use characteristic distance approach"
+      ],
+      "when_not_to_use": "Not needed for panels far from free edges, holes, or ply drops where through-thickness stresses are negligible.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/01-fundamentals/failure-modes.md"
+      ]
+    },
+
+    "rec_cohesive_zone": {
+      "id": "rec_cohesive_zone",
+      "type": "recommendation",
+      "recommended_criterion": "Cohesive Zone Model (CZM)",
+      "description": "Cohesive zone modelling places zero-thickness interface elements at the bond line or ply interface. These elements follow a traction-separation law: they resist opening/sliding up to a critical stress, then progressively soften as the interface disbonds, absorbing energy equal to the fracture toughness.",
+      "required_material_data": [
+        "G_Ic: Mode I fracture toughness (opening - from DCB test, ASTM D5528)",
+        "G_IIc: Mode II fracture toughness (sliding - from ENF or 4ENF test, ASTM D7905)",
+        "sigma_max: Cohesive strength in tension (Mode I)",
+        "tau_max: Cohesive strength in shear (Mode II)",
+        "Mixed-mode interaction law (typically Benzeggagh-Kenane or power law)"
+      ],
+      "reasoning": "CZM is the standard method for analysing bonded joints and co-cured interfaces in FEA. It captures both the initiation and propagation of disbonding, including the energy absorbed during crack growth. This makes it much more realistic than a simple stress-based check, which only predicts initiation. CZM is implemented in all major FEA codes (Abaqus COH3D8, ANSYS INTER, LS-DYNA tiebreak contacts).",
+      "advantages": [
+        "Captures both initiation and propagation of delamination/disbonding",
+        "Mesh-size independent (with proper regularisation)",
+        "Mixed-mode loading handled naturally",
+        "Well-validated against standard fracture tests"
+      ],
+      "limitations": [
+        "Requires fracture toughness data from mode I and mode II tests",
+        "Multiple cohesive interfaces needed for multiple delamination planes",
+        "Computationally expensive (very thin elements, small time steps)",
+        "Cohesive element formulation requires care (initial stiffness, viscous regularisation)"
+      ],
+      "when_not_to_use": "Overkill for preliminary sizing. Use simple stress-based delamination checks first, then apply CZM for detailed analysis of critical joints.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/01-fundamentals/failure-modes.md"
+      ]
+    },
+
+    "rec_delamination_propagation": {
+      "id": "rec_delamination_propagation",
+      "type": "recommendation",
+      "recommended_criterion": "VCCT (Virtual Crack Closure Technique) or Cohesive Zone Model",
+      "description": "For predicting whether an existing delamination (e.g., from impact) will grow under applied loads, use fracture mechanics. VCCT calculates the strain energy release rate (G) at the delamination front from FEA nodal forces and displacements. CZM models the crack growth using interface elements.",
+      "reasoning": "Once a delamination exists (from impact, manufacturing defect, or fatigue), the question is whether it will grow under service loads. This is a fracture mechanics problem: compare the strain energy release rate G at the crack front against the fracture toughness G_c. If G < G_c, the delamination is stable. VCCT is simpler to implement (no special elements needed) but requires the crack path to be predefined. CZM is more versatile but computationally more expensive.",
+      "comparison": {
+        "VCCT": {
+          "advantages": "Simple, no special elements, good for predefined crack paths",
+          "limitations": "Crack path must be known in advance, mesh-dependent, does not model initiation"
+        },
+        "CZM": {
+          "advantages": "Models both initiation and growth, mesh-independent with regularisation",
+          "limitations": "More computationally expensive, requires cohesive element placement"
+        }
+      },
+      "required_material_data": [
+        "G_Ic: Mode I fracture toughness",
+        "G_IIc: Mode II fracture toughness",
+        "Mixed-mode interaction law"
+      ],
+      "when_not_to_use": "If the question is only whether delamination will initiate (not grow), use the simpler Ye delamination onset criterion.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/01-fundamentals/failure-modes.md"
+      ]
+    },
+
+    "rec_interlaminar_curved": {
+      "id": "rec_interlaminar_curved",
+      "type": "recommendation",
+      "recommended_criterion": "Through-Thickness Stress Check Against Interlaminar Tensile Strength",
+      "description": "In curved composite regions (L-brackets, C-spar radii, joggle regions), bending loads generate through-thickness tensile stresses (sigma_33) that can cause delamination. This is a direct comparison of sigma_33 against the interlaminar tensile strength Z_T.",
+      "reasoning": "When a curved laminate is loaded in bending such that the radius tries to open (unfold), significant through-thickness tension develops. This is a well-known failure mode in L-brackets, C-channel flanges, and hat stiffener radii. The through-thickness stress can be estimated analytically for simple geometries (sigma_33 approximately equals M/(r*t) for a curved beam) or from 3D FEA. The allowable Z_T is typically 30-60 MPa for carbon/epoxy, which is much lower than the in-plane strengths.",
+      "analytical_estimate": "sigma_33 = M / (r * t), where M is the bending moment per unit width, r is the radius, and t is the laminate thickness. Add stress concentration factors for inner-radius ply drop-offs.",
+      "advantages": [
+        "Simple analytical estimate available for preliminary sizing",
+        "Directly identifies whether the radius will delaminate",
+        "Design fix is straightforward: increase radius, add through-thickness reinforcement, or reduce moment"
+      ],
+      "limitations": [
+        "Z_T is difficult to test and has high scatter",
+        "Analytical estimate is only valid for uniform curved beams",
+        "For complex geometries, 3D FEA with through-thickness elements is needed",
+        "Residual thermal stresses from cure can add to the through-thickness tension"
+      ],
+      "when_not_to_use": "Not needed for flat or gently curved regions where through-thickness stresses are negligible.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/01-fundamentals/failure-modes.md"
+      ]
+    },
+
+    "rec_knockdown_approach": {
+      "id": "rec_knockdown_approach",
+      "type": "recommendation",
+      "recommended_criterion": "Allowables-Based Approach with Damage Knockdown Factors",
+      "description": "Reduce the pristine (undamaged) laminate allowables by a knockdown factor to account for expected in-service damage. The knocked-down allowable represents the residual strength of a damaged laminate.",
+      "reasoning": "For non-aerospace structural applications where formal damage tolerance analysis is not required, a pragmatic approach is to apply knockdown factors to the undamaged laminate allowables. Typical knockdown factors: 0.60-0.75 for compression (to account for impact damage), 0.80-0.90 for tension (less sensitive to impact). These factors are conservative approximations based on aerospace CAI test data and should be validated with at least a few CAI tests on representative laminates.",
+      "typical_knockdown_factors": {
+        "compression_with_impact_damage": "0.60-0.75",
+        "tension_with_impact_damage": "0.80-0.90",
+        "compression_with_6mm_hole": "0.65-0.80",
+        "hot_wet_environmental": "0.75-0.90"
+      },
+      "advantages": [
+        "Simple to apply - multiply allowables by knockdown factor",
+        "Conservative when factors are chosen appropriately",
+        "No complex analysis needed"
+      ],
+      "limitations": [
+        "Knockdown factors are approximate and may be overly conservative or occasionally non-conservative",
+        "Does not provide insight into actual damage state or residual strength",
+        "Factors depend on laminate layup, thickness, and material system"
+      ],
+      "when_not_to_use": "Not acceptable for aerospace certification (formal damage tolerance analysis with CAI testing is required). Not appropriate when the specific damage scenario is unusual or the part is safety-critical.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/01-fundamentals/failure-modes.md"
+      ]
+    },
+
+    "rec_progressive_damage_general": {
+      "id": "rec_progressive_damage_general",
+      "type": "recommendation",
+      "recommended_criterion": "Hashin Initiation + Energy-Based Damage Evolution (Progressive Damage in FEA)",
+      "description": "Use Hashin criteria to detect damage initiation in each failure mode, then apply energy-based damage evolution laws to progressively degrade the stiffness of damaged elements. This predicts both the damage pattern and the ultimate strength of the structure.",
+      "reasoning": "When you need to predict the residual strength of a structure after a specific damage event (e.g., a 30J impact), progressive damage modelling is needed. The Hashin + damage evolution approach is the most widely implemented in commercial FEA codes and gives reasonable predictions for both the damage extent and the residual strength. The damage evolution uses fracture energy (G_Ic for fibre, G_IIc for matrix) to ensure mesh-independent results.",
+      "implementation_notes": [
+        "Abaqus: Built-in with *DAMAGE INITIATION + *DAMAGE EVOLUTION for composite shells and continuum shells",
+        "LS-DYNA: MAT054 or MAT058 for shell elements, MAT162 for solid elements",
+        "ANSYS: ACP with progressive damage in Mechanical"
+      ],
+      "advantages": [
+        "Predicts damage pattern and residual strength",
+        "Well-validated for impact damage simulation",
+        "Available in major FEA codes without user subroutines"
+      ],
+      "limitations": [
+        "Requires fracture energy data for each failure mode",
+        "Mesh sensitivity (characteristic element length must match test calibration)",
+        "Does not model delamination (add cohesive elements for that)",
+        "Computational cost is higher than linear analysis"
+      ],
+      "when_not_to_use": "Not needed for undamaged strength prediction of simple panels. Overkill for preliminary design.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/01-fundamentals/failure-modes.md"
+      ]
+    },
+
+    "rec_point_stress": {
+      "id": "rec_point_stress",
+      "type": "recommendation",
+      "recommended_criterion": "Point Stress or Average Stress Criterion (Whitney-Nuismer)",
+      "description": "For notched strength prediction without FEA, the Whitney-Nuismer point stress criterion evaluates the laminate stress at a characteristic distance from the notch edge and compares it against the unnotched strength. If the stress at the characteristic distance equals the unnotched strength, the notched laminate fails.",
+      "formulation": "Failure when: sigma(x = d_0) >= sigma_unnotched, where d_0 is the characteristic distance (typically 1-2 mm from the hole edge for carbon/epoxy)",
+      "reasoning": "The stress concentration at a hole or notch edge in a composite can be 3-5 times the far-field stress, but the laminate does not fail at the SCF-predicted load because the damage zone at the hole edge redistributes the stress. The point stress criterion captures this by evaluating the stress at a point away from the singularity, where the stress gradient has moderated. The characteristic distance d_0 is calibrated from one notched test and can then predict other hole sizes and geometries.",
+      "advantages": [
+        "Can be applied by hand (only needs the stress distribution around the notch)",
+        "Accounts for notch-size effect (larger holes are less notch-sensitive per unit width)",
+        "Well-validated for open-hole tension and compression",
+        "Requires only one calibration test (to find d_0)"
+      ],
+      "limitations": [
+        "Only applicable to in-plane tension and compression at notches",
+        "Does not work well for bolted joints (bearing changes the stress field)",
+        "The characteristic distance is material and layup dependent",
+        "Does not predict the damage mode or sequence"
+      ],
+      "when_not_to_use": "Not suitable for detailed joint analysis, impact damage, or when through-thickness stresses are important. Use FEA-based approaches for those cases.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/04-structural-analysis/sizing-a-panel.md"
+      ]
+    },
+
+    "rec_puck_matrix": {
+      "id": "rec_puck_matrix",
+      "type": "recommendation",
+      "recommended_criterion": "Puck Action-Plane Criterion",
+      "description": "Puck's criterion predicts matrix failure by finding the fracture plane orientation that gives the highest stress exposure factor. It distinguishes between different matrix failure modes based on the stress state on the fracture plane.",
+      "failure_modes": [
+        {
+          "mode": "Mode A (transverse tension)",
+          "description": "Fracture plane perpendicular to the ply. Caused by transverse tension. Clean matrix crack."
+        },
+        {
+          "mode": "Mode B (moderate transverse compression + shear)",
+          "description": "Fracture plane perpendicular to the ply. Compression keeps the crack closed but shear causes failure."
+        },
+        {
+          "mode": "Mode C (high transverse compression)",
+          "description": "Fracture plane inclined (typically 53 degrees from the transverse direction). This is the most dangerous mode because it causes wedge-shaped failure that pushes adjacent plies apart, triggering delamination."
+        }
+      ],
+      "required_material_data": [
+        "Y_T, Y_C, S_12 (standard ply strengths)",
+        "p_12+, p_12- (inclination parameters, typically from literature: p_12+ = 0.35, p_12- = 0.30 for carbon/epoxy)"
+      ],
+      "reasoning": "Puck's criterion is physically the most accurate for matrix failure because it predicts both the failure load and the fracture plane orientation. This is important because Mode C (inclined fracture under high compression) is a particularly dangerous failure mode that can trigger explosive delamination. Hashin does not predict the fracture plane and can miss this mode. Puck was the best-performing criterion in the World-Wide Failure Exercise (WWFE).",
+      "advantages": [
+        "Predicts fracture plane orientation (critical for Mode C)",
+        "Physically based on Mohr-Coulomb failure theory",
+        "Best prediction of matrix-dominated failure in WWFE",
+        "Distinguishes dangerous (Mode C) from benign (Mode A) matrix failures"
+      ],
+      "limitations": [
+        "More complex to implement than Hashin or Tsai-Wu",
+        "Requires iterative search for the fracture plane angle",
+        "Inclination parameters (p values) add uncertainty if not measured",
+        "Not as widely implemented in commercial FEA codes (LS-DYNA MAT261 has it; Abaqus requires UMAT)"
+      ],
+      "when_not_to_use": "For quick checks or when the failure is clearly fibre-dominated, Puck's additional complexity is not justified. Use Tsai-Wu or Hashin instead.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md"
+      ]
+    },
+
+    "rec_larc_compression": {
+      "id": "rec_larc_compression",
+      "type": "recommendation",
+      "recommended_criterion": "LaRC (Langley Research Center) Failure Criteria",
+      "description": "LaRC criteria (LaRC03/LaRC04/LaRC05) provide physically-based failure prediction for all failure modes, with particular strength in fibre kinking (compression failure). The fibre kinking model explicitly accounts for the initial fibre misalignment angle and the stress state in the kink band.",
+      "failure_modes": [
+        {
+          "mode": "Fibre tension",
+          "description": "Maximum stress or strain criterion (similar to Hashin)"
+        },
+        {
+          "mode": "Fibre kinking (compression)",
+          "description": "Physically-based kink band model. Accounts for initial fibre misalignment, in-situ shear strength, and multiaxial stress state in the kink band. Most accurate model for compression failure."
+        },
+        {
+          "mode": "Matrix cracking",
+          "description": "Similar to Puck's action-plane approach. Searches for the fracture plane with highest failure index."
+        }
+      ],
+      "required_material_data": [
+        "Standard ply strengths (X_T, X_C, Y_T, Y_C, S_12)",
+        "G_12: In-plane shear modulus",
+        "phi_0: Initial fibre misalignment angle (typically 1-3 degrees, from compression test data or assumed)",
+        "Fracture toughness values for damage evolution (G_Ic, G_IIc) if progressive damage is used"
+      ],
+      "reasoning": "Compression failure in composites is caused by fibre kinking (microbuckling), not by fibre crushing. The kinking process is driven by the combination of longitudinal compression, transverse stress, and shear stress acting on a fibre that is slightly misaligned. LaRC captures this physics directly, making it the most accurate criterion for compression-dominated failure. It was developed at NASA Langley and has been extensively validated.",
+      "advantages": [
+        "Most accurate prediction of compression failure (fibre kinking)",
+        "Physically based - models the actual failure mechanism",
+        "Captures the effect of lateral support (transverse compression increases kinking resistance)",
+        "Published in open literature (NASA/TM reports) - no proprietary restrictions"
+      ],
+      "limitations": [
+        "Complex implementation (fibre kinking requires iterative calculation)",
+        "Requires initial fibre misalignment angle, which varies within a part",
+        "Not built into most commercial FEA codes (requires UMAT/VUMAT)",
+        "The additional accuracy over Hashin may not justify the complexity for many applications"
+      ],
+      "when_not_to_use": "When the structure is tension-dominated and compression failure is not the critical mode. When a simpler criterion (Hashin) gives adequate predictions. When the FEA code does not support custom material models.",
+      "tools": [
+        {
+          "name": "CompDam (NASA)",
+          "url": "https://github.com/nasa/CompDam_DGD",
+          "notes": "Open-source Abaqus VUMAT implementing LaRC criteria with continuum damage mechanics"
+        }
+      ],
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/04-structural-analysis/buckling-basics.md"
+      ]
+    },
+
+    "rec_puck_or_larc": {
+      "id": "rec_puck_or_larc",
+      "type": "recommendation",
+      "recommended_criterion": "Puck or LaRC Criteria for Physically-Based Progressive Damage",
+      "description": "For the most accurate progressive damage analysis, use either Puck or LaRC criteria for damage initiation, combined with energy-based damage evolution. Both criteria separate failure into physically distinct modes and have been shown to give the best predictions in blind comparison exercises.",
+      "comparison": {
+        "Puck": {
+          "strength": "Best matrix failure prediction; predicts fracture plane angle",
+          "weakness": "Fibre compression model is simpler than LaRC",
+          "implementation": "LS-DYNA MAT261; Abaqus requires UMAT"
+        },
+        "LaRC": {
+          "strength": "Best fibre kinking (compression) prediction; physically rigorous",
+          "weakness": "More complex to implement; requires misalignment angle input",
+          "implementation": "Custom UMAT/VUMAT in most codes; some implementations in CompDam (NASA open-source Abaqus VUMAT)"
+        }
+      },
+      "reasoning": "Puck and LaRC represent the current state-of-the-art in physically-based composite failure prediction. In the World-Wide Failure Exercise (WWFE-I and WWFE-II), both criteria consistently outperformed simpler criteria (Tsai-Wu, Hashin, Max Stress). For research applications where understanding the failure physics is important, these criteria provide the most insight into how and why the laminate fails.",
+      "advantages": [
+        "Most physically accurate failure prediction available",
+        "Separate, physically-based criteria for each failure mechanism",
+        "Best predictions in WWFE blind comparisons",
+        "NASA CompDam provides an open-source LaRC implementation for Abaqus"
+      ],
+      "limitations": [
+        "Complex implementation and calibration",
+        "Not widely available in commercial FEA codes",
+        "Requires more material input data than simpler criteria",
+        "The additional accuracy may not be needed for many practical applications"
+      ],
+      "when_not_to_use": "For production design where simplicity and robustness are prioritized over accuracy, use Hashin. For preliminary sizing, use Tsai-Wu or Max Stress.",
+      "tools": [
+        {
+          "name": "CompDam (NASA)",
+          "url": "https://github.com/nasa/CompDam_DGD",
+          "notes": "Open-source Abaqus VUMAT implementing LaRC criteria with continuum damage mechanics"
+        }
+      ],
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md"
+      ]
+    },
+
+    "rec_vcct_or_czm": {
+      "id": "rec_vcct_or_czm",
+      "type": "recommendation",
+      "recommended_criterion": "VCCT or Cohesive Zone Model for Delamination Research",
+      "description": "For research into delamination initiation and propagation, use either Virtual Crack Closure Technique (VCCT) or Cohesive Zone Model (CZM) depending on whether the crack path is known.",
+      "comparison": {
+        "VCCT": {
+          "when_to_use": "When the delamination plane is known and you want to predict whether an existing crack will grow",
+          "method": "Calculate strain energy release rate G at crack front from nodal forces/displacements. Compare G against G_c.",
+          "advantages": "Simple, no special elements, works with standard shell or solid elements",
+          "limitations": "Cannot model initiation (crack must pre-exist). Crack path must be predefined."
+        },
+        "CZM": {
+          "when_to_use": "When you need to model both initiation and growth, or when the delamination plane is not predetermined",
+          "method": "Interface elements with traction-separation law. Damage initiates when traction reaches critical value, propagates absorbing fracture energy.",
+          "advantages": "Models initiation and growth. Mixed-mode handling. Mesh-independent with regularisation.",
+          "limitations": "More computationally expensive, requires cohesive element placement"
+        }
+      },
+      "required_material_data": [
+        "G_Ic: Mode I fracture toughness (DCB test, ASTM D5528)",
+        "G_IIc: Mode II fracture toughness (ENF test, ASTM D7905)",
+        "G_IIIc: Mode III fracture toughness (if relevant, ECT test)",
+        "Mixed-mode interaction law (BK or power law)",
+        "For CZM additionally: cohesive strengths and initial stiffness"
+      ],
+      "reasoning": "Delamination is a fracture mechanics problem at the interface between plies. Both VCCT and CZM are energy-based approaches that compare the energy available to drive the crack against the energy required (fracture toughness). VCCT is simpler for cases where the delamination interface is known. CZM is more versatile and has become the standard for delamination modelling in research and advanced design.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/01-fundamentals/failure-modes.md"
+      ]
+    },
+
+    "rec_hashin_progressive": {
+      "id": "rec_hashin_progressive",
+      "type": "recommendation",
+      "recommended_criterion": "Hashin Criteria with Ply-Discount Progressive Failure",
+      "description": "The simplest progressive failure approach: use Hashin to detect first-ply failure in each mode, then degrade the stiffness of the failed ply (discount it), redistribute loads, and check for failure in the remaining plies. Repeat until ultimate failure.",
+      "degradation_rules": [
+        {
+          "failure_mode": "Fibre tension",
+          "action": "Set E_1 = E_2 = G_12 = nu_12 = 0 (ply fully discounted - total failure)"
+        },
+        {
+          "failure_mode": "Fibre compression",
+          "action": "Set E_1 = E_2 = G_12 = nu_12 = 0 (ply fully discounted)"
+        },
+        {
+          "failure_mode": "Matrix tension",
+          "action": "Set E_2 = 0, nu_12 = 0 (matrix cracked, but fibres still carry longitudinal load)"
+        },
+        {
+          "failure_mode": "Matrix compression",
+          "action": "Set E_2 = 0, nu_12 = 0"
+        }
+      ],
+      "reasoning": "Ply-discount is the simplest form of progressive failure analysis. It gives a reasonable estimate of ultimate laminate strength by capturing the load redistribution that occurs after first-ply failure. Many laminates can carry 50-200% more load after matrix cracking before fibre failure occurs. The ply-discount method captures this reserve strength. It can be implemented in a spreadsheet with CLT or in any FEA code.",
+      "advantages": [
+        "Simple to implement (even in a spreadsheet)",
+        "Captures load redistribution after matrix cracking",
+        "Gives both first-ply failure and ultimate failure predictions",
+        "Well-suited for design optimisation loops"
+      ],
+      "limitations": [
+        "Sudden stiffness degradation can cause numerical issues in FEA (convergence problems)",
+        "Does not model gradual damage evolution (damage is binary: intact or failed)",
+        "Ignores delamination (a separate mechanism)",
+        "Tends to overpredict ultimate strength because it assumes perfect load redistribution"
+      ],
+      "when_not_to_use": "When accurate damage pattern prediction is needed (use continuum damage mechanics). When delamination is a concern (add CZM). When numerical robustness is important (use energy-based damage evolution instead of sudden discount).",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/01-fundamentals/failure-modes.md"
+      ]
+    },
+
+    "rec_continuum_damage": {
+      "id": "rec_continuum_damage",
+      "type": "recommendation",
+      "recommended_criterion": "Continuum Damage Mechanics (CDM) Model",
+      "description": "CDM models use internal damage variables (d_f for fibre damage, d_m for matrix damage) that evolve from 0 (undamaged) to 1 (fully damaged) based on the loading history and fracture energy. The effective stiffness is degraded gradually: C_damaged = (1-d) * C_undamaged.",
+      "reasoning": "CDM provides the most robust numerical framework for progressive damage in FEA. Unlike ply-discount (which causes sudden stiffness changes and convergence problems), CDM degrades stiffness gradually following an energy-based evolution law. This ensures: (1) mesh-independent results (when fracture energy is used as the regularisation parameter), (2) numerical robustness (gradual degradation helps convergence), (3) physical accuracy (energy absorbed during damage matches the material fracture toughness). CDM is the standard approach for impact simulation and crash modelling of composites.",
+      "required_material_data": [
+        "Standard ply properties (E_1, E_2, G_12, nu_12)",
+        "Ply strengths (X_T, X_C, Y_T, Y_C, S_12)",
+        "Fracture energies: G_ft (fibre tension), G_fc (fibre compression), G_mt (matrix tension), G_mc (matrix compression)",
+        "Characteristic element length (mesh-dependent, handled internally by most FEA codes)"
+      ],
+      "implementation_examples": [
+        "Abaqus: Built-in for shell and continuum shell elements (*DAMAGE INITIATION, *DAMAGE EVOLUTION)",
+        "LS-DYNA: MAT054/MAT058 (simplified CDM), MAT162 (advanced with delamination)",
+        "NASA CompDam: Open-source VUMAT for Abaqus with LaRC + CDM",
+        "ANSYS: Progressive damage in ACP-Mechanical workflow"
+      ],
+      "advantages": [
+        "Numerically robust (gradual degradation aids convergence)",
+        "Mesh-independent with energy regularisation",
+        "Captures the full damage sequence from initiation to ultimate failure",
+        "Standard approach for impact and crash simulation"
+      ],
+      "limitations": [
+        "Requires fracture energy data for each damage mode (may need testing)",
+        "Computational cost is higher than linear analysis",
+        "Does not inherently model delamination (add cohesive elements)",
+        "Calibration and validation against tests is essential"
+      ],
+      "when_not_to_use": "For simple strength checks where first-ply failure or ply-discount is sufficient. For preliminary design where the computational cost is not justified.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md",
+        "knowledge/01-fundamentals/failure-modes.md"
+      ]
+    },
+
+    "rec_fatigue_sn": {
+      "id": "rec_fatigue_sn",
+      "type": "recommendation",
+      "recommended_criterion": "S-N Curve Approach with Constant Life Diagrams",
+      "description": "Generate S-N curves from coupon fatigue tests at multiple R-ratios (typically R=0.1, R=-1, R=10). Construct constant life diagrams (Goodman or similar) to interpolate for any R-ratio. Apply to the ply-level or laminate-level stress to predict fatigue life.",
+      "reasoning": "The S-N curve approach is the most widely used fatigue method for composites in industry. Unlike metals, composites do not have an endurance limit, so the S-N curve continues to slope downward. Fatigue behaviour depends strongly on the R-ratio (min/max stress ratio) because tension-tension, compression-compression, and tension-compression fatigue have very different damage mechanisms. Constant life diagrams capture this R-ratio dependence.",
+      "key_concepts": [
+        "R-ratio = sigma_min / sigma_max (R=0.1 is tension-tension, R=-1 is fully reversed, R=10 is compression-compression)",
+        "Composite S-N curves are usually expressed as: sigma_max/sigma_static = 1 - b * log(N)",
+        "b-value (fatigue degradation rate) is typically 0.10-0.14 per decade for carbon/epoxy",
+        "Glass fibre composites degrade faster in fatigue than carbon (b = 0.12-0.18)"
+      ],
+      "advantages": [
+        "Well-established methodology with extensive test databases",
+        "Can be applied with simple hand calculations or spreadsheets",
+        "Constant life diagrams handle any R-ratio",
+        "Widely used in wind energy, automotive, and rotorcraft"
+      ],
+      "limitations": [
+        "Requires extensive coupon testing (multiple R-ratios, multiple stress levels)",
+        "Does not provide mechanistic insight into damage progression",
+        "Sequence effects (load order) are not captured",
+        "Environmental effects (temperature, moisture) add more testing requirements"
+      ],
+      "when_not_to_use": "When detailed damage evolution prediction is needed. When the loading spectrum is highly variable and sequence effects may be important.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md"
+      ]
+    },
+
+    "rec_fatigue_residual": {
+      "id": "rec_fatigue_residual",
+      "type": "recommendation",
+      "recommended_criterion": "Residual Strength Degradation Model",
+      "description": "Track the degradation of laminate residual strength as a function of loading cycles. Failure occurs when the residual strength degrades to the level of the applied maximum stress.",
+      "reasoning": "The residual strength approach recognises that composites lose strength gradually during fatigue loading. The remaining strength at any point in the fatigue life can be measured by testing coupons after various numbers of cycles (interrupted fatigue tests). The strength degradation is typically modelled as: S_R(n) = S_0 - (S_0 - sigma_max) * (n/N_f)^alpha, where S_R is residual strength, S_0 is static strength, and alpha is a curve-fit parameter. This approach is more conservative than S-N curves alone because it accounts for the scatter in initial strength.",
+      "advantages": [
+        "Provides a safety metric at any point in the fatigue life (residual strength margin)",
+        "More intuitive than S-N curves (can answer: how much strength is left after N cycles?)",
+        "Can incorporate proof testing (if it survives proof load, it has minimum residual strength)"
+      ],
+      "limitations": [
+        "Requires interrupted fatigue testing (more expensive than S-N testing)",
+        "The degradation model is empirical and may not extrapolate well",
+        "Does not capture damage mechanisms"
+      ],
+      "when_not_to_use": "When only fatigue life prediction is needed (S-N approach is simpler). When mechanistic damage modelling is required.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md"
+      ]
+    },
+
+    "rec_fatigue_progressive": {
+      "id": "rec_fatigue_progressive",
+      "type": "recommendation",
+      "recommended_criterion": "Progressive Fatigue Damage Model",
+      "description": "Simulate cycle-by-cycle (or block-by-block) accumulation of matrix cracking, delamination, and fibre breakage using FEA with cycle-dependent damage evolution laws.",
+      "reasoning": "Progressive fatigue damage models extend the static progressive damage approach (CDM) to cyclic loading. The damage variables evolve not just with strain level but also with cycle count. This captures the characteristic fatigue damage sequence in composites: (1) matrix cracking first, (2) crack coupling leads to delamination, (3) local load redistribution increases fibre stress, (4) fibre breakage and ultimate failure. These models are research-level tools used for understanding fatigue mechanisms and for special applications (wind turbine blade root, helicopter rotor hub).",
+      "implementation_approaches": [
+        {
+          "name": "Cycle-jump method",
+          "description": "Simulate a few cycles in detail, extrapolate the damage state forward by many cycles, then simulate a few more. Reduces computational cost by 100-1000x."
+        },
+        {
+          "name": "Fatigue-driven CDM",
+          "description": "Damage variables are functions of both stress state and cycle count. Damage evolution rate depends on stress amplitude and R-ratio."
+        }
+      ],
+      "advantages": [
+        "Captures the physical fatigue damage sequence",
+        "Can predict damage location and type under spectrum loading",
+        "Accounts for load sequence effects"
+      ],
+      "limitations": [
+        "Computationally very expensive (even with cycle-jump)",
+        "Requires extensive material characterisation for fatigue damage evolution laws",
+        "Models are still under active research - no fully standardised approach",
+        "Validation requires detailed fatigue test programmes"
+      ],
+      "when_not_to_use": "For most practical applications, S-N curves with Miner's rule are sufficient. Progressive fatigue models are justified only for safety-critical applications with complex loading spectra.",
+      "relevant_knowledge_pages": [
+        "knowledge/04-structural-analysis/failure-criteria.md"
+      ]
+    }
+  },
+
+  "summary_table": {
+    "description": "Quick reference: which criterion for which situation",
+    "criteria": [
+      {
+        "name": "Maximum Stress / Maximum Strain",
+        "complexity": "Simple",
+        "best_for": "Quick checks, preliminary sizing, uniaxial loading",
+        "failure_mode_separation": false,
+        "stress_interaction": false,
+        "tool_support": "Universal (AddStack, eLamX2, all FEA codes)"
+      },
+      {
+        "name": "Tsai-Wu",
+        "complexity": "Moderate",
+        "best_for": "General structural design, optimisation, single failure index",
+        "failure_mode_separation": false,
+        "stress_interaction": true,
+        "tool_support": "Universal (AddStack, eLamX2, all FEA codes)"
+      },
+      {
+        "name": "Hashin (1980)",
+        "complexity": "Moderate",
+        "best_for": "Aerospace certification, mode identification, progressive damage initiation",
+        "failure_mode_separation": true,
+        "stress_interaction": "Partial (within each mode)",
+        "tool_support": "Abaqus, ANSYS, LS-DYNA, Nastran, AddStack"
+      },
+      {
+        "name": "Puck",
+        "complexity": "High",
+        "best_for": "Research, accurate matrix failure, fracture plane prediction",
+        "failure_mode_separation": true,
+        "stress_interaction": true,
+        "tool_support": "LS-DYNA MAT261, eLamX2, custom UMAT"
+      },
+      {
+        "name": "LaRC03/04/05",
+        "complexity": "High",
+        "best_for": "Research, compression failure (fibre kinking), physically-based analysis",
+        "failure_mode_separation": true,
+        "stress_interaction": true,
+        "tool_support": "NASA CompDam (open-source Abaqus VUMAT), custom UMAT"
+      },
+      {
+        "name": "Ye Delamination",
+        "complexity": "Simple",
+        "best_for": "Delamination onset check at free edges, ply drops, curved regions",
+        "failure_mode_separation": "N/A (delamination only)",
+        "stress_interaction": true,
+        "tool_support": "FEA post-processing (any code with through-thickness stress output)"
+      },
+      {
+        "name": "Cohesive Zone Model (CZM)",
+        "complexity": "High",
+        "best_for": "Delamination/disbond initiation and propagation, bonded joints",
+        "failure_mode_separation": "N/A (interface failure only)",
+        "stress_interaction": true,
+        "tool_support": "Abaqus, ANSYS, LS-DYNA, Nastran SOL400"
+      },
+      {
+        "name": "VCCT",
+        "complexity": "Moderate",
+        "best_for": "Delamination growth prediction for known crack paths",
+        "failure_mode_separation": "N/A (interface failure only)",
+        "stress_interaction": true,
+        "tool_support": "Abaqus, ANSYS, Nastran"
+      }
+    ]
+  }
+}

@@ -153,6 +153,26 @@ Most criteria check each ply independently. But when one ply fails (e.g., matrix
 
 Most design uses FPF as the limit. LPF is used for understanding ultimate reserve strength.
 
+## Failure Criteria Quick-Selection Table
+
+| Criterion | Complexity | Failure Modes? | Stress Interaction? | Best For | Tool Support |
+|-----------|-----------|----------------|-------------------|----------|-------------|
+| **Max Stress** | Simple | No | No | Quick checks, preliminary sizing | All tools |
+| **Max Strain** | Simple | No | No | Strain-based design | All tools |
+| **Tsai-Wu** | Moderate | No (single index) | Yes | General structural, optimisation | AddStack, eLamX2, all FEA |
+| **Tsai-Hill** | Moderate | No | Yes | Legacy programs | Most tools |
+| **Hashin** | Moderate | Yes (4 modes) | Partial | Aerospace certification, FEA | ABAQUS, ANSYS, AddStack |
+| **Puck** | High | Yes + fracture plane | Yes | Research, matrix-dominated failure | eLamX2, LS-DYNA MAT261 |
+| **LaRC03/04** | High | Yes + kink band | Yes | Research, compression failure | NASA CompDam (open source) |
+
+**Decision shortcut:**
+- **Just starting?** → Max Stress (simplest, conservative)
+- **Designing a real part?** → Tsai-Wu (single failure index, accounts for stress interaction)
+- **Aerospace FEA?** → Hashin (separates fibre vs matrix failure, required by many specs)
+- **Research?** → Puck or LaRC (most physically accurate)
+
+For detailed guidance, see the decision tree: `decision-trees/failure-criteria-selection.json`
+
 ## Key Takeaways
 
 - No single failure criterion is correct for all situations — the choice depends on what information you need and what your design standard requires

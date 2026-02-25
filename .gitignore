@@ -21,6 +21,17 @@ content_index.json
 mirror_log.txt
 10Nau_Dassault.pdf
 
+# Environment files with secrets
+.env
+*.env
+!*.env.example
+
+# Node
+node_modules/
+
+# Frontend build output (rebuild with: cd web-app/frontend && npm run build)
+web-app/frontend/dist/
+
 # OS
 .DS_Store
 Thumbs.db

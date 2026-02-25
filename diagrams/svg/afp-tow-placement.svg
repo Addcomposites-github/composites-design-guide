@@ -1,0 +1,67 @@
+<!-- Original diagram by AddComposites, CC BY 4.0, composites-design-guide -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 400" font-family="system-ui, -apple-system, sans-serif">
+  <!-- Title -->
+  <text x="325" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">Automated Fibre Placement (AFP)</text>
+  <text x="325" y="46" text-anchor="middle" font-size="12" fill="#64748b">Tow placement on a curved surface — gaps, overlaps, and steering</text>
+
+  <!-- Curved mould surface -->
+  <path d="M 60,350 Q 200,250 350,240 Q 500,230 600,280" fill="#e2e8f0" stroke="#475569" stroke-width="2"/>
+  <text x="350" y="370" text-anchor="middle" font-size="12" fill="#64748b">Mould / Mandrel Surface</text>
+
+  <!-- Tow courses (parallel lines following the surface) -->
+  <!-- Course 1 -->
+  <path d="M 80,325 Q 210,230 350,220 Q 490,210 590,255" fill="none" stroke="#1e40af" stroke-width="12" opacity="0.7" stroke-linecap="round"/>
+  <!-- Course 2 -->
+  <path d="M 85,310 Q 215,218 355,208 Q 495,198 595,242" fill="none" stroke="#2563eb" stroke-width="12" opacity="0.7" stroke-linecap="round"/>
+  <!-- Course 3 -->
+  <path d="M 90,295 Q 220,205 360,196 Q 500,187 600,230" fill="none" stroke="#3b82f6" stroke-width="12" opacity="0.7" stroke-linecap="round"/>
+  <!-- Course 4 -->
+  <path d="M 95,280 Q 225,193 365,184 Q 505,175 605,218" fill="none" stroke="#60a5fa" stroke-width="12" opacity="0.7" stroke-linecap="round"/>
+  <!-- Course 5 -->
+  <path d="M 100,265 Q 230,180 370,172 Q 510,163 610,205" fill="none" stroke="#93c5fd" stroke-width="12" opacity="0.7" stroke-linecap="round"/>
+
+  <!-- Tow labels -->
+  <text x="40" y="330" font-size="10" fill="#1e40af">Tow 1</text>
+  <text x="40" y="315" font-size="10" fill="#2563eb">Tow 2</text>
+  <text x="40" y="300" font-size="10" fill="#3b82f6">Tow 3</text>
+  <text x="40" y="285" font-size="10" fill="#60a5fa">Tow 4</text>
+  <text x="40" y="270" font-size="10" fill="#93c5fd">Tow 5</text>
+
+  <!-- AFP Head icon -->
+  <rect x="340" y="95" width="80" height="55" fill="#475569" stroke="#1e293b" stroke-width="2" rx="5"/>
+  <text x="380" y="118" text-anchor="middle" font-size="11" font-weight="bold" fill="white">AFP</text>
+  <text x="380" y="132" text-anchor="middle" font-size="11" font-weight="bold" fill="white">HEAD</text>
+
+  <!-- Compaction roller -->
+  <ellipse cx="380" cy="165" rx="25" ry="10" fill="#94a3b8" stroke="#475569" stroke-width="1.5"/>
+  <text x="420" y="170" font-size="10" fill="#475569">Compaction roller</text>
+
+  <!-- Tow coming from head -->
+  <line x1="380" y1="150" x2="380" y2="175" stroke="#2563eb" stroke-width="8" opacity="0.6"/>
+
+  <!-- Gap annotation -->
+  <circle cx="250" cy="215" r="18" fill="none" stroke="#f97316" stroke-width="2"/>
+  <line x1="268" y1="215" x2="320" y2="120" stroke="#f97316" stroke-width="1.5"/>
+  <rect x="280" y="70" width="50" height="45" rx="4" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="305" y="86" text-anchor="middle" font-size="10" font-weight="bold" fill="#c2410c">GAP</text>
+  <text x="305" y="100" text-anchor="middle" font-size="8" fill="#c2410c">Resin-rich</text>
+  <text x="305" y="110" text-anchor="middle" font-size="8" fill="#c2410c">area</text>
+
+  <!-- Overlap annotation -->
+  <circle cx="500" cy="195" r="18" fill="none" stroke="#dc2626" stroke-width="2"/>
+  <line x1="518" y1="195" x2="555" y2="120" stroke="#dc2626" stroke-width="1.5"/>
+  <rect x="520" y="70" width="70" height="45" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="555" y="86" text-anchor="middle" font-size="10" font-weight="bold" fill="#b91c1c">OVERLAP</text>
+  <text x="555" y="100" text-anchor="middle" font-size="8" fill="#b91c1c">Local thickness</text>
+  <text x="555" y="110" text-anchor="middle" font-size="8" fill="#b91c1c">increase</text>
+
+  <!-- Steering radius annotation -->
+  <path d="M 130,300 Q 180,265 230,248" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="140" y="260" font-size="10" font-weight="600" fill="#7c3aed">Steering radius</text>
+  <text x="140" y="273" font-size="9" fill="#7c3aed">Min ~500 mm (6.35 mm tow)</text>
+  <text x="140" y="285" font-size="9" fill="#7c3aed">Min ~250 mm (3.175 mm tow)</text>
+
+  <!-- Key parameters box -->
+  <rect x="60" y="380" width="530" height="15" rx="3" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="325" y="392" text-anchor="middle" font-size="10" fill="#475569">Typical tow widths: 3.175 mm (1/8") or 6.35 mm (1/4") | Speed: 10-60 m/min | Max gap/overlap spec: 0.5-1.0 mm</text>
+</svg>

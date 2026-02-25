@@ -189,6 +189,26 @@ What is your manufacturing method?
 
 There is no universally "best" resin. There is only the best resin for your specific combination of performance requirements, manufacturing process, and budget.
 
+## Resin System Comparison Table
+
+| Property | Polyester | Vinyl Ester | Epoxy | PEEK | PPS | PA6 (Nylon) |
+|----------|-----------|-------------|-------|------|-----|-------------|
+| **Type** | Thermoset | Thermoset | Thermoset | Thermoplastic | Thermoplastic | Thermoplastic |
+| **Cost ($/kg)** | 2–5 | 5–10 | 8–30 | 80–150 | 40–80 | 5–15 |
+| **Tensile strength (MPa)** | 40–80 | 60–90 | 60–120 | 100 | 85 | 80 |
+| **Tensile modulus (GPa)** | 3.0–4.0 | 3.2–3.5 | 3.0–4.5 | 3.6 | 3.4 | 2.8 |
+| **Failure strain (%)** | 1–3 | 3–6 | 2–6 | 40+ | 4 | 5 |
+| **Tg / Use temp (°C)** | 60–100 | 80–120 | 120–220 | 143 (Tg), 250+ | 90 (Tg), 220+ | 60–80 |
+| **Cure/process temp (°C)** | RT–80 | RT–80 | RT–180 | 370–400 | 300–330 | 220–260 |
+| **Shrinkage (%)** | 5–8 | 3–5 | 1–3 | < 1 | < 1 | 1–2 |
+| **Chemical resistance** | Fair | Good | Good | Excellent | Excellent | Fair |
+| **Toughness (GIc, J/m²)** | 50–100 | 100–400 | 100–300 | 1,500–2,000 | 300–500 | 500–1,000 |
+| **Recyclable?** | No | No | No | Yes (remelt) | Yes (remelt) | Yes (remelt) |
+| **Primary process** | Wet layup, RTM | Wet layup, infusion | Prepreg, infusion, RTM | AFP, stamping | Stamping, AFP | Stamping |
+| **Primary market** | Marine, construction | Chemical tanks, pipes | Aerospace, automotive, sport | Aerospace (primary structure) | Aerospace, automotive | Automotive, industrial |
+
+*RT = room temperature. Tg = glass transition temperature. GIc = Mode I fracture toughness (higher = tougher). Values are typical neat resin properties.*
+
 ## Key Takeaways
 
 - The resin (matrix) transfers load between fibres, protects them, gives the part its shape, and prevents fibre buckling in compression

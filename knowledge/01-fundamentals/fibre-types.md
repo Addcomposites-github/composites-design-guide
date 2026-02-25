@@ -195,6 +195,23 @@ Decision flow:
   Default ──► E-GLASS (cheapest, most forgiving to work with)
 ```
 
+## Fibre Property Comparison Table
+
+This table summarises typical fibre properties. Use it for quick comparisons during preliminary design.
+
+| Property | E-Glass | S-Glass | Carbon (HS) | Carbon (IM) | Carbon (HM) | Aramid (Kevlar 49) | Basalt |
+|----------|---------|---------|-------------|-------------|-------------|-------------------|--------|
+| **Tensile modulus (GPa)** | 72 | 87 | 230 | 290 | 390 | 125 | 89 |
+| **Tensile strength (MPa)** | 3,400 | 4,600 | 4,900 | 5,700 | 3,400 | 3,000 | 4,800 |
+| **Density (g/cm³)** | 2.54 | 2.49 | 1.80 | 1.77 | 1.87 | 1.44 | 2.65 |
+| **Specific modulus (GPa·cm³/g)** | 28 | 35 | 128 | 164 | 209 | 87 | 34 |
+| **Failure strain (%)** | 4.7 | 5.3 | 2.1 | 1.9 | 0.9 | 2.4 | 3.1 |
+| **Cost ($/kg)** | 2–5 | 10–20 | 15–30 | 30–80 | 80–200 | 25–40 | 5–12 |
+| **Electrical conductivity** | Insulator | Insulator | Conductor | Conductor | Conductor | Insulator | Insulator |
+| **Temperature limit (°C)** | 350 | 500 | 500+ | 500+ | 500+ | 250 | 700 |
+
+*HS = high strength (T700, T300). IM = intermediate modulus (T800, IM7). HM = high modulus (M55J, M60J). Values are typical fibre properties, not laminate properties. Actual laminate performance depends on fibre volume fraction, resin system, and layup.*
+
 ## Key Takeaways
 
 - **Carbon fibre** delivers the best stiffness and strength per unit weight but is expensive and brittle. It is the default for aerospace and performance applications.

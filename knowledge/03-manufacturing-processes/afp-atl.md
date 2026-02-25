@@ -100,6 +100,40 @@ When a ply boundary is not perpendicular to the course direction, some tows reac
 - **Thermoplastic AFP** — placing thermoplastic prepreg tows, using laser heating to weld tows in place. No autoclave needed — the part is consolidated as it is laid up (in-situ consolidation).
 - **Smaller, more affordable AFP systems** — desktop and small gantry AFP machines are emerging for research, small production, and education.
 
+## When to Choose AFP or ATL
+
+```mermaid
+graph TD
+    A[Automated composite layup needed?] --> B{Part geometry?}
+    B -->|Flat or gently curved > 2m²| C[✅ ATL — wide tape, fast layup]
+    B -->|Complex double curvature| D[✅ AFP — steerable narrow tows]
+    B -->|Axisymmetric tube/vessel| E[Filament winding may be cheaper]
+    B -->|Small < 0.5m²| F[Hand layup — automation setup not justified]
+    C --> G{Volume?}
+    D --> G
+    G -->|< 50 parts/year| H{Budget for AFP?}
+    G -->|50–500 parts/year| I[✅ AFP/ATL — justified for repeatability]
+    G -->|500+ parts/year| J[✅ AFP/ATL — essential for rate]
+    H -->|Full-scale $2M+| K[Hard to justify at low volume]
+    H -->|AFP-XS ~$100k range| L[✅ Accessible AFP for startups and research]
+```
+
+**Choose AFP when:**
+- Part has complex double curvature requiring tow steering
+- High precision and repeatability are needed (aerospace quality)
+- Production volume justifies automation (50+ parts/year, or fewer if parts are large)
+- Material traceability and process documentation are required
+- Part size is moderate to large (> 0.5 m²)
+
+**Choose ATL when:**
+- Part is flat or gently curved with large surface area (wing skins, flat panels)
+- Layup rate is critical (ATL is faster than AFP on suitable geometries)
+
+**Consider AFP-XS when:**
+- You need AFP capability at startup-scale budget
+- University research, process development, or low-rate production
+- See [AddPath](https://www.addcomposites.com/all-products/addpath) for path planning software
+
 ## Key Takeaways
 
 - ATL lays wide tape for large flat parts; AFP lays multiple narrow tows for complex curved parts

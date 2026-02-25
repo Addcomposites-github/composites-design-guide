@@ -1,0 +1,92 @@
+<!-- Original diagram by AddComposites, CC BY 4.0, composites-design-guide -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <pattern id="stripe0" patternUnits="userSpaceOnUse" width="10" height="10">
+      <line x1="0" y1="0" x2="10" y2="0" stroke="#2563eb" stroke-width="2"/>
+    </pattern>
+    <pattern id="stripe45" patternUnits="userSpaceOnUse" width="10" height="10">
+      <line x1="0" y1="10" x2="10" y2="0" stroke="#16a34a" stroke-width="2"/>
+    </pattern>
+    <pattern id="stripe-45" patternUnits="userSpaceOnUse" width="10" height="10">
+      <line x1="0" y1="0" x2="10" y2="10" stroke="#eab308" stroke-width="2"/>
+    </pattern>
+    <pattern id="stripe90" patternUnits="userSpaceOnUse" width="10" height="10">
+      <line x1="5" y1="0" x2="5" y2="10" stroke="#dc2626" stroke-width="2"/>
+    </pattern>
+  </defs>
+
+  <!-- Title -->
+  <text x="300" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">Symmetric Laminate Cross-Section</text>
+  <text x="300" y="50" text-anchor="middle" font-size="12" fill="#64748b">[0/+45/-45/90]s — 8-ply symmetric laminate</text>
+
+  <!-- Ply layers -->
+  <!-- Ply 1: 0° (top) -->
+  <rect x="100" y="70" width="300" height="30" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" rx="2"/>
+  <text x="250" y="90" text-anchor="middle" font-size="14" font-weight="600" fill="#1e40af">0°</text>
+  <text x="420" y="90" font-size="12" fill="#475569">Ply 1 — fibre direction</text>
+
+  <!-- Ply 2: +45° -->
+  <rect x="100" y="100" width="300" height="30" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5" rx="2"/>
+  <text x="250" y="120" text-anchor="middle" font-size="14" font-weight="600" fill="#15803d">+45°</text>
+  <text x="420" y="120" font-size="12" fill="#475569">Ply 2 — shear stiffness</text>
+
+  <!-- Ply 3: -45° -->
+  <rect x="100" y="130" width="300" height="30" fill="#fef9c3" stroke="#eab308" stroke-width="1.5" rx="2"/>
+  <text x="250" y="150" text-anchor="middle" font-size="14" font-weight="600" fill="#a16207">-45°</text>
+  <text x="420" y="150" font-size="12" fill="#475569">Ply 3 — balance partner</text>
+
+  <!-- Ply 4: 90° -->
+  <rect x="100" y="160" width="300" height="30" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5" rx="2"/>
+  <text x="250" y="180" text-anchor="middle" font-size="14" font-weight="600" fill="#b91c1c">90°</text>
+  <text x="420" y="180" font-size="12" fill="#475569">Ply 4 — transverse</text>
+
+  <!-- Midplane -->
+  <line x1="80" y1="195" x2="420" y2="195" stroke="#f97316" stroke-width="3" stroke-dasharray="8,4"/>
+  <text x="440" y="199" font-size="13" font-weight="bold" fill="#f97316">MIDPLANE</text>
+  <text x="440" y="214" font-size="11" fill="#f97316">(axis of symmetry)</text>
+
+  <!-- Ply 5: 90° (mirror) -->
+  <rect x="100" y="200" width="300" height="30" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5" rx="2"/>
+  <text x="250" y="220" text-anchor="middle" font-size="14" font-weight="600" fill="#b91c1c">90°</text>
+  <text x="420" y="220" font-size="12" fill="#475569">Ply 5 — mirror of ply 4</text>
+
+  <!-- Ply 6: -45° (mirror) -->
+  <rect x="100" y="230" width="300" height="30" fill="#fef9c3" stroke="#eab308" stroke-width="1.5" rx="2"/>
+  <text x="250" y="250" text-anchor="middle" font-size="14" font-weight="600" fill="#a16207">-45°</text>
+  <text x="420" y="250" font-size="12" fill="#475569">Ply 6 — mirror of ply 3</text>
+
+  <!-- Ply 7: +45° (mirror) -->
+  <rect x="100" y="260" width="300" height="30" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5" rx="2"/>
+  <text x="250" y="280" text-anchor="middle" font-size="14" font-weight="600" fill="#15803d">+45°</text>
+  <text x="420" y="280" font-size="12" fill="#475569">Ply 7 — mirror of ply 2</text>
+
+  <!-- Ply 8: 0° (bottom, mirror) -->
+  <rect x="100" y="290" width="300" height="30" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" rx="2"/>
+  <text x="250" y="310" text-anchor="middle" font-size="14" font-weight="600" fill="#1e40af">0°</text>
+  <text x="420" y="310" font-size="12" fill="#475569">Ply 8 — mirror of ply 1</text>
+
+  <!-- Symmetry arrows -->
+  <line x1="70" y1="85" x2="70" y2="305" stroke="#94a3b8" stroke-width="1"/>
+  <polygon points="65,85 75,85 70,75" fill="#94a3b8"/>
+  <polygon points="65,305 75,305 70,315" fill="#94a3b8"/>
+
+  <!-- Mirror arrows -->
+  <path d="M 55,85 Q 40,195 55,305" stroke="#f97316" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+  <path d="M 55,120 Q 40,195 55,280" stroke="#f97316" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+  <path d="M 55,150 Q 45,195 55,250" stroke="#f97316" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+  <path d="M 55,180 Q 50,195 55,220" stroke="#f97316" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+
+  <!-- Legend -->
+  <text x="100" y="355" font-size="12" font-weight="bold" fill="#1e293b">Legend:</text>
+  <rect x="160" y="343" width="20" height="14" fill="#dbeafe" stroke="#2563eb" stroke-width="1" rx="1"/>
+  <text x="185" y="355" font-size="11" fill="#475569">0° (axial)</text>
+  <rect x="250" y="343" width="20" height="14" fill="#dcfce7" stroke="#16a34a" stroke-width="1" rx="1"/>
+  <text x="275" y="355" font-size="11" fill="#475569">+45°</text>
+  <rect x="320" y="343" width="20" height="14" fill="#fef9c3" stroke="#eab308" stroke-width="1" rx="1"/>
+  <text x="345" y="355" font-size="11" fill="#475569">-45°</text>
+  <rect x="390" y="343" width="20" height="14" fill="#fee2e2" stroke="#dc2626" stroke-width="1" rx="1"/>
+  <text x="415" y="355" font-size="11" fill="#475569">90° (transverse)</text>
+
+  <!-- Key points -->
+  <text x="100" y="385" font-size="11" fill="#64748b">Symmetric (B=0, no warping) | Balanced (+45/-45 paired) | Quasi-isotropic distribution</text>
+</svg>

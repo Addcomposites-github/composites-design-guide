@@ -1,0 +1,692 @@
+{
+  "_metadata": {
+    "title": "Composites Material Property Database",
+    "description": "Common composite material systems with typical mechanical properties from published datasheets. NOT proprietary allowables. Always verify against specific product datasheets for design use.",
+    "version": "1.0.0",
+    "last_updated": "2026-02",
+    "units": {
+      "E1_GPa": "Longitudinal Young's modulus (GPa)",
+      "E2_GPa": "Transverse Young's modulus (GPa)",
+      "G12_GPa": "In-plane shear modulus (GPa)",
+      "nu12": "Major Poisson's ratio (dimensionless)",
+      "Xt_MPa": "Longitudinal tensile strength (MPa)",
+      "Xc_MPa": "Longitudinal compressive strength (MPa)",
+      "Yt_MPa": "Transverse tensile strength (MPa)",
+      "Yc_MPa": "Transverse compressive strength (MPa)",
+      "S12_MPa": "In-plane shear strength (MPa)",
+      "alpha1_1e6_per_C": "Longitudinal CTE (1e-6 per degree C)",
+      "alpha2_1e6_per_C": "Transverse CTE (1e-6 per degree C)"
+    },
+    "property_notes": {
+      "woven_convention": "For woven fabrics, E1 and E2 refer to the warp and fill directions respectively. Xt/Xc and Yt/Yc correspond similarly. For balanced weaves E1 approx equals E2 and Xt approx equals Yt.",
+      "ncf_convention": "For NCF biaxial laminates, properties listed are for a single ply (one orientation). Laminate-level properties depend on the stacking of the biaxial plies."
+    },
+    "disclaimer": "These are typical published values for educational and preliminary design guidance only. They are NOT certified allowables. Always verify against the specific manufacturer datasheet, batch test data, and applicable certification requirements."
+  },
+  "materials": [
+    {
+      "id": "t300-epoxy-ud",
+      "name": "T300/Epoxy UD Prepreg",
+      "category": "carbon-epoxy",
+      "fibre_type": "Carbon",
+      "fibre_grade": "T300",
+      "resin_family": "Epoxy",
+      "form": "UD",
+      "fibre_volume_fraction": 0.60,
+      "ply_thickness_mm": 0.125,
+      "density_kg_m3": 1580,
+      "properties": {
+        "E1_GPa": 135,
+        "E2_GPa": 10,
+        "G12_GPa": 5.0,
+        "nu12": 0.30,
+        "Xt_MPa": 1500,
+        "Xc_MPa": 1200,
+        "Yt_MPa": 50,
+        "Yc_MPa": 200,
+        "S12_MPa": 70,
+        "alpha1_1e6_per_C": -0.3,
+        "alpha2_1e6_per_C": 28.0
+      },
+      "process_compatibility": [
+        "prepreg-autoclave",
+        "prepreg-oven",
+        "prepreg-press"
+      ],
+      "typical_cure_temp_C": 180,
+      "cost_usd_per_kg": {
+        "low": 30,
+        "high": 70
+      },
+      "applications": [
+        "General aerospace structures",
+        "Sporting goods",
+        "Industrial components"
+      ],
+      "notes": "Standard modulus carbon fibre. T300 is one of the most widely used carbon fibres globally. Good balance of strength, stiffness, and cost. Vf=0.60 is typical for autoclave-cured prepreg.",
+      "source": "Typical values from published Toray T300 datasheet and standard CLT references — verify against specific product datasheet"
+    },
+    {
+      "id": "t700-epoxy-ud",
+      "name": "T700S/Epoxy UD Prepreg",
+      "category": "carbon-epoxy",
+      "fibre_type": "Carbon",
+      "fibre_grade": "T700S",
+      "resin_family": "Epoxy",
+      "form": "UD",
+      "fibre_volume_fraction": 0.60,
+      "ply_thickness_mm": 0.125,
+      "density_kg_m3": 1570,
+      "properties": {
+        "E1_GPa": 132,
+        "E2_GPa": 10.3,
+        "G12_GPa": 5.2,
+        "nu12": 0.30,
+        "Xt_MPa": 2100,
+        "Xc_MPa": 1200,
+        "Yt_MPa": 55,
+        "Yc_MPa": 210,
+        "S12_MPa": 75,
+        "alpha1_1e6_per_C": -0.3,
+        "alpha2_1e6_per_C": 28.0
+      },
+      "process_compatibility": [
+        "prepreg-autoclave",
+        "prepreg-oven",
+        "resin-infusion",
+        "filament-winding",
+        "afp"
+      ],
+      "typical_cure_temp_C": 180,
+      "cost_usd_per_kg": {
+        "low": 25,
+        "high": 60
+      },
+      "applications": [
+        "Pressure vessels",
+        "Wind turbine blades",
+        "Aerospace secondary structures",
+        "Automotive structural parts"
+      ],
+      "notes": "High-strength standard-modulus carbon fibre. T700S offers higher tensile strength than T300 at similar modulus. Very widely used in wind energy and pressure vessels due to excellent strength-to-cost ratio.",
+      "source": "Typical values from published Toray T700S datasheet — verify against specific product datasheet"
+    },
+    {
+      "id": "as4-3501-6-ud",
+      "name": "AS4/3501-6 UD Prepreg",
+      "category": "carbon-epoxy",
+      "fibre_type": "Carbon",
+      "fibre_grade": "AS4",
+      "resin_family": "Epoxy",
+      "resin_system": "Hexcel 3501-6",
+      "form": "UD",
+      "fibre_volume_fraction": 0.62,
+      "ply_thickness_mm": 0.13,
+      "density_kg_m3": 1580,
+      "properties": {
+        "E1_GPa": 142,
+        "E2_GPa": 10.3,
+        "G12_GPa": 7.2,
+        "nu12": 0.27,
+        "Xt_MPa": 2280,
+        "Xc_MPa": 1440,
+        "Yt_MPa": 57,
+        "Yc_MPa": 228,
+        "S12_MPa": 71,
+        "alpha1_1e6_per_C": -0.5,
+        "alpha2_1e6_per_C": 26.0
+      },
+      "process_compatibility": [
+        "prepreg-autoclave"
+      ],
+      "typical_cure_temp_C": 177,
+      "cost_usd_per_kg": {
+        "low": 60,
+        "high": 120
+      },
+      "applications": [
+        "Aerospace primary structures",
+        "Military aircraft",
+        "Research and reference laminates"
+      ],
+      "notes": "Classic aerospace reference material system. AS4/3501-6 is one of the most extensively characterized composite systems in existence, with large public datasets in CMH-17. Often used as a benchmark in academic literature.",
+      "source": "Typical values from CMH-17 published summaries and Hexcel datasheets — verify against specific product datasheet"
+    },
+    {
+      "id": "im7-8552-ud",
+      "name": "IM7/8552 UD Prepreg",
+      "category": "carbon-epoxy",
+      "fibre_type": "Carbon",
+      "fibre_grade": "IM7",
+      "resin_family": "Epoxy",
+      "resin_system": "Hexcel 8552",
+      "form": "UD",
+      "fibre_volume_fraction": 0.57,
+      "ply_thickness_mm": 0.131,
+      "density_kg_m3": 1580,
+      "properties": {
+        "E1_GPa": 164,
+        "E2_GPa": 12.0,
+        "G12_GPa": 5.6,
+        "nu12": 0.32,
+        "Xt_MPa": 2724,
+        "Xc_MPa": 1690,
+        "Yt_MPa": 111,
+        "Yc_MPa": 286,
+        "S12_MPa": 120,
+        "alpha1_1e6_per_C": -0.4,
+        "alpha2_1e6_per_C": 25.0
+      },
+      "process_compatibility": [
+        "prepreg-autoclave",
+        "afp"
+      ],
+      "typical_cure_temp_C": 180,
+      "cost_usd_per_kg": {
+        "low": 80,
+        "high": 160
+      },
+      "applications": [
+        "Aerospace primary structures",
+        "Commercial aircraft fuselage and wing skins",
+        "High-performance sporting goods"
+      ],
+      "notes": "Intermediate modulus aerospace workhorse. IM7/8552 is the material system behind many modern commercial aircraft structures. 8552 is a toughened epoxy with excellent damage tolerance. Higher modulus and strength than standard-modulus systems at higher cost.",
+      "source": "Typical values from Hexcel published datasheet and NCAMP data — verify against specific product datasheet"
+    },
+    {
+      "id": "t300-epoxy-woven-pw",
+      "name": "T300/Epoxy Woven Plain Weave",
+      "category": "carbon-epoxy",
+      "fibre_type": "Carbon",
+      "fibre_grade": "T300",
+      "resin_family": "Epoxy",
+      "form": "Woven",
+      "weave_style": "Plain weave",
+      "areal_weight_gsm": 200,
+      "fibre_volume_fraction": 0.55,
+      "ply_thickness_mm": 0.22,
+      "density_kg_m3": 1540,
+      "properties": {
+        "E1_GPa": 62,
+        "E2_GPa": 60,
+        "G12_GPa": 4.5,
+        "nu12": 0.05,
+        "Xt_MPa": 600,
+        "Xc_MPa": 500,
+        "Yt_MPa": 580,
+        "Yc_MPa": 490,
+        "S12_MPa": 90,
+        "alpha1_1e6_per_C": 2.0,
+        "alpha2_1e6_per_C": 2.0
+      },
+      "process_compatibility": [
+        "prepreg-autoclave",
+        "prepreg-oven",
+        "wet-layup",
+        "resin-infusion"
+      ],
+      "typical_cure_temp_C": 180,
+      "cost_usd_per_kg": {
+        "low": 25,
+        "high": 60
+      },
+      "applications": [
+        "Cosmetic skins and fairings",
+        "Flat and simple-curvature panels",
+        "Tooling surfaces",
+        "DIY and maker projects"
+      ],
+      "notes": "Balanced plain weave — nearly equal properties in warp and fill. Lower in-plane stiffness and strength than UD due to fibre crimp. Excellent drapability for curved surfaces. Popular for cosmetic carbon fibre parts. Properties are per-ply (single layer).",
+      "source": "Typical values for balanced plain weave carbon/epoxy — verify against specific product datasheet"
+    },
+    {
+      "id": "e-glass-epoxy-ud",
+      "name": "E-Glass/Epoxy UD",
+      "category": "glass-epoxy",
+      "fibre_type": "E-Glass",
+      "fibre_grade": "E-Glass",
+      "resin_family": "Epoxy",
+      "form": "UD",
+      "fibre_volume_fraction": 0.55,
+      "ply_thickness_mm": 0.15,
+      "density_kg_m3": 1970,
+      "properties": {
+        "E1_GPa": 42,
+        "E2_GPa": 12,
+        "G12_GPa": 5.5,
+        "nu12": 0.28,
+        "Xt_MPa": 1100,
+        "Xc_MPa": 600,
+        "Yt_MPa": 35,
+        "Yc_MPa": 140,
+        "S12_MPa": 60,
+        "alpha1_1e6_per_C": 6.0,
+        "alpha2_1e6_per_C": 26.0
+      },
+      "process_compatibility": [
+        "prepreg-oven",
+        "wet-layup",
+        "resin-infusion",
+        "filament-winding",
+        "pultrusion"
+      ],
+      "typical_cure_temp_C": 120,
+      "cost_usd_per_kg": {
+        "low": 5,
+        "high": 20
+      },
+      "applications": [
+        "Wind turbine blades",
+        "Boat hulls",
+        "Pipes and tanks",
+        "General industrial structures"
+      ],
+      "notes": "The workhorse glass fibre composite. E-Glass/Epoxy offers good strength at low cost. Much heavier and lower stiffness than carbon but significantly cheaper. Excellent electrical insulation. Good fatigue performance.",
+      "source": "Typical values from published E-glass/epoxy data — verify against specific product datasheet"
+    },
+    {
+      "id": "e-glass-polyester-ud",
+      "name": "E-Glass/Polyester UD",
+      "category": "glass-polyester",
+      "fibre_type": "E-Glass",
+      "fibre_grade": "E-Glass",
+      "resin_family": "Polyester",
+      "form": "UD",
+      "fibre_volume_fraction": 0.45,
+      "ply_thickness_mm": 0.18,
+      "density_kg_m3": 1850,
+      "properties": {
+        "E1_GPa": 35,
+        "E2_GPa": 8.5,
+        "G12_GPa": 4.0,
+        "nu12": 0.28,
+        "Xt_MPa": 800,
+        "Xc_MPa": 450,
+        "Yt_MPa": 25,
+        "Yc_MPa": 100,
+        "S12_MPa": 40,
+        "alpha1_1e6_per_C": 7.0,
+        "alpha2_1e6_per_C": 30.0
+      },
+      "process_compatibility": [
+        "wet-layup",
+        "resin-infusion",
+        "filament-winding",
+        "pultrusion",
+        "spray-up"
+      ],
+      "typical_cure_temp_C": 25,
+      "cost_usd_per_kg": {
+        "low": 3,
+        "high": 10
+      },
+      "applications": [
+        "Boat hulls and decks",
+        "Automotive body panels",
+        "Tanks and piping",
+        "Building and construction panels"
+      ],
+      "notes": "Lowest cost composite system. Room-temperature cure with polyester resin. Lower Vf than epoxy systems due to typical wet layup processing. Lower mechanical properties than epoxy-based systems but very economical. Widely used in marine and general industry.",
+      "source": "Typical values for hand layup / infused E-glass polyester — verify against specific product datasheet"
+    },
+    {
+      "id": "s-glass-epoxy-ud",
+      "name": "S-Glass/Epoxy UD",
+      "category": "glass-epoxy",
+      "fibre_type": "S-Glass",
+      "fibre_grade": "S-2 Glass",
+      "resin_family": "Epoxy",
+      "form": "UD",
+      "fibre_volume_fraction": 0.55,
+      "ply_thickness_mm": 0.14,
+      "density_kg_m3": 2000,
+      "properties": {
+        "E1_GPa": 50,
+        "E2_GPa": 13,
+        "G12_GPa": 6.0,
+        "nu12": 0.28,
+        "Xt_MPa": 1700,
+        "Xc_MPa": 700,
+        "Yt_MPa": 40,
+        "Yc_MPa": 150,
+        "S12_MPa": 70,
+        "alpha1_1e6_per_C": 5.0,
+        "alpha2_1e6_per_C": 25.0
+      },
+      "process_compatibility": [
+        "prepreg-autoclave",
+        "prepreg-oven",
+        "wet-layup",
+        "resin-infusion",
+        "filament-winding"
+      ],
+      "typical_cure_temp_C": 120,
+      "cost_usd_per_kg": {
+        "low": 15,
+        "high": 40
+      },
+      "applications": [
+        "Ballistic protection",
+        "Aerospace secondary structures",
+        "Pressure vessels",
+        "High-performance sporting goods"
+      ],
+      "notes": "Higher performance glass fibre. S-Glass (or S-2 Glass) offers roughly 20% higher modulus and 40% higher tensile strength than E-Glass. Significantly better fatigue resistance. Used where glass is preferred over carbon (e.g. radar transparency, impact tolerance) but higher performance is needed.",
+      "source": "Typical values from published S-2 Glass data and AGY datasheets — verify against specific product datasheet"
+    },
+    {
+      "id": "kevlar49-epoxy-ud",
+      "name": "Kevlar 49/Epoxy UD",
+      "category": "aramid-epoxy",
+      "fibre_type": "Aramid",
+      "fibre_grade": "Kevlar 49",
+      "resin_family": "Epoxy",
+      "form": "UD",
+      "fibre_volume_fraction": 0.60,
+      "ply_thickness_mm": 0.125,
+      "density_kg_m3": 1380,
+      "properties": {
+        "E1_GPa": 80,
+        "E2_GPa": 5.5,
+        "G12_GPa": 2.2,
+        "nu12": 0.34,
+        "Xt_MPa": 1400,
+        "Xc_MPa": 280,
+        "Yt_MPa": 30,
+        "Yc_MPa": 140,
+        "S12_MPa": 45,
+        "alpha1_1e6_per_C": -4.0,
+        "alpha2_1e6_per_C": 60.0
+      },
+      "process_compatibility": [
+        "prepreg-autoclave",
+        "prepreg-oven",
+        "wet-layup",
+        "filament-winding"
+      ],
+      "typical_cure_temp_C": 180,
+      "cost_usd_per_kg": {
+        "low": 25,
+        "high": 60
+      },
+      "applications": [
+        "Ballistic and impact protection",
+        "Pressure vessels",
+        "Helicopter blades",
+        "Sailboat rigging and hulls"
+      ],
+      "notes": "Excellent impact absorption and damage tolerance. Very low density. Major weakness is poor compressive strength — aramid fibres buckle easily in compression. Difficult to machine and cut. Often hybridised with carbon or glass. Large negative longitudinal CTE is notable for dimensional stability applications.",
+      "source": "Typical values from published DuPont/Teijin Kevlar 49 data — verify against specific product datasheet"
+    },
+    {
+      "id": "as4-apc2-peek-ud",
+      "name": "AS4/APC-2 (PEEK) UD Thermoplastic",
+      "category": "carbon-thermoplastic",
+      "fibre_type": "Carbon",
+      "fibre_grade": "AS4",
+      "resin_family": "PEEK",
+      "resin_system": "Cytec APC-2",
+      "form": "UD",
+      "fibre_volume_fraction": 0.61,
+      "ply_thickness_mm": 0.14,
+      "density_kg_m3": 1560,
+      "properties": {
+        "E1_GPa": 138,
+        "E2_GPa": 10.2,
+        "G12_GPa": 5.7,
+        "nu12": 0.31,
+        "Xt_MPa": 2070,
+        "Xc_MPa": 1360,
+        "Yt_MPa": 86,
+        "Yc_MPa": 245,
+        "S12_MPa": 186,
+        "alpha1_1e6_per_C": 0.1,
+        "alpha2_1e6_per_C": 26.0
+      },
+      "process_compatibility": [
+        "prepreg-autoclave",
+        "prepreg-press",
+        "afp",
+        "stamp-forming"
+      ],
+      "typical_processing_temp_C": 380,
+      "cost_usd_per_kg": {
+        "low": 150,
+        "high": 350
+      },
+      "applications": [
+        "Aerospace primary structures",
+        "Space structures",
+        "High-temperature applications",
+        "Brackets and clips requiring weldability"
+      ],
+      "notes": "Premium thermoplastic composite. PEEK matrix gives excellent toughness, damage tolerance, and chemical resistance. Can be welded (fusion bonded) and reformed. Service temperature up to ~250 C continuous. Very high shear strength due to tough matrix. Processing requires high temperatures (~380 C) and pressures.",
+      "source": "Typical values from published Cytec/Solvay APC-2 datasheet and NCAMP data — verify against specific product datasheet"
+    },
+    {
+      "id": "carbon-pps-ud",
+      "name": "Carbon/PPS UD Thermoplastic",
+      "category": "carbon-thermoplastic",
+      "fibre_type": "Carbon",
+      "fibre_grade": "AS4",
+      "resin_family": "PPS",
+      "form": "UD",
+      "fibre_volume_fraction": 0.58,
+      "ply_thickness_mm": 0.14,
+      "density_kg_m3": 1560,
+      "properties": {
+        "E1_GPa": 127,
+        "E2_GPa": 9.5,
+        "G12_GPa": 5.2,
+        "nu12": 0.31,
+        "Xt_MPa": 1860,
+        "Xc_MPa": 1100,
+        "Yt_MPa": 60,
+        "Yc_MPa": 200,
+        "S12_MPa": 95,
+        "alpha1_1e6_per_C": 0.0,
+        "alpha2_1e6_per_C": 27.0
+      },
+      "process_compatibility": [
+        "prepreg-autoclave",
+        "prepreg-press",
+        "afp",
+        "stamp-forming"
+      ],
+      "typical_processing_temp_C": 320,
+      "cost_usd_per_kg": {
+        "low": 80,
+        "high": 200
+      },
+      "applications": [
+        "Aerospace secondary structures",
+        "Chemical processing equipment",
+        "Oil and gas downhole tools",
+        "Brackets and stiffeners"
+      ],
+      "notes": "Lower cost thermoplastic alternative to PEEK. PPS offers good chemical resistance and moderate temperature capability (continuous service ~200 C). Lower processing temperature than PEEK (~320 C). Semi-crystalline matrix provides good solvent resistance. Weldable and reformable like PEEK.",
+      "source": "Typical values from published Toray Cetex and TenCate datasheets — verify against specific product datasheet"
+    },
+    {
+      "id": "e-glass-vinyl-ester-ud",
+      "name": "E-Glass/Vinyl Ester UD",
+      "category": "glass-vinyl-ester",
+      "fibre_type": "E-Glass",
+      "fibre_grade": "E-Glass",
+      "resin_family": "Vinyl Ester",
+      "form": "UD",
+      "fibre_volume_fraction": 0.50,
+      "ply_thickness_mm": 0.16,
+      "density_kg_m3": 1900,
+      "properties": {
+        "E1_GPa": 39,
+        "E2_GPa": 10,
+        "G12_GPa": 4.5,
+        "nu12": 0.28,
+        "Xt_MPa": 950,
+        "Xc_MPa": 520,
+        "Yt_MPa": 30,
+        "Yc_MPa": 120,
+        "S12_MPa": 50,
+        "alpha1_1e6_per_C": 6.5,
+        "alpha2_1e6_per_C": 28.0
+      },
+      "process_compatibility": [
+        "wet-layup",
+        "resin-infusion",
+        "filament-winding",
+        "pultrusion"
+      ],
+      "typical_cure_temp_C": 25,
+      "cost_usd_per_kg": {
+        "low": 4,
+        "high": 15
+      },
+      "applications": [
+        "Chemical storage tanks",
+        "Pipes and ducting",
+        "Marine structures in corrosive environments",
+        "Cooling towers",
+        "Scrubbers and flue gas handling"
+      ],
+      "notes": "Vinyl ester resin provides excellent chemical and corrosion resistance compared to polyester, with mechanical properties closer to epoxy. Commonly used in chemical processing, water treatment, and marine applications where exposure to aggressive chemicals is expected. Room-temperature curable.",
+      "source": "Typical values for infused E-glass/vinyl ester — verify against specific product datasheet"
+    },
+    {
+      "id": "t700-epoxy-woven-tw",
+      "name": "T700/Epoxy Woven 2x2 Twill",
+      "category": "carbon-epoxy",
+      "fibre_type": "Carbon",
+      "fibre_grade": "T700S",
+      "resin_family": "Epoxy",
+      "form": "Woven",
+      "weave_style": "2x2 Twill",
+      "areal_weight_gsm": 200,
+      "fibre_volume_fraction": 0.55,
+      "ply_thickness_mm": 0.22,
+      "density_kg_m3": 1550,
+      "properties": {
+        "E1_GPa": 65,
+        "E2_GPa": 63,
+        "G12_GPa": 5.0,
+        "nu12": 0.05,
+        "Xt_MPa": 700,
+        "Xc_MPa": 550,
+        "Yt_MPa": 680,
+        "Yc_MPa": 540,
+        "S12_MPa": 100,
+        "alpha1_1e6_per_C": 2.0,
+        "alpha2_1e6_per_C": 2.0
+      },
+      "process_compatibility": [
+        "prepreg-autoclave",
+        "prepreg-oven",
+        "wet-layup",
+        "resin-infusion"
+      ],
+      "typical_cure_temp_C": 180,
+      "cost_usd_per_kg": {
+        "low": 25,
+        "high": 65
+      },
+      "applications": [
+        "Automotive body panels and structural parts",
+        "Sporting goods",
+        "Cosmetic carbon fibre components",
+        "Complex curved surfaces"
+      ],
+      "notes": "2x2 twill weave offers better drapability than plain weave while maintaining a balanced construction. Slightly higher strength and stiffness than plain weave due to reduced crimp. The classic aesthetic carbon fibre weave pattern. T700S fibre gives slightly higher properties than T300 woven equivalents.",
+      "source": "Typical values for balanced 2x2 twill T700/epoxy — verify against specific product datasheet"
+    },
+    {
+      "id": "basalt-epoxy-ud",
+      "name": "Basalt/Epoxy UD",
+      "category": "basalt-epoxy",
+      "fibre_type": "Basalt",
+      "fibre_grade": "Continuous basalt fibre",
+      "resin_family": "Epoxy",
+      "form": "UD",
+      "fibre_volume_fraction": 0.55,
+      "ply_thickness_mm": 0.15,
+      "density_kg_m3": 2050,
+      "properties": {
+        "E1_GPa": 48,
+        "E2_GPa": 12,
+        "G12_GPa": 5.5,
+        "nu12": 0.28,
+        "Xt_MPa": 1200,
+        "Xc_MPa": 550,
+        "Yt_MPa": 35,
+        "Yc_MPa": 130,
+        "S12_MPa": 55,
+        "alpha1_1e6_per_C": 5.5,
+        "alpha2_1e6_per_C": 25.0
+      },
+      "process_compatibility": [
+        "wet-layup",
+        "resin-infusion",
+        "filament-winding",
+        "pultrusion"
+      ],
+      "typical_cure_temp_C": 120,
+      "cost_usd_per_kg": {
+        "low": 5,
+        "high": 18
+      },
+      "applications": [
+        "Civil infrastructure reinforcement",
+        "Pipes and rebar",
+        "Fire-resistant structures",
+        "Automotive underbody panels"
+      ],
+      "notes": "Basalt fibre is made from volcanic rock. Properties fall between E-Glass and S-Glass. Better temperature resistance than glass (softening point ~1050 C vs ~840 C for E-Glass). No special raw materials needed — basalt rock is abundant globally. Environmentally friendly compared to glass fibre (no boric acid needed). Gaining adoption in civil engineering and infrastructure.",
+      "source": "Typical values from published basalt fibre manufacturer data — verify against specific product datasheet"
+    },
+    {
+      "id": "carbon-epoxy-ncf-biax",
+      "name": "Carbon/Epoxy NCF Biaxial (+/-45)",
+      "category": "carbon-epoxy",
+      "fibre_type": "Carbon",
+      "fibre_grade": "T700S",
+      "resin_family": "Epoxy",
+      "form": "NCF",
+      "ncf_architecture": "Biaxial +/-45 degrees",
+      "areal_weight_gsm": 300,
+      "fibre_volume_fraction": 0.56,
+      "ply_thickness_mm": 0.30,
+      "density_kg_m3": 1560,
+      "properties": {
+        "E1_GPa": 130,
+        "E2_GPa": 10,
+        "G12_GPa": 5.0,
+        "nu12": 0.30,
+        "Xt_MPa": 1900,
+        "Xc_MPa": 1100,
+        "Yt_MPa": 50,
+        "Yc_MPa": 190,
+        "S12_MPa": 70,
+        "alpha1_1e6_per_C": -0.2,
+        "alpha2_1e6_per_C": 28.0
+      },
+      "process_compatibility": [
+        "resin-infusion",
+        "prepreg-autoclave",
+        "prepreg-oven"
+      ],
+      "typical_cure_temp_C": 180,
+      "cost_usd_per_kg": {
+        "low": 20,
+        "high": 55
+      },
+      "applications": [
+        "Wind turbine blades",
+        "Large marine structures",
+        "Automotive structural components",
+        "Bridge decks and infrastructure"
+      ],
+      "notes": "Non-crimp fabric (NCF) — fibres are held straight by stitching instead of interlacing (as in woven fabrics). This eliminates fibre crimp, giving NCF properties closer to true UD than woven fabrics achieve. Biaxial NCF provides two fibre orientations in a single ply, enabling faster layup. Properties listed here are per single fibre direction (treat each direction as a UD sub-ply). The stitching can slightly reduce through-thickness properties. Total ply thickness includes both directions.",
+      "source": "Typical values for stitched biaxial NCF carbon/epoxy — verify against specific product datasheet"
+    }
+  ]
+}

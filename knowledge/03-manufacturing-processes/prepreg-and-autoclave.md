@@ -114,6 +114,35 @@ Autoclaves are expensive — a large aerospace autoclave costs millions of dolla
 | Shelf life concern | Yes (frozen storage) | No | No |
 | Suitable for | Aerospace, high-performance | Prototypes, makers | Medium-performance |
 
+## When to Choose Prepreg
+
+```mermaid
+graph TD
+    A[Highest quality composite needed?] --> B{Performance requirement?}
+    B -->|Aerospace / certified| C[✅ PREPREG + AUTOCLAVE]
+    B -->|High performance but not certified| D{Budget for equipment?}
+    B -->|General structural| E[Infusion or RTM may be more cost-effective]
+    D -->|Can access autoclave| C
+    D -->|Oven only| F[✅ OOA PREPREG — near-autoclave quality]
+    D -->|Minimal equipment| G[Vacuum bag or infusion]
+    C --> H{Volume?}
+    H -->|1–50 parts / year| I[Hand layup prepreg ✅]
+    H -->|50–500 parts / year| J[Consider AFP / ATL automation]
+    H -->|500+ parts / year| K[AFP mandatory for rate — see AddPath]
+```
+
+**Choose prepreg when:**
+- Fibre volume fraction > 55% and void content < 1% are required
+- The application is aerospace, defence, or high-performance sporting goods
+- Material qualification and traceability are essential
+- You have access to a freezer for prepreg storage and an autoclave or oven for cure
+- Consistency and repeatability across production parts are critical
+
+**Choose OOA prepreg when:**
+- Near-autoclave quality is needed but autoclave access is limited
+- Part is too large for available autoclaves
+- Budget does not justify autoclave capital cost
+
 ## Key Takeaways
 
 - Prepreg is fibre with resin already applied at a controlled ratio — no mixing on the shop floor

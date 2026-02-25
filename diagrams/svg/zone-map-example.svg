@@ -1,0 +1,66 @@
+<!-- Original diagram by AddComposites, CC BY 4.0, composites-design-guide -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 450" font-family="system-ui, -apple-system, sans-serif">
+  <!-- Title -->
+  <text x="325" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">Zone Map Example</text>
+  <text x="325" y="46" text-anchor="middle" font-size="12" fill="#64748b">Iso-thickness zones on a composite panel with varying load requirements</text>
+
+  <!-- Panel outline -->
+  <rect x="80" y="70" width="450" height="280" fill="#f8fafc" stroke="#475569" stroke-width="2" rx="8"/>
+
+  <!-- Zone 1: Thick zone (high load area - bolted joint) -->
+  <rect x="90" y="80" width="140" height="120" fill="#fee2e2" stroke="#dc2626" stroke-width="2" rx="5"/>
+  <text x="160" y="120" text-anchor="middle" font-size="14" font-weight="bold" fill="#b91c1c">Zone A</text>
+  <text x="160" y="138" text-anchor="middle" font-size="11" fill="#dc2626">24 plies</text>
+  <text x="160" y="153" text-anchor="middle" font-size="10" fill="#dc2626">3.12 mm</text>
+  <text x="160" y="170" text-anchor="middle" font-size="9" fill="#991b1b">Bolted joint area</text>
+  <!-- Bolt holes -->
+  <circle cx="120" cy="190" r="6" fill="white" stroke="#475569" stroke-width="1.5"/>
+  <circle cx="145" cy="190" r="6" fill="white" stroke="#475569" stroke-width="1.5"/>
+  <circle cx="170" cy="190" r="6" fill="white" stroke="#475569" stroke-width="1.5"/>
+  <circle cx="195" cy="190" r="6" fill="white" stroke="#475569" stroke-width="1.5"/>
+
+  <!-- Zone 2: Medium zone (structural region) -->
+  <rect x="240" y="80" width="280" height="120" fill="#fef9c3" stroke="#eab308" stroke-width="2" rx="5"/>
+  <text x="380" y="120" text-anchor="middle" font-size="14" font-weight="bold" fill="#a16207">Zone B</text>
+  <text x="380" y="138" text-anchor="middle" font-size="11" fill="#eab308">16 plies</text>
+  <text x="380" y="153" text-anchor="middle" font-size="10" fill="#eab308">2.08 mm</text>
+  <text x="380" y="170" text-anchor="middle" font-size="9" fill="#854d0e">Primary structure</text>
+
+  <!-- Zone 3: Transition zone -->
+  <rect x="90" y="210" width="140" height="130" fill="#e0f2fe" stroke="#0284c7" stroke-width="2" rx="5"/>
+  <text x="160" y="260" text-anchor="middle" font-size="14" font-weight="bold" fill="#0369a1">Zone C</text>
+  <text x="160" y="278" text-anchor="middle" font-size="11" fill="#0284c7">12 plies</text>
+  <text x="160" y="293" text-anchor="middle" font-size="10" fill="#0284c7">1.56 mm</text>
+  <text x="160" y="310" text-anchor="middle" font-size="9" fill="#075985">Secondary structure</text>
+
+  <!-- Zone 4: Thin zone (lightly loaded) -->
+  <rect x="240" y="210" width="280" height="130" fill="#dcfce7" stroke="#16a34a" stroke-width="2" rx="5"/>
+  <text x="380" y="260" text-anchor="middle" font-size="14" font-weight="bold" fill="#15803d">Zone D</text>
+  <text x="380" y="278" text-anchor="middle" font-size="11" fill="#16a34a">8 plies</text>
+  <text x="380" y="293" text-anchor="middle" font-size="10" fill="#16a34a">1.04 mm</text>
+  <text x="380" y="310" text-anchor="middle" font-size="9" fill="#166534">Fairing / lightly loaded</text>
+
+  <!-- Ply drop transition indicators -->
+  <!-- Between Zone A and Zone C (vertical) -->
+  <line x1="90" y1="200" x2="230" y2="210" stroke="#f97316" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="115" y="207" font-size="9" font-weight="600" fill="#f97316">Drop 12 plies</text>
+
+  <!-- Between Zone B and Zone D (vertical) -->
+  <line x1="240" y1="200" x2="520" y2="210" stroke="#f97316" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="380" y="207" font-size="9" font-weight="600" fill="#f97316">Drop 8 plies</text>
+
+  <!-- Between Zone A and Zone B (horizontal) -->
+  <line x1="230" y1="80" x2="240" y2="200" stroke="#f97316" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="235" y="145" font-size="9" font-weight="600" fill="#f97316" transform="rotate(-90, 235, 145)">Drop 8 plies</text>
+
+  <!-- Between Zone C and Zone D (horizontal) -->
+  <line x1="230" y1="210" x2="240" y2="340" stroke="#f97316" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="235" y="280" font-size="9" font-weight="600" fill="#f97316" transform="rotate(-90, 235, 280)">Drop 4 plies</text>
+
+  <!-- Legend / summary box -->
+  <rect x="60" y="365" width="530" height="78" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="80" y="385" font-size="12" font-weight="bold" fill="#1e293b">Zone Design Rules</text>
+  <text x="80" y="403" font-size="11" fill="#475569">Each zone has constant thickness (iso-thickness). Transitions between zones use ply drop-offs.</text>
+  <text x="80" y="419" font-size="11" fill="#475569">Drop internal plies only (never surface plies). Maintain ramp ratio of 1:10 to 1:20 between zones.</text>
+  <text x="80" y="435" font-size="11" fill="#94a3b8">Base laminate (thinnest zone) defines the minimum plies present everywhere. Thicker zones add local reinforcement.</text>
+</svg>

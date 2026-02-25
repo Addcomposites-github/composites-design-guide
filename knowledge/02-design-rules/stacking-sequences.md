@@ -132,6 +132,24 @@ graph TD
     I -->|Yes| J[Finalise stacking sequence]
 ```
 
+## Common Laminate Families
+
+These standard layup families cover most applications. Use them as starting points, then optimise.
+
+| Laminate Family | Notation | Use When | Typical Application |
+|----------------|----------|----------|-------------------|
+| **Quasi-isotropic** | [0/±45/90]ns | Equal properties in all directions needed | General-purpose panels, test coupons |
+| **Hard (0°-dominated)** | [0₃/±45/90]ns | Axial stiffness or tension/compression loads dominate | Spar caps, longerons, beams |
+| **Soft (±45°-dominated)** | [±45₂/0/90]ns | Shear stiffness or torsion loads dominate | Skins under shear, torsion tubes |
+| **Cross-ply** | [0/90]ns | Biaxial loads, simple construction | Flat panels, student projects |
+| **Angle-ply** | [±θ]ns | Pressure vessels, cylindrical shells | Filament-wound tubes, pipes |
+| **Optimised** | [specific to loads] | Weight-critical structures with well-known loads | Aerospace primary structure |
+
+**Quick rules of thumb:**
+- Start with quasi-isotropic if you do not know the loads well
+- Add 0° plies for bending/axial strength; add ±45° plies for shear/torsion; add 90° plies for transverse loads
+- The 10% rule (minimum 10% in each direction) prevents unexpected failures from secondary loads
+
 ## Key Takeaways
 
 - Always design symmetric laminates (mirrored about the midplane) to avoid warping

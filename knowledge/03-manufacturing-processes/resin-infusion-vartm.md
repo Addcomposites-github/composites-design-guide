@@ -111,6 +111,36 @@ Getting the inlet and outlet locations right is the key to a successful infusion
 
 **Rule of thumb:** Position inlets at the lowest point and outlets at the highest point (if possible) — gravity helps resin flow. But vacuum pressure dominates over gravity in most setups.
 
+## When to Choose Infusion
+
+```mermaid
+graph TD
+    A[Composite part needed] --> B{Part size?}
+    B -->|Small < 0.5m²| C[Wet layup or vacuum bag simpler]
+    B -->|Medium 0.5–5m²| D{Volume?}
+    B -->|Large > 5m²| E[✅ INFUSION — ideal for large parts]
+    D -->|1–500 parts| F{Need two good surfaces?}
+    D -->|500+ parts| G[Consider RTM for cycle time]
+    F -->|One good surface OK| H[✅ INFUSION]
+    F -->|Both surfaces must be finished| I[Consider RTM matched moulds]
+    E --> J{Performance class?}
+    J -->|Hobby / structural| K[✅ INFUSION — best value]
+    J -->|Aerospace certified| L[Prepreg may be required by spec]
+```
+
+**Choose infusion when:**
+- Parts are medium to large (> 0.5 m²) — this is where infusion shines over wet layup
+- You need 50–60% fibre volume fraction and 1–3% void content
+- One finished (mould) surface is acceptable
+- Production volume is 10–500 parts
+- You want cleaner, more consistent results than wet layup without prepreg cost
+
+**Do NOT choose infusion when:**
+- Both surfaces must be finished (use RTM instead)
+- Part is very small — setup time dominates (use wet layup + vacuum bag)
+- Aerospace specification requires prepreg and autoclave
+- Production volume exceeds 500 parts (RTM or HP-RTM may be faster per-part)
+
 ## Key Takeaways
 
 - VARTM uses vacuum to pull resin through a dry fabric stack — cleaner, faster, and more consistent than wet layup
