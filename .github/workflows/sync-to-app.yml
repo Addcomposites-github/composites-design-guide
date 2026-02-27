@@ -1,0 +1,73 @@
+name: Sync Knowledge Base to App
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'knowledge/**'
+      - 'data/**'
+      - 'decision-trees/**'
+      - 'diagrams/**'
+      - 'scripts/build_index.py'
+      - 'index.json'
+
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout knowledge base repo
+        uses: actions/checkout@v4
+        with:
+          path: knowledge-repo
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Rebuild index.json
+        working-directory: knowledge-repo
+        run: python scripts/build_index.py
+
+      - name: Checkout app repo
+        uses: actions/checkout@v4
+        with:
+          repository: Addcomposites-github/opencomposites-app
+          token: ${{ secrets.APP_REPO_TOKEN }}
+          path: app-repo
+
+      - name: Sync content to app repo
+        run: |
+          # Sync knowledge articles
+          rsync -av --delete knowledge-repo/knowledge/ app-repo/knowledge/
+
+          # Sync data files
+          rsync -av --delete knowledge-repo/data/ app-repo/data/
+
+          # Sync decision trees
+          rsync -av --delete knowledge-repo/decision-trees/ app-repo/decision-trees/
+
+          # Copy index.json
+          cp knowledge-repo/index.json app-repo/index.json
+
+      - name: Check for changes
+        id: changes
+        working-directory: app-repo
+        run: |
+          git diff --quiet && git diff --staged --quiet && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push to app repo
+        if: steps.changes.outputs.changed == 'true'
+        working-directory: app-repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add knowledge/ data/ decision-trees/ index.json
+          git commit -m "Sync knowledge base content from composites-design-guide
+
+          Auto-synced by GitHub Actions from:
+          ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"
+          git push
