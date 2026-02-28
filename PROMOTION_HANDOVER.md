@@ -39,7 +39,7 @@ placement) robots. They know composites. This is credible.
 | Sandwich panel analyser | Core + face sheet design and optimisation |
 | Bolted joint analyser | Joint sizing and bearing/bypass analysis |
 | Cost estimator | Per-part cost including materials, labour, tooling |
-| Materials browser | Carbon, glass, aramid — properties and recommendations |
+| Materials browser | 15 material systems (carbon, glass, aramid, basalt, thermoplastics) — properties and recommendations |
 
 AI uses Claude (Anthropic) via **BYOK** — users bring their own API key.
 Everything else works without an API key.

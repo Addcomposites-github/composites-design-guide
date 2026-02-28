@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenComposites Launch Pad</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0F172A;
+  color: #E2E8F0;
+  min-height: 100vh;
+  padding: 24px;
+}
+.header {
+  text-align: center;
+  padding: 32px 0 40px;
+  border-bottom: 1px solid #1E293B;
+  margin-bottom: 40px;
+}
+.logo { font-size: 13px; color: #F97316; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+h1 { font-size: 28px; font-weight: 700; color: #F1F5F9; }
+.subtitle { color: #94A3B8; margin-top: 8px; font-size: 15px; }
+.live-link { display: inline-block; margin-top: 14px; padding: 7px 18px; background: #F97316; color: white; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; }
+.live-link:hover { background: #EA6A05; }
+
+/* LOGIN BANNER */
+.login-banner {
+  max-width: 900px; margin: 0 auto 32px;
+  padding: 14px 18px; background: #1a1e2e;
+  border: 1px solid #F97316; border-radius: 10px;
+  font-size: 13px; color: #FED7AA;
+}
+.login-banner strong { color: #F97316; font-size: 14px; display: block; margin-bottom: 6px; }
+.login-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.login-links a {
+  padding: 4px 12px; background: #0F172A;
+  border: 1px solid #475569; border-radius: 5px;
+  color: #94A3B8; text-decoration: none; font-size: 12px; font-weight: 500;
+}
+.login-links a:hover { border-color: #F97316; color: #F97316; }
+
+/* CHECKLIST */
+.section-box {
+  background: #1E293B; border: 1px solid #334155;
+  border-radius: 12px; padding: 24px;
+  max-width: 900px; margin: 0 auto 36px;
+}
+.section-title { font-size: 16px; font-weight: 700; color: #F1F5F9; margin-bottom: 16px; }
+.checklist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 640px) { .checklist-grid { grid-template-columns: 1fr; } }
+.check-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px; background: #0F172A;
+  border-radius: 8px; cursor: pointer;
+  border: 1px solid #334155;
+}
+.check-item.done { border-color: #22C55E; background: #052e16; }
+.check-item input[type="checkbox"] { accent-color: #22C55E; width: 16px; height: 16px; margin-top: 1px; flex-shrink: 0; cursor: pointer; }
+.check-label { font-size: 13px; color: #CBD5E1; line-height: 1.4; }
+.check-item.done .check-label { color: #86EFAC; text-decoration: line-through; }
+.note-box { margin-top: 14px; padding: 10px 14px; background: #111827; border-left: 3px solid #F97316; border-radius: 4px; font-size: 12px; color: #94A3B8; line-height: 1.6; }
+.note-box strong { color: #F97316; }
+code { background: #0F172A; padding: 1px 5px; border-radius: 3px; font-size: 11px; color: #94A3B8; }
+
+/* SCHEDULE TABLE */
+.schedule-table { width: 100%; border-collapse: collapse; }
+.schedule-table th { padding: 9px 14px; text-align: left; font-size: 11px; color: #64748B; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #334155; }
+.schedule-table td { padding: 9px 14px; font-size: 13px; border-bottom: 1px solid #0F172A; color: #CBD5E1; }
+.schedule-table tr:last-child td { border-bottom: none; }
+.schedule-table tr:hover td { background: #1a2540; }
+.day-badge { display: inline-block; padding: 2px 8px; background: #0F172A; border: 1px solid #334155; border-radius: 4px; font-size: 11px; color: #94A3B8; white-space: nowrap; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.b-red { background: #FF4500; color: white; }
+.b-hn  { background: #FF6600; color: white; }
+.b-li  { background: #0077B5; color: white; }
+.b-fo  { background: #6366F1; color: white; }
+.b-tw  { background: #1DA1F2; color: white; }
+.done-row td { opacity: 0.4; }
+
+/* PLATFORM CARDS */
+.platforms-grid { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+.platform-card { background: #1E293B; border: 1px solid #334155; border-radius: 12px; overflow: hidden; }
+.platform-card.posted { border-color: #22C55E; opacity: 0.65; }
+.card-header {
+  padding: 14px 20px; border-bottom: 1px solid #334155;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+.card-left { display: flex; align-items: center; gap: 10px; }
+.platform-icon { font-size: 22px; }
+.card-name { font-size: 15px; font-weight: 700; color: #F1F5F9; }
+.card-meta { font-size: 12px; color: #64748B; margin-top: 2px; }
+.card-actions { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+
+.btn {
+  padding: 7px 13px; border-radius: 7px; font-size: 12px; font-weight: 600;
+  cursor: pointer; border: none; display: inline-flex; align-items: center;
+  gap: 4px; text-decoration: none; white-space: nowrap;
+}
+.btn-ghost { background: #0F172A; color: #94A3B8; border: 1px solid #334155; }
+.btn-ghost:hover { background: #1E293B; color: #F1F5F9; border-color: #475569; }
+.btn-ghost.flashed { border-color: #22C55E !important; color: #86EFAC !important; }
+.btn-orange { background: #F97316; color: white; }
+.btn-orange:hover { background: #EA6A05; }
+.btn-blue   { background: #0077B5; color: white; }
+.btn-blue:hover { background: #005885; }
+.btn-hn     { background: #FF6600; color: white; }
+.btn-hn:hover { background: #e05800; }
+.btn-tw     { background: #1DA1F2; color: white; }
+.btn-tw:hover { background: #0d8fd6; }
+.btn-forum  { background: #6366F1; color: white; }
+.btn-forum:hover { background: #4F46E5; }
+.btn-done { background: #0F172A; color: #64748B; border: 1px solid #334155; }
+.btn-done:hover { background: #052e16; color: #22C55E; border-color: #22C55E; }
+.btn-done.is-done { background: #052e16; color: #22C55E; border-color: #22C55E; }
+
+.card-body { padding: 16px 20px; }
+.field-label { font-size: 11px; font-weight: 600; color: #64748B; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.title-box {
+  background: #0F172A; border: 1px solid #334155; border-radius: 8px;
+  padding: 10px 14px; font-size: 13px; color: #F1F5F9; font-weight: 600;
+  margin-bottom: 12px; cursor: pointer; user-select: all;
+}
+.title-box:hover { border-color: #F97316; }
+.body-box {
+  background: #0F172A; border: 1px solid #334155; border-radius: 8px;
+  padding: 12px 14px; font-size: 12px; color: #CBD5E1; line-height: 1.7;
+  white-space: pre-wrap; font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+  max-height: 210px; overflow-y: auto; cursor: pointer;
+}
+.body-box:hover { border-color: #94A3B8; }
+.hint { font-size: 11px; color: #475569; margin-top: 6px; }
+
+/* ASSETS */
+.assets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-top: 14px; }
+.asset-card { background: #0F172A; border: 1px solid #334155; border-radius: 8px; padding: 12px; }
+.asset-name { font-weight: 600; color: #F1F5F9; font-size: 13px; margin-bottom: 3px; }
+.asset-desc { color: #64748B; font-size: 11px; }
+.asset-path { color: #F97316; font-size: 10px; font-family: monospace; margin-top: 4px; word-break: break-all; }
+
+.footer { text-align: center; padding: 40px 0 20px; color: #334155; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">Addcomposites</div>
+  <h1>OpenComposites Launch Pad</h1>
+  <p class="subtitle">Pre-posting checklist · copy-ready post copy · one-click platform openers</p>
+  <a href="https://opencomposites.addcomposites.com" target="_blank" class="live-link">↗ Open Live App</a>
+  &nbsp;
+  <a href="https://github.com/Addcomposites-github/composites-design-guide" target="_blank" class="live-link" style="background:#1E293B;border:1px solid #334155;">↗ GitHub Repo</a>
+</div>
+
+<!-- LOGIN BANNER -->
+<div class="login-banner">
+  <strong>⚠ Log in to all platforms before posting — you are currently logged out of all three</strong>
+  <div class="login-links">
+    <a href="https://www.reddit.com/login/" target="_blank">Reddit Login</a>
+    <a href="https://news.ycombinator.com/login" target="_blank">Hacker News Login</a>
+    <a href="https://www.linkedin.com/login" target="_blank">LinkedIn Login</a>
+    <a href="https://twitter.com/login" target="_blank">Twitter / X Login</a>
+    <a href="https://forum.compositescentral.org/ucp.php?mode=login" target="_blank">Composites Central Login</a>
+    <a href="https://www.talkcomposites.com/login/" target="_blank">Talk Composites Login</a>
+  </div>
+</div>
+
+<!-- PRE-POSTING CHECKLIST -->
+<div class="section-box">
+  <div class="section-title">✅ Pre-Posting Checklist</div>
+  <div class="checklist-grid" id="checkGrid">
+    <label class="check-item" data-key="chk_live"><input type="checkbox" onchange="saveChk(this,'chk_live')"><span class="check-label">Live app loads at opencomposites.addcomposites.com</span></label>
+    <label class="check-item" data-key="chk_search"><input type="checkbox" onchange="saveChk(this,'chk_search')"><span class="check-label">Search "ply drop-off" → 10 results, top result 81% match</span></label>
+    <label class="check-item" data-key="chk_article"><input type="checkbox" onchange="saveChk(this,'chk_article')"><span class="check-label">Article opens and renders correctly (ASCII diagrams show)</span></label>
+    <label class="check-item" data-key="chk_analyze"><input type="checkbox" onchange="saveChk(this,'chk_analyze')"><span class="check-label">Analyze page loads with all form fields</span></label>
+    <label class="check-item" data-key="chk_56"><input type="checkbox" onchange="saveChk(this,'chk_56')"><span class="check-label">Homepage shows "56" articles (deploy fix from local code)</span></label>
+    <label class="check-item" data-key="chk_github"><input type="checkbox" onchange="saveChk(this,'chk_github')"><span class="check-label">GitHub repo is public, README looks good</span></label>
+    <label class="check-item" data-key="chk_reddit"><input type="checkbox" onchange="saveChk(this,'chk_reddit')"><span class="check-label">Logged in to Reddit (personal account, karma check)</span></label>
+    <label class="check-item" data-key="chk_hn"><input type="checkbox" onchange="saveChk(this,'chk_hn')"><span class="check-label">Logged in to Hacker News — post at Tue–Thu 9–11am EST</span></label>
+    <label class="check-item" data-key="chk_li"><input type="checkbox" onchange="saveChk(this,'chk_li')"><span class="check-label">Logged in to LinkedIn (personal + company page access)</span></label>
+    <label class="check-item" data-key="chk_forums"><input type="checkbox" onchange="saveChk(this,'chk_forums')"><span class="check-label">Registered + approved on Composites Central &amp; Talk Composites</span></label>
+    <label class="check-item" data-key="chk_carousel"><input type="checkbox" onchange="saveChk(this,'chk_carousel')"><span class="check-label">Carousel PPTX reviewed, slides exported to images</span></label>
+    <label class="check-item" data-key="chk_screenshots"><input type="checkbox" onchange="saveChk(this,'chk_screenshots')"><span class="check-label">All 6 app screenshots reviewed in marketing/ folder</span></label>
+  </div>
+  <div class="note-box">
+    <strong>Deployment note:</strong> The local code fix changes the homepage article stat from "54+" to "56". The live site still shows "54+". Before posting, push <code>web-app/frontend/src/pages/HomePage.tsx</code> and <code>KnowledgeBasePage.tsx</code> so all post copy matches what users see. Every post says "56 articles".
+  </div>
+</div>
+
+<!-- POSTING SCHEDULE -->
+<div class="section-box">
+  <div class="section-title">📅 21-Day Posting Schedule — Do NOT post all at once</div>
+  <table class="schedule-table">
+    <thead><tr><th>Day</th><th>Platform</th><th>Post</th><th>Audience</th></tr></thead>
+    <tbody>
+      <tr id="sr1"><td><span class="day-badge">Day 1 — Tue</span></td><td><span class="badge b-red">r/Composites</span></td><td>Post A</td><td>4,940 specialists ★★★★★</td></tr>
+      <tr id="sr2"><td><span class="day-badge">Day 2 — Wed</span></td><td><span class="badge b-fo">Composites Central</span></td><td>Post G</td><td>Practitioners ★★★★★</td></tr>
+      <tr id="sr3"><td><span class="day-badge">Day 3 — Thu</span></td><td><span class="badge b-red">r/Multicopter</span></td><td>Post B</td><td>118K drone builders ★★★☆</td></tr>
+      <tr id="sr4"><td><span class="day-badge">Day 4 — Fri</span></td><td><span class="badge b-fo">Talk Composites</span></td><td>Post H</td><td>Advanced practitioners ★★★★★</td></tr>
+      <tr id="sr5"><td><span class="day-badge">Day 5 — Sat</span></td><td><span class="badge b-li">LinkedIn Personal</span></td><td>Pravin post</td><td>Professional network ★★★★</td></tr>
+      <tr id="sr6"><td><span class="day-badge">Day 6 — Sun</span></td><td><span class="badge b-li">LinkedIn Company</span></td><td>Addcomposites post</td><td>Company followers ★★★</td></tr>
+      <tr id="sr7"><td><span class="day-badge">Day 8 — Tue</span></td><td><span class="badge b-red">r/AerospaceEngineering</span></td><td>Post C</td><td>131K professionals ★★★★</td></tr>
+      <tr id="sr8"><td><span class="day-badge">Day 10 — Thu</span></td><td><span class="badge b-hn">Show HN</span></td><td>HN post + comment</td><td>5M+ tech/OSS ★★★★</td></tr>
+      <tr id="sr9"><td><span class="day-badge">Day 15 — Tue</span></td><td><span class="badge b-red">r/DIY</span></td><td>Post E</td><td>~11M makers ★★☆</td></tr>
+      <tr id="sr10"><td><span class="day-badge">Day 18 — Fri</span></td><td><span class="badge b-red">r/engineering</span></td><td>Post F</td><td>725K engineers ★★★</td></tr>
+      <tr id="sr11"><td><span class="day-badge">Day 21+</span></td><td><span class="badge b-tw">Twitter / X</span></td><td>7-tweet thread</td><td>@addcomposites ★★★</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- PLATFORM CARDS -->
+<div class="platforms-grid">
+
+<!-- ── POST A: r/Composites ── -->
+<div class="platform-card" id="card_rcomp">
+  <div class="card-header">
+    <div class="card-left">
+      <span class="platform-icon">🟠</span>
+      <div>
+        <div class="card-name">Reddit — r/Composites</div>
+        <div class="card-meta">4,940 subscribers · Most targeted · Day 1 · Check sidebar for flair</div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-ghost" onclick="cp('t_rcomp',this)">📋 Copy Title</button>
+      <button class="btn btn-ghost" onclick="cp('b_rcomp',this)">📋 Copy Body</button>
+      <button class="btn btn-orange" onclick="openReddit('Composites','t_rcomp')">↗ Open r/Composites</button>
+      <button class="btn btn-done" id="d_rcomp" onclick="markDone('rcomp')">Mark Posted</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="field-label">Title — click title bar to open Reddit pre-filled</div>
+    <div class="title-box" id="t_rcomp" onclick="cp('t_rcomp',this)">We open-sourced a composites design platform — 56 articles, CLT calc, AI analysis. Built by the AFP robot people.</div>
+    <div class="field-label">Body — click to copy, then paste into Reddit text box</div>
+    <div class="body-box" id="b_rcomp">I work at Addcomposites (we make AFP robots). We kept getting the same questions from people in communities like this one:
+
+"Which fibres should I use for a car diffuser?"
+"My layup keeps getting dry spots — is it the infusion setup or the resin?"
+"I want 0/45/-45/90 but I can't find anyone to check if my stacking sequence is right."
+
+The people asking are completely capable of making good parts. They just don't have access to the reference material — because most of it is locked inside $15,000–$150,000/year software that no maker or small team can justify.
+
+So we built OpenComposites and open-sourced the whole knowledge base.
+
+**What it has:**
+
+- **AI part analysis** — describe your part (geometry, load, budget) → material recommendation, fibre orientation, process recommendation, per-part cost estimate. AI is Claude via BYOK so you bring your own Anthropic key.
+- **56 knowledge articles** — fibres, resin systems, wet layup, vacuum bagging, VARTM, AFP, stacking rules, ply drop-offs, failure modes, failure criteria, cost estimation. Plain English. CC BY 4.0.
+- **CLT calculator** — ABD matrices, effective moduli, Tsai-Wu / Hashin / max stress failure checks
+- **Sandwich panel analyser** — foam and honeycomb core design
+- **Bolted joint tool** — bearing and bypass analysis
+- **Materials database** — 15 material systems (T300, IM7/8552, E-glass, S-glass, Kevlar 49, AS4/PEEK, basalt, NCF) with source citations
+- **Cost estimator** — materials, labour, tooling
+
+No account. No credit card. Knowledge base on GitHub (CC BY 4.0 — fork it, quote it, use it).
+
+**Try it:** https://opencomposites.addcomposites.com
+**Knowledge base:** https://github.com/Addcomposites-github/composites-design-guide
+
+Would love feedback from people who've actually tried to design composite parts — what's missing, what's wrong, what you wish existed.</div>
+    <div class="hint">💡 Click "Open r/Composites" to open Reddit with the title pre-filled. Paste the body manually.</div>
+  </div>
+</div>
+
+<!-- ── POST G: Composites Central ── -->
+<div class="platform-card" id="card_cc">
+  <div class="card-header">
+    <div class="card-left">
+      <span class="platform-icon">💬</span>
+      <div>
+        <div class="card-name">Composites Central Forum</div>
+        <div class="card-meta">forum.compositescentral.org · Practitioners · Day 2 · Post in Resources / General</div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-ghost" onclick="cp('t_cc',this)">📋 Copy Subject</button>
+      <button class="btn btn-ghost" onclick="cp('b_cc',this)">📋 Copy Body</button>
+      <a class="btn btn-forum" href="https://forum.compositescentral.org" target="_blank">↗ Open Forum</a>
+      <button class="btn btn-done" id="d_cc" onclick="markDone('cc')">Mark Posted</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="field-label">Subject</div>
+    <div class="title-box" id="t_cc" onclick="cp('t_cc',this)">Free open-source composites knowledge base + design app — 56 articles, CLT calc, AI analysis (BYOK)</div>
+    <div class="field-label">Body</div>
+    <div class="body-box" id="b_cc">Hi all — I work at Addcomposites (AFP robot company). We've open-sourced a composites knowledge base and built a free web app around it. Sharing here because this community is exactly who it's designed for.
+
+The problem that drove this: composites design knowledge — stacking rules, ply drop-off ratios, failure criteria, manufacturing constraints — lives inside Fibersim and CATIA at $15–150k/year. Small teams and individuals have no reliable reference. We wrote 56 plain-English articles and open-sourced them (CC BY 4.0).
+
+**Knowledge base topics:**
+- Fibre types and resin systems
+- Stacking sequences (symmetry, balance, 10% rule, consecutive angle limits)
+- Ply drop-offs (ramp ratios 1:8–1:20, ETBS workflow, no-drop-off zones)
+- Splice design (overlap/gap, no-splice zones, 3D multi-splice on curved surfaces)
+- Zone design (rosette systems, iso-thickness zones, transition zones)
+- Dart design (double curvature, sizing, quality risks)
+- Manufacturing: wet layup, vacuum bagging, VARTM, prepreg, RTM, AFP/ATL, filament winding, pultrusion
+- Common defects: voids, dry spots, racetracking, bridging, wrinkling
+- Failure criteria: Tsai-Wu, Hashin, max stress — when to use which
+- Damage tolerance, repair (scarf, stepped lap, bolted doubler)
+- Cost estimation (material, labour, tooling)
+
+**Web app (free):**
+- AI part analysis using Claude (BYOK — you bring your own Anthropic key)
+- CLT calculator: ABD matrices, effective moduli, Tsai-Wu/Hashin/max stress
+- Sandwich panel analyser
+- Bolted joint analyser
+- 15-material database (T300, T700S, IM7/8552, AS4/3501-6, AS4/PEEK, E-glass, S-glass, Kevlar 49, basalt, NCF biaxial — all with published property source citations)
+- Cost estimator
+
+App: https://opencomposites.addcomposites.com
+GitHub (CC BY 4.0): https://github.com/Addcomposites-github/composites-design-guide
+
+Property values are sourced from published datasheets and CMH-17 where available. If you find anything wrong or missing, open an issue — we want this to be accurate.
+
+Happy to discuss the CLT implementation, knowledge base structure, or take questions on composites design.</div>
+  </div>
+</div>
+
+<!-- ── POST B: r/Multicopter ── -->
+<div class="platform-card" id="card_multi">
+  <div class="card-header">
+    <div class="card-left">
+      <span class="platform-icon">🟠</span>
+      <div>
+        <div class="card-name">Reddit — r/Multicopter</div>
+        <div class="card-meta">118,393 subscribers · Drone builders · Day 3</div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-ghost" onclick="cp('t_multi',this)">📋 Copy Title</button>
+      <button class="btn btn-ghost" onclick="cp('b_multi',this)">📋 Copy Body</button>
+      <button class="btn btn-orange" onclick="openReddit('Multicopter','t_multi')">↗ Open r/Multicopter</button>
+      <button class="btn btn-done" id="d_multi" onclick="markDone('multi')">Mark Posted</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="field-label">Title</div>
+    <div class="title-box" id="t_multi" onclick="cp('t_multi',this)">Built a free AI tool for designing carbon fibre drone arms and frames — material selection, laminate calc, cost estimate</div>
+    <div class="field-label">Body</div>
+    <div class="body-box" id="b_multi">If you've ever tried to design a custom carbon frame or arm from scratch and not just buy a tube off AliExpress, you've probably hit the same wall:
+
+The knowledge is scattered, the tools are expensive, and nobody explains *why* certain layups work better than others.
+
+We built a free tool for this: https://opencomposites.addcomposites.com
+
+**For drone/FPV use specifically:**
+
+Type something like: "200mm arm, 50N lateral load at root, carbon fibre, lightest possible"
+
+It gives you:
+- Material recommendation (why IM7 vs T300 for your application)
+- Fibre orientation + stacking sequence
+- Manufacturing process recommendation (wet layup vs prepreg vs infusion)
+- Per-arm cost estimate
+
+There's also a CLT calculator so you can verify the laminate yourself — stiffness (EI), failure margin, weight per metre.
+
+And a 56-article knowledge base covering everything from "what actually is a woven vs UD ply" to "how to design for minimum ply drop-off stress concentration." CC BY 4.0, no account needed.
+
+I know most drone frames are just pultruded or cut tube — but for anyone actually designing custom structural parts (eVTOL, larger craft, custom monocoques), this fills a real gap.
+
+https://opencomposites.addcomposites.com
+GitHub: https://github.com/Addcomposites-github/composites-design-guide
+
+What layup failures have you run into on custom arms? Curious what's actually going wrong out there.</div>
+  </div>
+</div>
+
+<!-- ── POST H: Talk Composites ── -->
+<div class="platform-card" id="card_tc">
+  <div class="card-header">
+    <div class="card-left">
+      <span class="platform-icon">💬</span>
+      <div>
+        <div class="card-name">Talk Composites Forum</div>
+        <div class="card-meta">talkcomposites.com · "The Forum for Advanced Composites" · Day 4</div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-ghost" onclick="cp('t_tc',this)">📋 Copy Subject</button>
+      <button class="btn btn-ghost" onclick="cp('b_tc',this)">📋 Copy Body</button>
+      <a class="btn btn-forum" href="https://www.talkcomposites.com" target="_blank">↗ Open Forum</a>
+      <button class="btn btn-done" id="d_tc" onclick="markDone('tc')">Mark Posted</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="field-label">Subject</div>
+    <div class="title-box" id="t_tc" onclick="cp('t_tc',this)">Free composites design tool + knowledge base — 56 articles, CLT calc, AI analysis</div>
+    <div class="field-label">Body</div>
+    <div class="body-box" id="b_tc">Hi — sharing something we built that might be useful here.
+
+I work at Addcomposites (we make AFP machines). Over the past few years we kept getting the same questions from makers and small teams: which fibres, what stacking, which process, how do I check if this laminate passes? All answerable questions — but the tools that answer them properly are $15k+/year.
+
+So we wrote a knowledge base (56 articles, CC BY 4.0) and built a free app around it.
+
+**What the knowledge base covers:**
+Fibre types, resin systems, wet layup, vacuum bagging, VARTM, prepreg, AFP/ATL, stacking sequences, ply drop-offs, splices, zone design, darts, failure modes, failure criteria (Tsai-Wu, Hashin, max stress), damage tolerance, repair methods, cost estimation. 10 topic areas, plain English throughout.
+
+**What the app does:**
+- Describe your part → AI gives material recommendation, stacking sequence, process rec, cost estimate (uses Claude AI — BYOK)
+- CLT calculator with ABD matrices and failure criteria
+- Sandwich panel and bolted joint analysis
+- 15-material database with published properties
+- Cost estimator
+
+Everything free. No account. CC BY 4.0 on the knowledge base.
+
+App: https://opencomposites.addcomposites.com
+GitHub: https://github.com/Addcomposites-github/composites-design-guide
+
+If something is wrong in the articles, please say — property values are from published datasheets and CMH-17. We want it to be reliable, not just plentiful.</div>
+  </div>
+</div>
+
+<!-- ── LinkedIn Personal ── -->
+<div class="platform-card" id="card_lip">
+  <div class="card-header">
+    <div class="card-left">
+      <span class="platform-icon">💼</span>
+      <div>
+        <div class="card-name">LinkedIn — Pravin's Personal Profile</div>
+        <div class="card-meta">Personal founder perspective · Day 5 · No title needed — paste body directly</div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-ghost" onclick="cp('b_lip',this)">📋 Copy Post</button>
+      <a class="btn btn-blue" href="https://www.linkedin.com/feed/" target="_blank">↗ Open LinkedIn</a>
+      <button class="btn btn-done" id="d_lip" onclick="markDone('lip')">Mark Posted</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="field-label">Post — paste directly into LinkedIn "Start a post" box</div>
+    <div class="body-box" id="b_lip">I spent years watching engineers get stuck on composites questions that I could answer in five minutes.
+
+The problem wasn't the engineers. It was that the answers lived inside software that costs $15,000–$150,000 a year. Out of reach for anyone who doesn't work at a major aerospace company.
+
+A maker wanting to build a carbon fibre part for their car.
+A drone startup with no composites person on the team.
+A junior engineer at a Tier 2 supplier without access to institutional knowledge.
+
+All of them would hit the same wall — and then either guess, or give up, or email me with "what do I even do here?"
+
+So we built something to fix that.
+
+Today we're launching OpenComposites:
+
+→ AI-guided material selection and process recommendation (describe your part, get a plan)
+→ 56-article open-source knowledge base — fibres, resins, manufacturing, failure analysis, stacking rules — written in plain English, CC BY 4.0
+→ CLT calculator with full ABD matrices and failure criteria (Tsai-Wu, Hashin, max stress)
+→ Sandwich panel and bolted joint analysis
+→ 15-material database with published property sources
+→ Cost estimator
+
+No account. No paywall. No subscription.
+
+The knowledge base is also structured specifically for LLM retrieval — so Claude, ChatGPT, Gemini, or any local model can search it and give reliable composites answers. As AI assistants become how engineers actually look things up, the knowledge has to be findable.
+
+App (free): https://opencomposites.addcomposites.com
+GitHub (CC BY 4.0): https://github.com/Addcomposites-github/composites-design-guide
+
+If you know someone in composites who needs this — a student, a maker, an engineer at a startup — please share it. This is the resource I wish had existed when I started.
+
+#composites #carbonfibre #opensource #engineering #eVTOL #drones #aerospace #manufacturing</div>
+  </div>
+</div>
+
+<!-- ── LinkedIn Company ── -->
+<div class="platform-card" id="card_lic">
+  <div class="card-header">
+    <div class="card-left">
+      <span class="platform-icon">🏢</span>
+      <div>
+        <div class="card-name">LinkedIn — Addcomposites Company Page</div>
+        <div class="card-meta">Company institutional voice · Day 6</div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-ghost" onclick="cp('b_lic',this)">📋 Copy Post</button>
+      <a class="btn btn-blue" href="https://www.linkedin.com/company/addcomposites/" target="_blank">↗ Open Company Page</a>
+      <button class="btn btn-done" id="d_lic" onclick="markDone('lic')">Mark Posted</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="field-label">Post — paste directly into the company page post box</div>
+    <div class="body-box" id="b_lic">We just open-sourced a composites design platform. Here's why, and what's in it.
+
+The composites industry has an access problem. The software that supports professional design — Fibersim, CATIA Composites, HyperFiber — costs $15,000–$150,000 per year. That puts design-grade knowledge out of reach for most of the people who want it: makers, startups, students, junior engineers at Tier 2/3 suppliers.
+
+At Addcomposites, we build AFP (Automated Fibre Placement) robots. We've spent years in this domain. And we kept getting questions we could answer in five minutes — from people who just didn't have anywhere reliable to look.
+
+So we built OpenComposites and open-sourced the entire knowledge layer.
+
+What it includes:
+
+▸ 56-article knowledge base (CC BY 4.0) — composites fundamentals, design rules, manufacturing processes (wet layup through AFP), structural analysis, cost estimation. Written in plain English. Structured for LLM retrieval.
+
+▸ AI-guided design — describe your part, get material selection, fibre orientation, process recommendation, and cost estimate. Powered by Claude (BYOK model).
+
+▸ CLT calculator — ABD matrices, effective moduli, Tsai-Wu / Hashin / max stress failure analysis
+
+▸ Sandwich panel and bolted joint analysis
+
+▸ 15-material database with published property sources
+
+▸ Cost estimator — materials, labour, tooling, consumables
+
+Free. No account required. No paywall.
+
+Try the app: https://opencomposites.addcomposites.com
+GitHub (CC BY 4.0): https://github.com/Addcomposites-github/composites-design-guide
+
+#composites #carbonfibre #opensource #AFP #advancedmanufacturing #aerospace #eVTOL</div>
+  </div>
+</div>
+
+<!-- ── POST C: r/AerospaceEngineering ── -->
+<div class="platform-card" id="card_aero">
+  <div class="card-header">
+    <div class="card-left">
+      <span class="platform-icon">🟠</span>
+      <div>
+        <div class="card-name">Reddit — r/AerospaceEngineering</div>
+        <div class="card-meta">131,281 subscribers · Professional engineers · Day 8</div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-ghost" onclick="cp('t_aero',this)">📋 Copy Title</button>
+      <button class="btn btn-ghost" onclick="cp('b_aero',this)">📋 Copy Body</button>
+      <button class="btn btn-orange" onclick="openReddit('AerospaceEngineering','t_aero')">↗ Open Subreddit</button>
+      <button class="btn btn-done" id="d_aero" onclick="markDone('aero')">Mark Posted</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="field-label">Title</div>
+    <div class="title-box" id="t_aero" onclick="cp('t_aero',this)">Open-sourced a composites knowledge base and design tool — CLT calculator, 56 articles, CC BY 4.0</div>
+    <div class="field-label">Body</div>
+    <div class="body-box" id="b_aero">My team builds AFP systems at Addcomposites. We've open-sourced two things:
+
+**1. Knowledge base** — 56 plain-English articles on composites design and manufacturing. Covers CLT basics, stacking rules (symmetry, balance, 10% rule, ply drop-offs, splices), failure criteria (Tsai-Wu, Hashin, max stress — when to use which), manufacturing processes (wet layup through AFP/ATL), damage tolerance, sandwich structures, bolted and bonded joints, and CATIA workflow concepts rewritten in tool-independent terms. CC BY 4.0.
+
+Structured specifically for LLM retrieval — 100–400 word sections, front matter, tagged, JSON-indexed — so any model (Claude, GPT, Gemini, local) can search it and give reliable answers.
+
+**2. Web app** — https://opencomposites.addcomposites.com
+- CLT calculator: ABD matrices, effective moduli, failure analysis
+- Sandwich panel analyser
+- Bolted joint analysis (bearing/bypass)
+- AI part analysis using Claude (BYOK)
+- 15-material database (T300, T700S, IM7/8552, AS4/3501-6, AS4/PEEK, E-glass, S-glass, Kevlar 49, basalt, NCF biaxial — with published property sources)
+
+Everything free. No paywall.
+
+GitHub: https://github.com/Addcomposites-github/composites-design-guide
+
+The target audience is people who don't have access to Fibersim, CATIA Composites, or HyperFiber — makers, drone/eVTOL startups, junior engineers at Tier 2/3 suppliers, students. If you find an error, open a PR. Property sources are cited to published datasheets and CMH-17 where available.
+
+Happy to answer questions about the CLT implementation or knowledge base structure.</div>
+  </div>
+</div>
+
+<!-- ── HN Show HN ── -->
+<div class="platform-card" id="card_hn">
+  <div class="card-header">
+    <div class="card-left">
+      <span class="platform-icon">🟧</span>
+      <div>
+        <div class="card-name">Hacker News — Show HN</div>
+        <div class="card-meta">Post Tue–Thu 9–11am US Eastern · Post first comment within 5 min · Day 10</div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-ghost" onclick="cp('t_hn',this)">📋 Copy Title</button>
+      <button class="btn btn-ghost" onclick="cp('b_hn',this)">📋 Copy Comment</button>
+      <button class="btn btn-ghost" onclick="cp('url_hn',this)">📋 Copy URL</button>
+      <button class="btn btn-hn" onclick="openHN()">↗ Open HN Submit</button>
+      <button class="btn btn-done" id="d_hn" onclick="markDone('hn')">Mark Posted</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="field-label">Title — paste into HN "title" field</div>
+    <div class="title-box" id="t_hn" onclick="cp('t_hn',this)">Show HN: OpenComposites – free AI composites design tool, open-source knowledge base (56 articles, CC BY 4.0)</div>
+    <div class="field-label">URL — paste into HN "url" field</div>
+    <div class="title-box" id="url_hn" onclick="cp('url_hn',this)" style="color:#F97316;font-weight:normal;font-family:monospace;font-size:13px;">https://opencomposites.addcomposites.com</div>
+    <div class="field-label">First Comment — post as OP within 5 minutes of submitting</div>
+    <div class="body-box" id="b_hn">Hi HN. I work at Addcomposites (we make AFP robots for industrial composites manufacturing).
+
+The problem we kept seeing: engineers at startups and Tier 2/3 suppliers — and makers building carbon fibre parts in their garage — have no access to the design tools that aerospace companies rely on. Fibersim: ~$15k/year. CATIA Composites: ~$50k/year. The knowledge lives inside those tools and doesn't get out.
+
+So we built two things:
+
+**1. An open-source knowledge base** — 56 plain-English articles on composites design and manufacturing, CC BY 4.0, structured specifically for LLM retrieval (100–400 word chunks, front matter, JSON-indexed). The idea is that Claude, ChatGPT, Gemini, or any local model can search it reliably and answer composites questions.
+GitHub: https://github.com/Addcomposites-github/composites-design-guide
+
+**2. A free web app** — wraps the knowledge base with:
+- AI part analysis: describe your part → material selection, stacking sequence, process rec, cost estimate. Uses Claude (BYOK — users bring their own Anthropic key, zero backend AI cost on our end)
+- CLT calculator (ABD matrices, effective moduli, Tsai-Wu / Hashin / max stress)
+- Sandwich panel analyser and bolted joint analyser
+- 15-material database with published property sources
+- Cost estimator
+
+Stack: FastAPI backend, React + Vite + Tailwind CSS frontend, scikit-learn TF-IDF for knowledge search, JSON data files for materials and processes.
+
+The BYOK model means we have no AI costs, no subscription, no reason to put up a paywall. Everything else is static data and a Python backend.
+
+We specifically designed the knowledge base chunks (100–400 words each, tagged, indexed in JSON) to be usable as a RAG source by any LLM. If you're building an engineering assistant and want reliable composites retrieval, feel free to use it.
+
+Happy to answer questions about composites, the architecture, or the knowledge base structure.</div>
+    <div class="hint">⏱ Submit on HN first, then immediately reply to your own post with the first comment above.</div>
+  </div>
+</div>
+
+<!-- ── POST E: r/DIY ── -->
+<div class="platform-card" id="card_diy">
+  <div class="card-header">
+    <div class="card-left">
+      <span class="platform-icon">🟠</span>
+      <div>
+        <div class="card-name">Reddit — r/DIY</div>
+        <div class="card-meta">~11M subscribers · Beginner tone, no jargon · Day 15</div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-ghost" onclick="cp('t_diy',this)">📋 Copy Title</button>
+      <button class="btn btn-ghost" onclick="cp('b_diy',this)">📋 Copy Body</button>
+      <button class="btn btn-orange" onclick="openReddit('DIY','t_diy')">↗ Open r/DIY</button>
+      <button class="btn btn-done" id="d_diy" onclick="markDone('diy')">Mark Posted</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="field-label">Title</div>
+    <div class="title-box" id="t_diy" onclick="cp('t_diy',this)">Built a free tool to help people design their own carbon fibre parts — no expensive software needed</div>
+    <div class="field-label">Body</div>
+    <div class="body-box" id="b_diy">Carbon fibre is an incredible material — stiff, light, and not as hard to work with as people think once you know the basics.
+
+The problem is that the design knowledge is locked inside software that costs $15,000–$150,000 per year. Out of reach for anyone doing DIY.
+
+So I built a free alternative: https://opencomposites.addcomposites.com
+
+You describe what you're making (a car splitter, a bike fork, a drone arm) and it gives you:
+- Which fibres and resin to use, and why
+- How to orient and stack the plies
+- Which manufacturing method fits your setup (wet layup for most DIY, infusion for bigger parts, prepreg if you have oven access)
+- A rough cost estimate
+
+There's also a 56-article knowledge base in plain English — covering fibres, resins, wet layup, vacuum bagging, defects and how to avoid them. No account needed, all free.
+
+If you've been curious about trying carbon fibre but didn't know where to start — this is where I'd point you.
+
+https://opencomposites.addcomposites.com</div>
+  </div>
+</div>
+
+<!-- ── POST F: r/engineering ── -->
+<div class="platform-card" id="card_eng">
+  <div class="card-header">
+    <div class="card-left">
+      <span class="platform-icon">🟠</span>
+      <div>
+        <div class="card-name">Reddit — r/engineering</div>
+        <div class="card-meta">725,637 subscribers · Mixed disciplines · Day 18</div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-ghost" onclick="cp('t_eng',this)">📋 Copy Title</button>
+      <button class="btn btn-ghost" onclick="cp('b_eng',this)">📋 Copy Body</button>
+      <button class="btn btn-orange" onclick="openReddit('engineering','t_eng')">↗ Open Subreddit</button>
+      <button class="btn btn-done" id="d_eng" onclick="markDone('eng')">Mark Posted</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="field-label">Title</div>
+    <div class="title-box" id="t_eng" onclick="cp('t_eng',this)">Open-sourced a composites design platform — CLT calculator, 56-article knowledge base, AI analysis (BYOK)</div>
+    <div class="field-label">Body</div>
+    <div class="body-box" id="b_eng">My team makes AFP robots at Addcomposites. We built an open-source composites design platform and want to share it with the engineering community.
+
+**The gap we're filling:**
+Most composites design knowledge lives in Fibersim, CATIA Composites, and similar tools at $15k–$150k/year. Engineers at startups, Tier 2/3 suppliers, and students have no access to it. We wrote and open-sourced the knowledge layer.
+
+**What it includes:**
+
+Knowledge base (CC BY 4.0, GitHub):
+- 56 articles across 10 topic areas
+- Fundamentals (CLT, failure modes, fibre types, resin systems)
+- Design rules (stacking sequences, ply drop-offs, splice design, zone design)
+- Manufacturing (every major process from wet layup to AFP)
+- Structural analysis (sizing, failure criteria, buckling, sandwich, joints)
+- Cost estimation and applications
+
+Web app (free, no account):
+- CLT calculator — ABD matrices, effective moduli, failure analysis
+- Sandwich panel and bolted joint analysis
+- AI part analysis using Claude (BYOK)
+- 15-material database with published property sources
+- Process selection guide and cost estimator
+
+App: https://opencomposites.addcomposites.com
+GitHub (CC BY 4.0): https://github.com/Addcomposites-github/composites-design-guide
+
+If you work in composites and find anything wrong, open an issue or PR. Property citations are linked to published datasheets and CMH-17 where available.</div>
+  </div>
+</div>
+
+<!-- ── Twitter Thread ── -->
+<div class="platform-card" id="card_tw">
+  <div class="card-header">
+    <div class="card-left">
+      <span class="platform-icon">🐦</span>
+      <div>
+        <div class="card-name">Twitter / X — 7-Tweet Thread</div>
+        <div class="card-meta">@addcomposites · Post Tweet 1, then reply with Tweets 2–7 in sequence · Day 21+</div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-ghost" onclick="cp('tw1',this)">📋 Copy Tweet 1</button>
+      <button class="btn btn-tw" onclick="openTwitter()">↗ Open Twitter</button>
+      <button class="btn btn-done" id="d_tw" onclick="markDone('tw')">Mark Posted</button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="field-label">Tweet 1 — post this first (click to copy)</div>
+    <div class="body-box" id="tw1" style="max-height:100px;">We just open-sourced a composites design platform.
+
+56 articles, CLT calculator, AI analysis, 15-material database.
+No paywall. No account. CC BY 4.0.
+
+Here's why we built it 🧵</div>
+
+    <div class="field-label" style="margin-top:12px;">Tweet 2 — reply to Tweet 1 (click to copy)</div>
+    <div class="body-box" id="tw2" style="max-height:100px;">The problem: composites design knowledge is locked inside software that costs $15,000–$150,000/year.
+
+Fibersim. CATIA Composites. HyperFiber.
+
+99% of people who need it — makers, drone startups, junior engineers — can't afford it.</div>
+
+    <div class="field-label" style="margin-top:12px;">Tweet 3 — reply to Tweet 2 (click to copy)</div>
+    <div class="body-box" id="tw3" style="max-height:100px;">So we built OpenComposites — free, open-source, forever.
+
+56 plain-English articles. CC BY 4.0.
+Covers everything from wet layup to AFP/ATL, CLT to failure criteria.
+
+Structured for LLM retrieval so Claude/ChatGPT/Gemini can answer composites questions reliably.
+
+↗ opencomposites.addcomposites.com</div>
+
+    <div class="field-label" style="margin-top:12px;">Tweet 4 (click to copy)</div>
+    <div class="body-box" id="tw4" style="max-height:100px;">The web app (free):
+→ AI part analysis — describe your part, get material + process + cost
+→ CLT calculator (ABD matrices, failure criteria)
+→ Sandwich panel + bolted joint analysis
+→ 15-material database with published property sources
+
+AI uses Claude via BYOK. Zero backend cost = no paywall.</div>
+
+    <div class="field-label" style="margin-top:12px;">Tweet 5 (click to copy)</div>
+    <div class="body-box" id="tw5" style="max-height:100px;">For drone builders: type "200mm arm, 50N at root, carbon, lightest" → get IM7 vs T300 tradeoff, stacking sequence, wet layup vs prepreg rec, per-arm cost.
+
+For eVTOL teams: full structural analysis toolchain, no Fibersim needed.</div>
+
+    <div class="field-label" style="margin-top:12px;">Tweet 6 (click to copy)</div>
+    <div class="body-box" id="tw6" style="max-height:100px;">The knowledge base is designed to be a RAG source.
+100–400 word chunks. Front matter. JSON-indexed. Freely forkable.
+
+If you're building an engineering AI assistant and need reliable composites retrieval → use it.
+
+GitHub: github.com/Addcomposites-github/composites-design-guide</div>
+
+    <div class="field-label" style="margin-top:12px;">Tweet 7 — final tweet (click to copy)</div>
+    <div class="body-box" id="tw7" style="max-height:100px;">Built by @addcomposites (we make AFP robots).
+
+We open-sourced the knowledge we wish had existed when we started.
+
+↗ App: opencomposites.addcomposites.com
+📂 GitHub (CC BY 4.0): github.com/Addcomposites-github/composites-design-guide
+
+#composites #carbonfibre #opensource #aerospace #eVTOL #manufacturing</div>
+    <div class="hint">💡 Copy and post each tweet separately, replying to your own chain.</div>
+  </div>
+</div>
+
+</div><!-- /platforms-grid -->
+
+<!-- ASSETS -->
+<div class="section-box" style="margin-top:40px;">
+  <div class="section-title">📁 Marketing Assets in marketing/ folder</div>
+  <div class="assets-grid">
+    <div class="asset-card"><div class="asset-name">Homepage</div><div class="asset-desc">Hero + nav, light theme</div><div class="asset-path">screenshot-homepage.png</div></div>
+    <div class="asset-card"><div class="asset-name">Knowledge Base</div><div class="asset-desc">Browse by Topic layout</div><div class="asset-path">screenshot-knowledge-base.png</div></div>
+    <div class="asset-card"><div class="asset-name">Search Results</div><div class="asset-desc">"ply drop-off" → 10 found, 81%</div><div class="asset-path">screenshot-search-results.png</div></div>
+    <div class="asset-card"><div class="asset-name">Article View</div><div class="asset-desc">Ply Drop-offs with ASCII art</div><div class="asset-path">screenshot-article-view.png</div></div>
+    <div class="asset-card"><div class="asset-name">Analyze Page</div><div class="asset-desc">Drone arm example filled in</div><div class="asset-path">screenshot-analyze-page.png</div></div>
+    <div class="asset-card"><div class="asset-name">Footer</div><div class="asset-desc">CC BY 4.0, tools links</div><div class="asset-path">screenshot-footer.png</div></div>
+    <div class="asset-card"><div class="asset-name">QR Code</div><div class="asset-desc">Orange on slate, high EC</div><div class="asset-path">qr-opencomposites.png</div></div>
+    <div class="asset-card"><div class="asset-name">Carousel PPTX</div><div class="asset-desc">10 slides 1080×1080 branded</div><div class="asset-path">opencomposites-carousel.pptx</div></div>
+  </div>
+</div>
+
+<div class="footer">OpenComposites Launch Pad · Addcomposites · opencomposites.addcomposites.com</div>
+
+<script>
+// ── REDDIT pre-fill (title + selftext mode) ──
+function openReddit(sub, titleId) {
+  const title = encodeURIComponent(document.getElementById(titleId).textContent.trim());
+  window.open('https://www.reddit.com/r/' + sub + '/submit?selftext=true&title=' + title, '_blank');
+}
+
+// ── HN submitlink ──
+function openHN() {
+  const title = encodeURIComponent(document.getElementById('t_hn').textContent.trim());
+  const url   = encodeURIComponent('https://opencomposites.addcomposites.com');
+  window.open('https://news.ycombinator.com/submitlink?u=' + url + '&t=' + title, '_blank');
+}
+
+// ── Twitter intent (Tweet 1) ──
+function openTwitter() {
+  const text = encodeURIComponent(document.getElementById('tw1').textContent.trim());
+  window.open('https://twitter.com/intent/tweet?text=' + text, '_blank');
+}
+
+// ── Copy helper ──
+function cp(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const text = el.textContent.trim();
+  navigator.clipboard.writeText(text).catch(() => {
+    const t = document.createElement('textarea');
+    t.value = text;
+    t.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand('copy');
+    document.body.removeChild(t);
+  });
+  // Flash the source element
+  const origBorder = el.style.borderColor;
+  el.style.borderColor = '#22C55E';
+  setTimeout(() => { el.style.borderColor = origBorder || ''; }, 1000);
+  // Flash the button if provided
+  if (btn && btn.classList) {
+    btn.classList.add('flashed');
+    const origText = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => { btn.classList.remove('flashed'); btn.textContent = origText; }, 1200);
+  }
+}
+
+// ── Mark Done ──
+function markDone(key) {
+  const btn  = document.getElementById('d_' + key);
+  const card = document.getElementById('card_' + key);
+  const now  = btn.classList.toggle('is-done');
+  if (card) card.classList.toggle('posted', now);
+  btn.textContent = now ? '✓ Posted' : 'Mark Posted';
+  localStorage.setItem('done_' + key, now ? '1' : '0');
+}
+
+// ── Checklist ──
+function saveChk(cb, key) {
+  cb.closest('.check-item').classList.toggle('done', cb.checked);
+  localStorage.setItem(key, cb.checked ? '1' : '0');
+}
+
+// ── Restore on load ──
+(function restore() {
+  // Checklist
+  document.querySelectorAll('.check-item[data-key]').forEach(item => {
+    const k = item.dataset.key;
+    if (localStorage.getItem(k) === '1') {
+      const cb = item.querySelector('input');
+      if (cb) cb.checked = true;
+      item.classList.add('done');
+    }
+  });
+  // Done buttons
+  ['rcomp','cc','multi','tc','lip','lic','aero','hn','diy','eng','tw'].forEach(k => {
+    if (localStorage.getItem('done_' + k) === '1') {
+      const btn  = document.getElementById('d_' + k);
+      const card = document.getElementById('card_' + k);
+      if (btn)  { btn.classList.add('is-done'); btn.textContent = '✓ Posted'; }
+      if (card) card.classList.add('posted');
+    }
+  });
+})();
+</script>
+</body>
+</html>
