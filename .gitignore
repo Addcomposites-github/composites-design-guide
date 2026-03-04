@@ -44,3 +44,11 @@ Thumbs.db
 # Local Claude settings
 .claude/
 HANDOFF_BRIEF.md
+
+# Marketing materials — kept local, not public
+marketing/
+POSTING_PLAN.md
+PROMOTION_HANDOVER.md
+VISUAL_CONTENT_HANDOVER.md
+MARKETING_HANDOVER.md
+scripts/create_carousel.py
