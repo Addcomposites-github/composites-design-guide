@@ -1,5 +1,59 @@
 # CLAUDE.md — Composites Design Open Knowledge Base
 
+## Branch Strategy — READ THIS FIRST
+
+This repo has two branches with different purposes:
+
+| Branch | Purpose | Who sees it |
+|--------|---------|-------------|
+| **`master`** | Clean public knowledge base — articles, diagrams, index only | Everyone (public) |
+| **`work`** | Agent working branch — context files, plans, app code, audits, handovers | Internal only |
+
+### Rules for Claude agents
+
+**Always check which branch you are on before committing:**
+```bash
+git branch --show-current
+```
+
+**If you are adding or editing knowledge articles** → commit to `master` (or `work`, then promote)
+
+**If you are creating context files** (HANDOVER.md, PLAN.md, audit files, scripts, app code, etc.)
+→ commit to `work` only. These are blocked from `master` via `.gitignore`.
+
+### Promoting knowledge content from `work` → `master`
+
+When articles written on `work` are ready to go public:
+```bash
+# From master, pull just the specific files you want to promote
+git checkout master
+git checkout work -- knowledge/03-manufacturing-processes/new-article.md
+git add knowledge/03-manufacturing-processes/new-article.md
+python scripts/build_index.py   # rebuild search index
+git add index.json
+git commit -m "Add: new-article.md"
+git push origin master
+```
+
+### What belongs on each branch
+
+**`master` only:**
+- `knowledge/**/*.md` — composites articles
+- `diagrams/` — SVG and rendered diagrams
+- `index.json` — search index (auto-generated)
+- `README.md`, `CONTRIBUTING.md`, `CLAUDE.md`
+- `.github/workflows/` — CI/CD
+
+**`work` only (never master):**
+- `HANDOVER.md`, `PLAN.md`, `PRODUCT_ROADMAP.md`, `SETUP_GUIDE.md`
+- `web-app/` — local app development copy
+- `mcp-server/` — MCP server source
+- `marketing/` — marketing assets and post copy
+- `audit-*.jpeg/png` — app audit screenshots
+- `replit.nix`, `.replit` — Replit config
+
+---
+
 ## Project Purpose
 
 Build a **free, public, LLM-searchable knowledge base** for composites design.

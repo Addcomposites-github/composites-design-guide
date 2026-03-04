@@ -52,3 +52,19 @@ PROMOTION_HANDOVER.md
 VISUAL_CONTENT_HANDOVER.md
 MARKETING_HANDOVER.md
 scripts/create_carousel.py
+
+# Working / agent context files — belong on work branch only, never master
+HANDOVER.md
+PLAN.md
+PRODUCT_ROADMAP.md
+SETUP_GUIDE.md
+HANDOFF_BRIEF.md
+audit-*.jpeg
+audit-*.png
+mcp-server/
+web-app/
+replit.nix
+.replit
+.playwright-mcp/
+nul
+*.zip
