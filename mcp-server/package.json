@@ -1,0 +1,67 @@
+{
+  "name": "composites-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for composites engineering knowledge base — serves design rules, material data, stacking checks, process selection, and cost estimation to any AI assistant via the Model Context Protocol.",
+  "type": "module",
+  "main": "build/index.js",
+  "bin": {
+    "composites-mcp-server": "build/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/index.js",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "composites",
+    "engineering",
+    "knowledge-base",
+    "carbon-fibre",
+    "carbon-fiber",
+    "laminate",
+    "design",
+    "manufacturing",
+    "clt",
+    "classical-lamination-theory",
+    "aerospace",
+    "materials",
+    "ai-tools",
+    "claude",
+    "llm"
+  ],
+  "author": "Addcomposites <info@addcomposites.com> (https://www.addcomposites.com)",
+  "homepage": "https://github.com/addcomposites/composites-design-guide#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/addcomposites/composites-design-guide.git",
+    "directory": "mcp-server"
+  },
+  "bugs": {
+    "url": "https://github.com/addcomposites/composites-design-guide/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "build/",
+    "README.md",
+    "../data/materials.json",
+    "../data/processes.json",
+    "../decision-trees/",
+    "../knowledge/",
+    "../index.json",
+    "../llm-instructions.md"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.8.3"
+  }
+}
